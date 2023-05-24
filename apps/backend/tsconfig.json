@@ -1,17 +1,6 @@
 {
-  "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "dist",
-    "strict": true,
-    "lib": ["esnext", "dom"],
-    "esModuleInterop": true,
-    "allowJs": false,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "noEmit": true,
-    "noImplicitAny": true
-  },
-  "include": ["src"],
+  "extends": "tsconfig/base.json",
+  "compilerOptions": {},
+  "include": ["**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
