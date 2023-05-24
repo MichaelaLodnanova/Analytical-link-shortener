@@ -1,0 +1,116 @@
+@startuml analytical link shortener
+
+left to right direction
+skinparam Linetype ortho
+
+skinparam Shadowing false
+
+skinparam ArrowFontStyle normal
+skinparam ArrowFontName Courier
+skinparam ArrowFontSize 10
+
+title Analytical link shortener\n
+
+
+actor "Guest" as guest
+actor "Admin" as admin
+actor "Registered" as registered
+actor "Advertiser" as advertiser
+
+admin -down-|> advertiser
+advertiser -down-|> registered
+
+
+rectangle System {
+  usecase "Login" as login
+  usecase "Logout" as logout
+  usecase "Sign up as advertiser" as signup_advert
+  usecase "JWT?" as signup_jwt
+  usecase "Sign up as user" as signup_user
+
+  usecase "View link" as view_link
+  usecase "Display ad" as display_ad
+  usecase "Stats: Gather browser settings" as stat_browser_sett
+  usecase "Stats: Measure view time" as stat_measure_view_time
+  usecase "Stats: Count ad impressions" as stat_count_ad_impr
+  usecase "Stats: Count link visits" as stat_count_link_visits
+
+  usecase "Click ad" as click_ad
+  usecase "Stats: Count ad clicks" as stat_count_ad_click
+
+  usecase "Skip ad" as skip_ad
+  usecase "Stats: Count ad skips" as stat_count_ad_skip
+  
+  usecase "Create link" as link_create
+  usecase "Delete link" as link_delete
+  usecase "Enable link advertisements" as link_enable_ads
+  usecase "Disable link advertisements" as link_disable_ads
+
+  usecase "Create advertisement" as ad_create
+  usecase "Delete advertisement" as ad_delete
+  usecase "Edit advertisement\n(fields TODO)" as ad_edit
+
+  usecase "Display all links" as display_all_links
+  usecase "Display created links" as display_created_links
+  usecase "Display created link statistics" as display_created_link_stats
+
+  usecase "Display all ads" as display_all_ads
+  usecase "Display created ads" as display_created_ads
+  usecase "Display ad statistics" as display_created_ad_stats
+  usecase "User management\n(nice to have)" as user_management
+
+  note "Advertiser can view his ads (admin can all) in a dashboard" as note_ad_dashboard
+  usecase "Display all created ads\nstatistics (dashboard)" as display_all_ad_stats_dashboard
+  
+  usecase "Set wanted stats time period" as display_set_time_period
+  
+  note_ad_dashboard .left. display_all_ad_stats_dashboard
+
+  display_all_ad_stats_dashboard <.. display_set_time_period: extend
+  display_created_ad_stats <.. display_set_time_period: extend
+  display_created_link_stats <.. display_set_time_period: extend
+
+  signup_advert <.left. signup_jwt: include
+  signup_user <.right. signup_jwt: include
+
+  view_link <.. display_ad: extend
+  view_link <.. stat_count_link_visits: include
+  view_link <.. stat_browser_sett: include
+
+  display_ad <.. stat_measure_view_time: include
+  display_ad <.. stat_count_ad_impr: include
+  
+  skip_ad <.. stat_count_ad_skip: include
+  
+  click_ad <.. stat_count_ad_click: include
+
+}
+
+guest --> login
+guest --> click_ad
+guest --> skip_ad
+guest --> signup_advert
+guest --> signup_user
+guest --> view_link
+
+registered --> logout
+registered --> link_create
+registered --> link_delete
+registered --> link_enable_ads
+registered --> link_disable_ads
+registered --> display_created_links
+registered --> display_created_link_stats
+
+advertiser --> ad_create
+advertiser --> ad_edit
+advertiser --> ad_delete
+advertiser --> display_created_ads
+advertiser --> display_created_ad_stats
+advertiser --> display_all_ad_stats_dashboard
+
+admin --> display_all_ads
+admin --> display_all_links
+
+admin --> user_management
+
+@enduml
