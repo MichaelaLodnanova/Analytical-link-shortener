@@ -1,81 +1,48 @@
-# Turborepo starter
+# Analytical-link-shortener
 
-This is an official starter Turborepo.
+> Authors: xlodnan, xberky, xfalesn, xturek
 
-## Using this example
+## Dev setup
 
-Run the following command:
+### Stack
 
-```sh
-npx create-turbo@latest
-```
+- yarn, typescript, eslint, prettier, turborepo, husky
+- **BE:** express
+- **FE:** vite + react
 
-## What's inside?
+> **Disclaimer:** This project uses husky to enforce conventional commits, if you see an error message while committing
+> in vscode, click the `Open git log` button, it will tell you what you did wrong.
 
-This Turborepo includes the following packages/apps:
+### Setup
 
-### Apps and Packages
+- `yarn install` - in root directory of project, this installs dependencies into all sub-projects.
+- `yarn dev` - starts the frontend and backend
+- `yarn lint` - manually runs eslint in all projects
+- `yarn ts-check` - manually runs typescript check in all projects
+- `yarn format:{write,check}` - checks/writes prettier code style
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `ui`: a stub React component library shared by both `web` and `docs` applications
-- `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `tsconfig`: `tsconfig.json`s used throughout the monorepo
+### Adding new packages
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+If you want to add new packages to either `frontend` or `backend`, then enter the corresponding folder (eg. `apps/frontend`) and normally run `yarn add xyz`. This will add the package to `package.json` in the project and install it and link it from the root node_modules into the project.
 
-### Utilities
+## Description
 
-This Turborepo has some additional tools already setup for you:
+An app inspired by bit.ly.
+A regular user can generate a shortened link on which he has the option to either enable or disable advertising.
+This can then be shared.
+Advertisers can also create accounts in the app and add their advertisements to the platform.
+When the user clicks on the shortened link (if the ad is enabled), the ad will be displayed to the user and when the ad ends/skipped, it will redirect the user to the original link.
+Both the authors of the shortened link and the advertisers can track statistics about the clicks on their links (advertisements).
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+## Requirements
 
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm build
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-pnpm dev
-```
-
-### Remote Caching
-
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+- redirecting from shortened links
+- display of advertisements
+- authentication/authorization of users
+- links management
+- overview of relevant analytics (number of visits, number of ad impressions, ...)
+- overview of analytics per time period (at least last day, week, 14 days, month, year; ideally let the user enter the period)
+- authentication/authorization of admin advertisement section
+- manage advertisements
+- overview of relevant analytics (number of impressions, number of skips, time spent by the user on the ad, region and language of users...)
+- overview of analytics per time period (at least last day, week, 14 days, month, year; ideally let the user enter the period)
