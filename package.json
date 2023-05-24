@@ -6,7 +6,7 @@
     "lint": "turbo run lint",
     "format:check": "turbo run format:check",
     "format:write": "turbo run format:write",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "ts-check": "turbo run ts-check"
   },
   "devDependencies": {
     "@turbo/gen": "^1.9.7",

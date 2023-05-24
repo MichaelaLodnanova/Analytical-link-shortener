@@ -1,0 +1,46 @@
+
+image: node:19.4.0
+
+# And to cache them as well.
+cache:
+  paths:
+    - node_modules/
+    - .yarn
+
+# You specify the stages. Those are the steps that GitLab will go through 
+# Order matters. 
+stages:
+  - ts-check
+  - eslint
+  - prettier
+
+Typescript:
+  stage: ts-check
+  tags:
+  - node
+  before_script: 
+    - yarn config set cache-folder .yarn
+    - yarn install --frozen-lockfile
+  script:
+    - yarn ts-check
+
+Lint:
+  stage: eslint
+  tags:
+  - node
+  before_script: 
+    - yarn config set cache-folder .yarn
+    - yarn install --frozen-lockfile
+  script:
+    - yarn lint
+
+
+Prettier format:
+  stage: prettier
+  tags:
+  - node
+  before_script: 
+    - yarn config set cache-folder .yarn
+    - yarn install --frozen-lockfile
+  script:
+    - yarn format:check

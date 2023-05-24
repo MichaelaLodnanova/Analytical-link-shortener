@@ -9,6 +9,7 @@
     "lint": {},
     "format:check": {},
     "format:write": {},
+    "ts-check": {},
     "dev": {
       "cache": false,
       "persistent": true
