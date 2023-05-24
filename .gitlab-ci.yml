@@ -17,7 +17,7 @@ stages:
 Typescript:
   stage: ts-check
   tags:
-  - node
+  - shared-fi
   before_script: 
     - yarn config set cache-folder .yarn
     - yarn install --frozen-lockfile
@@ -27,7 +27,7 @@ Typescript:
 Lint:
   stage: eslint
   tags:
-  - node
+  - shared-fi
   before_script: 
     - yarn config set cache-folder .yarn
     - yarn install --frozen-lockfile
@@ -38,7 +38,7 @@ Lint:
 Prettier format:
   stage: prettier
   tags:
-  - node
+  - shared-fi
   before_script: 
     - yarn config set cache-folder .yarn
     - yarn install --frozen-lockfile
