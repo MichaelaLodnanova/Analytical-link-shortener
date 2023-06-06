@@ -1,0 +1,80 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String          @id @default(uuid())
+  email         String          @unique
+  username      String
+  passwordHash  String
+  role          Role            @default(USER)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  deletedAt     DateTime?
+  Link          Link[]
+  Advertisement Advertisement[]
+}
+
+enum Role {
+  ADMIN
+  ADVERTISER
+  USER
+}
+
+model Link {
+  id                      String                    @id @default(uuid())
+  url                     String
+  shortUrl                String                    @unique
+  isAdvertisementEnabled  Boolean
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  deletedAt               DateTime?
+  creator                 User                      @relation(fields: [createdById], references: [id])
+  createdById             String
+  LinkStatistics          LinkStatistics[]
+  AdvertisementStatistics AdvertisementStatistics[]
+}
+
+model LinkStatistics {
+  id        String    @id @default(uuid())
+  region    String
+  language  String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  link      Link      @relation(fields: [linkId], references: [id])
+  linkId    String
+}
+
+model Advertisement {
+  id                      String                    @id @default(uuid())
+  title                   String
+  url                     String
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @updatedAt
+  deletedAt               DateTime?
+  createdById             String
+  createdBy               User                      @relation(fields: [createdById], references: [id])
+  AdvertisementStatistics AdvertisementStatistics[]
+}
+
+model AdvertisementStatistics {
+  id              String        @id @default(uuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  skippedAt       DateTime?
+  clickedAt       DateTime?
+  deletedAt       DateTime?
+  advertisementId String
+  advertisement   Advertisement @relation(fields: [advertisementId], references: [id])
+  linkId          String
+  link            Link          @relation(fields: [linkId], references: [id])
+}

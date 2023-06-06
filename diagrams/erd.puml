@@ -5,74 +5,69 @@ skinparam Linetype ortho
 skinparam Ranksep 60
 skinparam Nodesep 100
 
-
-entity "Role" as role {
-    * id: <<uuid>>
-    ---
-    * name: string
-    * createdAt: timestamp
-    * editedAt: timestamp
-    deletedAt: timestamp
-}
-
 entity "User" as user {
   *id : <<uuid>>
   --
   * username : text
   * email : text
   * passwordHash : text
+  * role : ENUM(ADMIN, ADVERTISER, USER)
   * createdAt: timestamp
-  * editedAt: timestamp
+  * updatedAt: timestamp
   deletedAt: timestamp
 }
 
 entity "Link" as link {
   *id : <<uuid>>
   --
-  * createdBy_id: <<FK>>
+  * createdById: <<FK>>
   * url: text
   * shortUrl: text
   * isAdvertisementEnabled: bool
   * createdAt: timestamp
-  * editedAt: timestamp
+  * updatedAt: timestamp
   deletedAt: timestamp
 }
 
 entity "LinkStatistics" as linkStats {
   *id : <<uuid>>
   --
-  * link_id: <<FK>>
+  * linkId: <<FK>>
   * region: text
   * language: text
   * createdAt: timestamp
+  * updatedAt: timestamp
   deletedAt: timestamp
 }
 
 entity "Advertisement" as ad {
   *id : <<uuid>>
   --
-  * createdBy_id: <<FK>>
+  * createdById: <<FK>>
+  * title: text
   * url: text
   * type: ENUM(VIDEO, PHOTO)
   * createdAt: timestamp
-  * editedAt: timestamp
+  * updatedAt: timestamp
   deletedAt: timestamp
 }
 
 entity "AdvertisementStatistics" as adStats {
   *id : <<uuid>>
   --
-  * advertisement_id: <<FK>>
+  * advertisementId: <<FK>>
+  * linkId: <<FK>>
   * createdAt: timestamp
+  * updatedAt: timestamp
   skippedAt: timestamp
   clickedAt: timestamp
   deletedAt: timestamp
 }
 
-user }o..|| role
 user ||..o{ link
 user ||..o{ ad
 
 ad ||..o{ adStats
 link ||..o{ linkStats
+link ||..o{ adStats
 @enduml
