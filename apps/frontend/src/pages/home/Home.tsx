@@ -4,11 +4,9 @@ import { Footer } from '../../common/footer';
 import SignIn from './components/SignIn';
 export function Home() {
   return (
-    <Box width={'100dvw'}>
+    <Box width={'100dvw'} backgroundColor="secondary.200">
       <Navbar></Navbar>
-      <Box backgroundColor="secondary.200" padding={'5'}>
-        <SignIn></SignIn>
-      </Box>
+      <SignIn></SignIn>
       <Footer></Footer>
     </Box>
   );
