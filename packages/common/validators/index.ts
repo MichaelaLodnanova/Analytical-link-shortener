@@ -1,1 +1,1 @@
-export * from './exampleValidators';
+export * from './authZod';
