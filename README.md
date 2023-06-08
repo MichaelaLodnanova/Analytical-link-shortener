@@ -15,6 +15,7 @@
 
 ### Dev Setup
 
+- `docker compose up -d` - starts database
 - `yarn install` - in root directory of project, this installs dependencies into all sub-projects.
 - `docker compose up -d` - starts the database server (docker is needed)
 - `yarn dev` - sets up the DB; starts the frontend and backend.
