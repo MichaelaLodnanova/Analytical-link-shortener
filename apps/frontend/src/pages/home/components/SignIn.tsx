@@ -1,14 +1,14 @@
-import { Box, Flex, Heading, Text } from '@chakra-ui/react';
+import { Box, Flex, HStack, Heading, Text, VStack } from '@chakra-ui/react';
 import SignInCard from './SignInCard';
 
 export default function SignIn() {
   return (
-    <Flex direction={'column'}>
+    <Box minH={'3xl'}>
       <Heading>Welcome to the Home Page</Heading>
-      <Box>
+      <VStack>
         <SignInCard></SignInCard>
-      </Box>
+      </VStack>
       <Text>Feel free to explore our website and learn more about us.</Text>
-    </Flex>
+    </Box>
   );
 }
