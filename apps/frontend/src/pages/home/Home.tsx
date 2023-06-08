@@ -1,13 +1,13 @@
-import { Box, Heading, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { Navbar } from '../../common/navbar';
 import { Footer } from '../../common/footer';
+import SignIn from './components/SignIn';
 export function Home() {
   return (
     <Box width={'100dvw'}>
       <Navbar></Navbar>
       <Box backgroundColor="secondary.200" padding={'5'}>
-        <Heading>Welcome to the Home Page</Heading>
-        <Text>Feel free to explore our website and learn more about us.</Text>
+        <SignIn></SignIn>
       </Box>
       <Footer></Footer>
     </Box>

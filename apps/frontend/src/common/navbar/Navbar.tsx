@@ -1,5 +1,4 @@
-import { ReactNode } from 'react';
-import { chakra, Flex, Image, HStack, Link, Button } from '@chakra-ui/react';
+import { chakra, Flex, Image, HStack, Button } from '@chakra-ui/react';
 
 export function Navbar() {
   return (
