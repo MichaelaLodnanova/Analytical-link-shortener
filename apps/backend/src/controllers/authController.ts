@@ -31,7 +31,8 @@ export const loginUser: (data: {
     return user;
   }
 
-  if (await verify(user.value.passwordHash, password)) {
+  const passwordOk = await verify(user.value.passwordHash, password);
+  if (!passwordOk) {
     return Result.err(new UserNotFound());
   }
 
