@@ -21,6 +21,17 @@
 - `yarn ts-check` - manually runs typescript check in all projects
 - `yarn format:{write,check}` - checks/writes prettier code style
 
+### BE testing
+
+Install insomnia and import the insomnia.json into it. If you change anything then export it, but please consult this with the team as the exports could lead to merge conflicts which are hard to resolve in this concrete situation. If you want to generate a new version of the insomnia config:
+
+1. In the top of the screen click on the arrow facing down next to the document name¨
+2. Import/Export
+3. Export data (arrow facing down)
+4. Export the "" document
+5. Select all and click "Export" in the right down corner
+6. Select insomnia v4 JSON format
+
 ### Adding new packages
 
 If you want to add new packages to either `frontend` or `backend`, then enter the corresponding folder (eg. `apps/frontend`) and normally run `yarn add xyz`. This will add the package to `package.json` in the project and install it and link it from the root node_modules into the project.
