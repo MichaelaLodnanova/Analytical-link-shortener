@@ -13,10 +13,16 @@
 > **Disclaimer:** This project uses husky to enforce conventional commits, if you see an error message while committing
 > in vscode, click the `Open git log` button, it will tell you what you did wrong.
 
-### Setup
+### Dev Setup
 
 - `yarn install` - in root directory of project, this installs dependencies into all sub-projects.
-- `yarn dev` - starts the frontend and backend
+- `docker compose up -d` - starts the database server (docker is needed)
+- `yarn dev` - starts the frontend and backend (sets up)
+
+#### Before commit
+
+Run `yarn style` to ensure the coding standard is met. The same commands are run in the CI. `style` command just wraps the following together:
+
 - `yarn lint` - manually runs eslint in all projects
 - `yarn ts-check` - manually runs typescript check in all projects
 - `yarn format:{write,check}` - checks/writes prettier code style

@@ -7,7 +7,8 @@
     "format:check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "format:write": "prettier --write \"**/*.{ts,tsx,md}\"",
     "ts-check": "turbo run ts-check",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "style": "yarn lint ts-check format:write"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.3",
