@@ -1,4 +1,4 @@
-@startuml shortener
+@startuml shortener_erd
 
 hide circle
 skinparam Linetype ortho
@@ -22,7 +22,7 @@ entity "Link" as link {
   --
   * createdById: <<FK>>
   * url: text
-  * shortUrl: text
+  * shortId: text
   * isAdvertisementEnabled: bool
   * createdAt: timestamp
   * updatedAt: timestamp

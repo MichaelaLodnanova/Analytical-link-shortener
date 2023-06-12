@@ -32,7 +32,7 @@ enum Role {
 model Link {
   id                      String                    @id @default(uuid())
   url                     String
-  shortUrl                String                    @unique
+  shortId                 String                    @unique
   isAdvertisementEnabled  Boolean
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
