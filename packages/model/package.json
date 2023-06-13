@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "db:generate": "prisma generate",
-    "db:push": "prisma migrate",
+    "db:migrate:dev": "prisma migrate dev",
     "db:seed": "ts-node prisma/seed.ts"
   },
   "publishConfig": {

@@ -38,38 +38,40 @@ async function main() {
   });
   console.log({ jdoe, advertiser, user });
 
-  await client.link.deleteMany({
-    where: {
-      createdById: user.id,
-      url: {
-        in: [
-          'https://www.google.com',
-          'https://www.facebook.com',
-          'https://www.twitter.com',
-        ],
-      },
-    },
-  });
-
   const [link1, link2, link3] = await Promise.all([
-    client.link.create({
-      data: {
+    client.link.upsert({
+      where: {
+        id: 'seed_link_1',
+      },
+      update: {},
+      create: {
+        id: 'seed_link_1',
         url: 'https://www.google.com',
         isAdvertisementEnabled: true,
         shortId: 'google',
         createdById: user.id,
       },
     }),
-    client.link.create({
-      data: {
+    client.link.upsert({
+      where: {
+        id: 'seed_link_2',
+      },
+      update: {},
+      create: {
+        id: 'seed_link_2',
         url: 'https://www.facebook.com',
         isAdvertisementEnabled: false,
         shortId: 'facebook',
         createdById: user.id,
       },
     }),
-    client.link.create({
-      data: {
+    client.link.upsert({
+      where: {
+        id: 'seed_link_3',
+      },
+      update: {},
+      create: {
+        id: 'seed_link_3',
         url: 'https://www.twitter.com',
         isAdvertisementEnabled: true,
         shortId: 'twitter',
@@ -80,8 +82,13 @@ async function main() {
   console.log({ link1, link2, link3 });
 
   const [ad1] = await Promise.all([
-    client.advertisement.create({
-      data: {
+    client.advertisement.upsert({
+      where: {
+        id: 'seed_advert_1',
+      },
+      update: {},
+      create: {
+        id: 'seed_advert_1',
         title: 'Our great AD!',
         adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
         forwardUrl: 'https://youtube.com',
@@ -93,57 +100,97 @@ async function main() {
 
   const [click1, click2, click3, click4, click5, click6, click7, click8] =
     await Promise.all([
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_1',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_1',
           linkId: link1.id,
           language: 'en',
           region: 'US',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_2',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_2',
           linkId: link2.id,
           language: 'en',
           region: 'US',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_3',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_3',
           linkId: link3.id,
           language: 'en',
           region: 'US',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_4',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_4',
           linkId: link1.id,
           language: 'cs',
           region: 'CZ',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_5',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_5',
           linkId: link1.id,
           language: 'cs',
           region: 'CZ',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_6',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_6',
           linkId: link1.id,
           language: 'sk',
           region: 'SK',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_7',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_7',
           linkId: link3.id,
           language: 'sk',
           region: 'SK',
         },
       }),
-      client.linkStatistics.create({
-        data: {
+      client.linkStatistics.upsert({
+        where: {
+          id: 'seed_link_stat_8',
+        },
+        update: {},
+        create: {
+          id: 'seed_link_stat_8',
           linkId: link3.id,
           language: 'hu',
           region: 'HU',
@@ -164,55 +211,90 @@ async function main() {
 
   const [adStat1, adStat2, adStat3, adStat4, adStat5, adStat6, adStat7] =
     await Promise.all([
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_1',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_1',
           linkId: link1.id,
           advertisementId: ad1.id,
           clickedAt: addSeconds(new Date(), 5),
         },
       }),
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_2',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_2',
           linkId: link1.id,
           advertisementId: ad1.id,
           clickedAt: addMinutes(addSeconds(new Date(), 10), 5),
           createdAt: addMinutes(new Date(), 5),
         },
       }),
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_3',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_3',
           linkId: link1.id,
           advertisementId: ad1.id,
           skippedAt: addMinutes(addSeconds(new Date(), 10), 10),
           createdAt: addMinutes(new Date(), 10),
         },
       }),
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_4',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_4',
           linkId: link1.id,
           advertisementId: ad1.id,
           clickedAt: addMinutes(addSeconds(new Date(), 10), 15),
           createdAt: addMinutes(new Date(), 15),
         },
       }),
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_5',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_5',
           linkId: link1.id,
           advertisementId: ad1.id,
           skippedAt: addMinutes(addSeconds(new Date(), 10), 20),
           createdAt: addMinutes(new Date(), 20),
         },
       }),
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_6',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_6',
           linkId: link1.id,
           advertisementId: ad1.id,
           clickedAt: addMinutes(addSeconds(new Date(), 10), 25),
           createdAt: addMinutes(new Date(), 25),
         },
       }),
-      client.advertisementStatistics.create({
-        data: {
+      client.advertisementStatistics.upsert({
+        where: {
+          id: 'seed_advert_stat_7',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_stat_7',
           linkId: link1.id,
           advertisementId: ad1.id,
           skippedAt: addMinutes(addSeconds(new Date(), 10), 30),
@@ -230,6 +312,8 @@ async function main() {
     adStat6,
     adStat7,
   });
+  console.log('');
+  console.log('DB READY! 🔥');
 }
 main()
   .then(async () => {

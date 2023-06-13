@@ -17,7 +17,11 @@
 
 - `yarn install` - in root directory of project, this installs dependencies into all sub-projects.
 - `docker compose up -d` - starts the database server (docker is needed)
-- `yarn dev` - starts the frontend and backend (sets up)
+- `yarn dev` - sets up the DB; starts the frontend and backend.
+
+### Modifying the DB
+
+In the `packages/model` use `yarn prisma migrate dev --name the_description_of_what_you_did` to create a new DB migration after you change the prisma schema. This creates a new migration in the migrations directory.
 
 #### Before commit
 
