@@ -14,3 +14,8 @@ export type ErrorResponse = {
   data: object;
   message: string;
 };
+
+export type DateRange = {
+  from: string;
+  to: string;
+};
