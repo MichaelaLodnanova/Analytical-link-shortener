@@ -10,13 +10,14 @@ import {
   ResponseAuthGet,
   ResponseAuthLogin,
   ResponseAuthLogout,
-  ResponseError,
   loginUserZod,
   registerUserZod,
 } from 'common';
-import { errorResponse } from '../utils';
 import { loginUser, registerUser } from '../controllers/authController';
 import { UserAlreadyExists, UserNotFound } from '../repository/errors';
+import { validate } from '../middleware/validationMiddleware';
+import { ErrorResponse } from 'common/types/api/utils';
+import { handleErrorResp, handleOkResp } from '../utils';
 
 const authRouter = Router();
 
@@ -27,7 +28,7 @@ const authRouter = Router();
  */
 export const getHandler = async (
   req: Request<never, never, never, RequestAuthGet>,
-  res: Response<ResponseAuthGet | ResponseError>
+  res: Response<ResponseAuthGet | ErrorResponse>
 ) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we know that user is authorized using auth middleware
   const id = req.session.user!.id;
@@ -43,11 +44,10 @@ export const getHandler = async (
   });
 
   if (!user) {
-    res.status(404).json(errorResponse('Something went wrong!'));
-    return;
+    return handleErrorResp(400, res, 'User not found.');
   }
 
-  res.json({ user });
+  return handleOkResp(user, res);
 };
 authRouter.get('/', auth(), getHandler);
 
@@ -57,32 +57,30 @@ authRouter.get('/', auth(), getHandler);
  * @returns new user data
  */
 const createHandler = async (
-  req: Request<never, never, never, RequestAuthCreate>,
-  res: Response<ResponseAuthCreate | ResponseError>
+  req: Request<never, never, RequestAuthCreate, never>,
+  res: Response<ResponseAuthCreate | ErrorResponse>
 ) => {
-  const result = await registerUserZod.safeParseAsync(req.body);
-  if (!result.success) {
-    res.status(400).json(result.error);
-    return;
-  }
-
-  const user = await registerUser(result.data);
+  const user = await registerUser(req.body);
 
   if (user.isErr && user.error instanceof UserAlreadyExists) {
-    res.status(400).json(errorResponse(user.error.message));
-    return;
+    return handleErrorResp(400, res, user.error.message);
   }
 
   if (user.isErr) {
-    res
-      .status(400)
-      .json(errorResponse('An error occurred while registering user'));
-    return;
+    return handleErrorResp(
+      400,
+      res,
+      'An error occurred while registering user'
+    );
   }
 
-  res.json({ message: 'ok' });
+  return handleOkResp('ok', res);
 };
-authRouter.post('/registration', createHandler);
+authRouter.post(
+  '/registration',
+  validate({ body: registerUserZod }),
+  createHandler
+);
 
 /**
  * This endpoint logs in a user. If the user does not exist, then 404 is
@@ -92,32 +90,29 @@ authRouter.post('/registration', createHandler);
  * @returns ok
  */
 const loginHandler = async (
-  req: Request<never, never, never, RequestAuthLogin>,
-  res: Response<ResponseAuthLogin | ResponseError>
+  req: Request<never, never, RequestAuthLogin, never>,
+  res: Response<ResponseAuthLogin | ErrorResponse>
 ) => {
-  const result = await loginUserZod.safeParseAsync(req.body);
-  if (!result.success) {
-    res.status(400).json(result.error);
-    return;
-  }
-
-  const user = await loginUser(result.data);
+  const user = await loginUser(req.body);
 
   if (user.isErr && user.error instanceof UserNotFound) {
-    res.status(404).json(errorResponse('User not found'));
-    return;
+    return handleErrorResp(404, res, 'User not found');
   }
 
   if (user.isErr) {
-    console.error(user.error);
-    res.status(400).json(errorResponse('An error occurred'));
-    return;
+    return handleErrorResp(400, res, 'An error occurred');
   }
 
   req.session.user = user.value;
-  res.json({ message: 'ok' });
+  return handleOkResp('ok', res);
 };
-authRouter.post('/login', loginHandler);
+authRouter.post(
+  '/login',
+  validate({
+    body: loginUserZod,
+  }),
+  loginHandler
+);
 
 /**
  * This endpoint logs out a user. If the user is not logged in, then 400 is
@@ -125,17 +120,15 @@ authRouter.post('/login', loginHandler);
  */
 const logoutHandler = async (
   req: Request<never, never, never, RequestAuthLogout>,
-  res: Response<ResponseAuthLogout | ResponseError>
+  res: Response<ResponseAuthLogout | ErrorResponse>
 ) => {
   req.session.destroy((err) => {
     if (err) {
-      console.error(err);
-      res.status(400).json(errorResponse('An error occurred'));
-      return;
+      return handleErrorResp(400, res, 'An error occurred');
     }
   });
 
-  res.json({ message: 'ok' });
+  return handleOkResp('ok', res);
 };
 authRouter.post('/logout', logoutHandler);
 
