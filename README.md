@@ -13,10 +13,20 @@
 > **Disclaimer:** This project uses husky to enforce conventional commits, if you see an error message while committing
 > in vscode, click the `Open git log` button, it will tell you what you did wrong.
 
-### Setup
+### Dev Setup
 
 - `yarn install` - in root directory of project, this installs dependencies into all sub-projects.
-- `yarn dev` - starts the frontend and backend
+- `docker compose up -d` - starts the database server (docker is needed)
+- `yarn dev` - sets up the DB; starts the frontend and backend.
+
+### Modifying the DB
+
+In the `packages/model` use `yarn prisma migrate dev --name the_description_of_what_you_did` to create a new DB migration after you change the prisma schema. This creates a new migration in the migrations directory.
+
+#### Before commit
+
+Run `yarn style` to ensure the coding standard is met. The same commands are run in the CI. `style` command just wraps the following together:
+
 - `yarn lint` - manually runs eslint in all projects
 - `yarn ts-check` - manually runs typescript check in all projects
 - `yarn format:{write,check}` - checks/writes prettier code style

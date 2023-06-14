@@ -9,13 +9,18 @@
     "lint": {},
     "dev": {
       "cache": false,
-      "dependsOn": ["^db:generate"]
+      "dependsOn": ["^db:seed"]
     },
     "db:generate": {
       "cache": false
     },
-    "db:push": {
-      "cache": false
+    "db:seed": {
+      "cache": false,
+      "dependsOn": ["db:migrate:dev"]
+    },
+    "db:migrate:dev": {
+      "cache": false,
+      "dependsOn": ["db:generate"]
     },
     "format:check": {},
     "format:write": {},

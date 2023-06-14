@@ -57,7 +57,8 @@ model LinkStatistics {
 model Advertisement {
   id                      String                    @id @default(uuid())
   title                   String
-  url                     String
+  adUrl                   String
+  forwardUrl              String
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @updatedAt
   deletedAt               DateTime?
