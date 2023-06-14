@@ -1,5 +1,10 @@
 import axios from 'axios';
-import { RequestAuthLogin, ResponseAuthGet, ResponseAuthLogout } from 'common';
+import {
+  RequestAuthCreate,
+  RequestAuthLogin,
+  ResponseAuthGet,
+  ResponseAuthLogout,
+} from 'common';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:4000/api',
@@ -11,7 +16,7 @@ const apiClient = axios.create({
 });
 
 export const login = async (data: RequestAuthLogin) => {
-  const resp = await apiClient.post('/auth/login', {
+  const resp = await apiClient.post<RequestAuthLogin>('/auth/login', {
     username: data.username,
     password: data.password,
   });
@@ -25,6 +30,15 @@ export const auth = async () => {
 
 export const logout = async () => {
   const resp = await apiClient.post<ResponseAuthLogout>('/auth/logout', {});
+  return resp.data;
+};
+
+export const register = async (data: RequestAuthCreate) => {
+  const resp = await apiClient.post<RequestAuthCreate>('/auth/register', {
+    username: data.username,
+    email: data.email,
+    password: data.password,
+  });
   return resp.data;
 };
 

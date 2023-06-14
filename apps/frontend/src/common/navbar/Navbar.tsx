@@ -9,13 +9,13 @@ export function Navbar() {
         py="10"
         align="center"
         justify="space-between"
-        backgroundColor="primary.main"
+        backgroundColor="primary.800"
       >
         // TODO: Logo
         <Image src="" h="50px" />
         <HStack as="nav" spacing="5"></HStack>
         <HStack>
-          <Button colorScheme="secondary" marginX={'2'}>
+          <Button colorScheme="primary" marginX={'2'}>
             Sign In
           </Button>
         </HStack>
