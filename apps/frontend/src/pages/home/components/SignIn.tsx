@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Heading, Text, VStack } from '@chakra-ui/react';
+import { Box, Heading, VStack } from '@chakra-ui/react';
 import SignInCard from './SignInCard';
 
 export default function SignIn() {
