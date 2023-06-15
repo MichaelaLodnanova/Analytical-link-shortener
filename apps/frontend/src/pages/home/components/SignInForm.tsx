@@ -48,7 +48,7 @@ export default function SignInForm({ onSubmit }: SingInFormProps) {
         </FormErrorMessage>
       </FormControl>
       <Button type="submit" padding={'4'} mt="4" colorScheme="primary">
-        Submit
+        Sign in
       </Button>
     </form>
   );

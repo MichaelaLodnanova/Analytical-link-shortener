@@ -1,13 +1,14 @@
 import { Box } from '@chakra-ui/react';
 import { Element } from 'react-scroll';
 import { Navbar } from '../../common/navbar';
+import SignUp from './components/SignUp';
 export function Home() {
   return (
     <Box>
       <Navbar></Navbar>
       <Box boxShadow="1px 2px 4px rgba(0, 0, 0, 1)">
         <Element name="home" className="element">
-          <div style={{ height: '1000px', backgroundColor: '#e5eaf5' }}></div>
+          <SignUp></SignUp>
         </Element>
         <Element name="about" className="element">
           <div style={{ height: '1000px', backgroundColor: '#a0d2eb' }}></div>

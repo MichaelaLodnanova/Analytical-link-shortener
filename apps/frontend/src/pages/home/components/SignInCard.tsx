@@ -11,7 +11,7 @@ export default function SignInCard() {
 
   return (
     <HStack>
-      <Card colorScheme="primary">
+      <Card colorScheme="primary" size={'lg'}>
         <CardHeader>
           <Heading size={'md'}>Sign in</Heading>
         </CardHeader>
