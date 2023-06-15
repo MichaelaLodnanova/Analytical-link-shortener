@@ -14,7 +14,7 @@ export default function BoxItem({
       minH={'4xl'}
       backgroundColor={color}
       display="flex"
-      justifyContent="center"
+      justifyContent="space-evenly"
       alignItems="center"
     >
       {children}

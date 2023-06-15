@@ -8,7 +8,7 @@ export default function SignInNavBar() {
     navigate('/');
   };
   return (
-    <Box boxShadow="0px 2px 4px rgba(0, 0, 0, 0.8)">
+    <Box boxShadow="0px 2px 4px rgba(0, 0, 0, 0.1)">
       <Flex
         w="100%"
         maxH={'12'}
@@ -16,7 +16,7 @@ export default function SignInNavBar() {
         py="10"
         align="center"
         justify="space-between"
-        backgroundColor="primary.800"
+        backgroundColor="#81b5d4"
       >
         {/* TODO: Logo */}
         <Image src="" h="50px" />

@@ -4,13 +4,14 @@ import {
   CardFooter,
   CardHeader,
   Heading,
+  Image,
   Text,
 } from '@chakra-ui/react';
 import BoxItem from './BoxItem';
 import SignUpForm from './SignUpForm';
 import { RegisterUserSchema } from 'common';
 import useRegister from '../../../hooks/useRegister';
-
+import smokeImage from '../../../assets/images/smoke.png';
 export default function SignUp() {
   const { register } = useRegister({ redirect: '/login' });
   const onSubmit = (data: RegisterUserSchema) => {
@@ -31,6 +32,7 @@ export default function SignUp() {
           </Text>
         </CardFooter>
       </Card>
+      <Image src={smokeImage} alt="smoke image" width={'md'}></Image>
     </BoxItem>
   );
 }

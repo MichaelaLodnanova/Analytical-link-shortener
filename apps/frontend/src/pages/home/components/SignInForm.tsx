@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 
-import { Button } from '@chakra-ui/react';
+import { Button, Divider } from '@chakra-ui/react';
 import { LoginUserSchema } from 'common';
 import { loginUserZod } from 'common';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -20,6 +20,7 @@ export default function SignInForm({ onSubmit }: SingInFormProps) {
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <Divider marginY={'4'}></Divider>
       <FormField
         errors={errors}
         label={'Username'}
@@ -33,6 +34,7 @@ export default function SignInForm({ onSubmit }: SingInFormProps) {
         name={'password'}
         type={'password'}
       ></FormField>
+      <Divider marginY={'4'}></Divider>
       <Button type="submit" padding={'4'} mt="4" colorScheme="primary">
         Sign in
       </Button>
