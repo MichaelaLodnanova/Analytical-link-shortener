@@ -7,7 +7,7 @@ import {
 } from 'common';
 
 const apiClient = axios.create({
-  baseURL: 'http://localhost:4000/api',
+  baseURL: 'http://localhost:4000',
   headers: {
     'Content-type': 'application/json',
     'Access-Control-Allow-Credentials': true,

@@ -6,20 +6,29 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App.tsx';
 const theme = extendTheme({
+  fonts: {
+    heading: `'Dosis', sans-serif`,
+    body: `'Quicksand', sans-serif`,
+  },
   colors: {
     primary: {
-      main: '#a28089',
+      main: '#d0bdf4',
       '50': '#faf7f9',
-      '100': '#f5f0f3',
-      '200': '#e8dce3',
-      '300': '#dbcad2',
-      '400': '#bfa3ae',
-      '500': '#a28089',
-      '600': '#946974',
-      '700': '#7a4854',
-      '800': '#612e39',
-      '900': '#4a1b24',
-      '950': '#300b11',
+      '100': '#494d5f',
+      '200': '#8458b3',
+      '300': '#d0bdf4',
+      '400': '#e5eaf5',
+      '500': '#a0d2eb',
+      '600': '#f5fbfc',
+      '700': '#d0bdf4',
+      '800': '#e2d0f7',
+      '900': '#b8c3db',
+      '950': '#81b5d4',
+    },
+    navbar: {
+      main: 'primary.800',
+      100: '#e2d0f7',
+      200: '#f6edfc',
     },
   },
 });
