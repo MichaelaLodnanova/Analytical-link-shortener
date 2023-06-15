@@ -6,6 +6,10 @@ import ReactDOM from 'react-dom/client';
 
 import App from './App.tsx';
 const theme = extendTheme({
+  fonts: {
+    heading: `'Dosis', sans-serif`,
+    body: `'Quicksand', sans-serif`,
+  },
   colors: {
     primary: {
       main: '#d0bdf4',
