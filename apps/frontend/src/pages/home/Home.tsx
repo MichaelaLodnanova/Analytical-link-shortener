@@ -12,11 +12,11 @@ export function Home() {
         <Element name="about" className="element">
           <div style={{ height: '1000px', backgroundColor: '#a0d2eb' }}></div>
         </Element>
-        <Element name="contact" className="element">
-          <div style={{ height: '1000px', backgroundColor: '#494d5f' }}></div>
-        </Element>
         <Element name="shortenpath" className="element">
           <div style={{ height: '1000px', backgroundColor: '#8458b3' }}></div>
+        </Element>
+        <Element name="contact" className="element">
+          <div style={{ height: '1000px', backgroundColor: '#494d5f' }}></div>
         </Element>
       </Box>
     </Box>
