@@ -17,24 +17,26 @@ import { LoginUserSchema } from 'common';
 import { useMutation, useQueryClient } from 'react-query';
 import { login } from '../../../controllers/ApiController';
 import { useNavigate } from 'react-router-dom';
+import { loginUserZod } from 'common';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export default function SignInCard() {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginUserSchema>();
+  } = useForm<LoginUserSchema>({
+    resolver: zodResolver(loginUserZod),
+  });
   const mutation = useMutation({
     mutationFn: (data: LoginUserSchema) => {
       return login(data);
     },
   });
-  const toast = useToast();
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const onSubmit = (data: LoginUserSchema) => {
-    // Handle form submission logic here
-    console.log(data.username);
     mutation.mutate(data);
     if (mutation.isSuccess) {
       toast({

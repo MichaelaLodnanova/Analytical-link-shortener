@@ -5,7 +5,7 @@ export function Router() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route index element={<Home />} />
       </Routes>
     </BrowserRouter>
   );
