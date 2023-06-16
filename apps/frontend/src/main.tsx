@@ -30,6 +30,20 @@ const theme = extendTheme({
       100: '#e2d0f7',
       200: '#f6edfc',
     },
+    cards: {
+      main: '#e5eaf5',
+      '50': '#ffffff',
+      '100': '#fcfeff',
+      '200': '#f7fafc',
+      '300': '#f2f6fa',
+      '400': '#ebf0f7',
+      '500': '#e5eaf5',
+      '600': '#b8c3db',
+      '700': '#8190b8',
+      '800': '#536394',
+      '900': '#2e3d6e',
+      '950': '#131e47',
+    },
   },
 });
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
