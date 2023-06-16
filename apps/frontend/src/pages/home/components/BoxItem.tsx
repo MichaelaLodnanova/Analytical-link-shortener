@@ -11,7 +11,7 @@ export default function BoxItem({
 }: PropsWithChildren<BoxItemProps>) {
   return (
     <Box
-      minH={'4xl'}
+      minH={'2xl'}
       backgroundColor={color}
       display="flex"
       justifyContent="space-evenly"
