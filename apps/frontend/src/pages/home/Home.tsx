@@ -3,6 +3,7 @@ import { Element } from 'react-scroll';
 import { Navbar } from '../../common/navbar';
 import SignUp from './components/SignUp';
 import Contact from './components/Contact';
+import About from './components/About';
 export function Home() {
   return (
     <Box>
@@ -12,7 +13,7 @@ export function Home() {
           <SignUp></SignUp>
         </Element>
         <Element name="about" className="element">
-          <div style={{ height: '1000px', backgroundColor: '#a0d2eb' }}></div>
+          <About></About>
         </Element>
         <Element name="shortenpath" className="element">
           <div style={{ height: '1000px', backgroundColor: '#8458b3' }}></div>
