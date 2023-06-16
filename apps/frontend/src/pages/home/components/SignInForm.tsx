@@ -1,15 +1,10 @@
 import { useForm } from 'react-hook-form';
 
-import {
-  FormControl,
-  FormErrorMessage,
-  Input,
-  Heading,
-  Button,
-} from '@chakra-ui/react';
+import { Button, Divider } from '@chakra-ui/react';
 import { LoginUserSchema } from 'common';
 import { loginUserZod } from 'common';
 import { zodResolver } from '@hookform/resolvers/zod';
+import FormField from './FormField';
 
 type SingInFormProps = {
   onSubmit: (data: LoginUserSchema) => void;
@@ -25,30 +20,23 @@ export default function SignInForm({ onSubmit }: SingInFormProps) {
   });
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <FormControl
-        padding="1"
-        textAlign="center"
-        isInvalid={errors.username != undefined ? true : undefined}
-      >
-        <Heading size={'sm'}>Username</Heading>
-        <Input type="username" {...register('username', { required: true })} />
-        <FormErrorMessage fontSize="sm" color="red">
-          {errors.username && 'Username is required'}
-        </FormErrorMessage>
-      </FormControl>
-      <FormControl
-        padding="1"
-        textAlign="center"
-        isInvalid={errors.password != undefined ? true : undefined}
-      >
-        <Heading size={'sm'}>Password</Heading>
-        <Input type="password" {...register('password', { required: true })} />
-        <FormErrorMessage fontSize="sm" color="red">
-          {errors.password && 'Password is required'}
-        </FormErrorMessage>
-      </FormControl>
+      <Divider marginY={'4'}></Divider>
+      <FormField
+        errors={errors}
+        label={'Username'}
+        {...register('username')}
+        name={'username'}
+      ></FormField>
+      <FormField
+        errors={errors}
+        label={'Password'}
+        {...register('password')}
+        name={'password'}
+        type={'password'}
+      ></FormField>
+      <Divider marginY={'4'}></Divider>
       <Button type="submit" padding={'4'} mt="4" colorScheme="primary">
-        Submit
+        Sign in
       </Button>
     </form>
   );
