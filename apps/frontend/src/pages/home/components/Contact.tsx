@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardBody,
   CardFooter,
@@ -7,10 +8,10 @@ import {
   Heading,
   useToast,
 } from '@chakra-ui/react';
-import BoxItem from './BoxItem';
 import { ContactFormSchema } from 'common';
 import ContactForm from './ContactForm';
 import { useNavigate } from 'react-router-dom';
+import backgroundPicture from '../../../assets/images/pngegg.png';
 export default function Contact() {
   const toast = useToast();
   const navigate = useNavigate();
@@ -27,9 +28,17 @@ export default function Contact() {
     navigate('/');
   };
   return (
-    <BoxItem color={'primary.100'}>
+    <Box
+      minH={'2xl'}
+      backgroundColor={'primary.100'}
+      backgroundImage={backgroundPicture}
+      backgroundSize={'cover'}
+      display="flex"
+      justifyContent="space-evenly"
+      alignItems="center"
+    >
       <Flex justifyContent={'flex-start'}>
-        <Card>
+        <Card position={'relative'}>
           <CardHeader>
             <Heading size={'2xl'} marginX={'6'}>
               Let's keep in touch!
@@ -41,6 +50,6 @@ export default function Contact() {
           <CardFooter></CardFooter>
         </Card>
       </Flex>
-    </BoxItem>
+    </Box>
   );
 }
