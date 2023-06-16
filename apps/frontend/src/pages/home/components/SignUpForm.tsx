@@ -23,6 +23,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
         <FormField
           errors={errors}
           label={field.label}
+          key={field.name}
           {...register(field.name)}
           type={field.type}
           placeholder={field.placeholder}
