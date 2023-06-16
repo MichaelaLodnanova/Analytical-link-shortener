@@ -2,7 +2,6 @@ import bodyParser from 'body-parser';
 import { AnonymizedUser } from 'common';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import { formatISO } from 'date-fns';
 import * as dotenv from 'dotenv';
 import express from 'express';
 import JSONBig from 'json-bigint';
