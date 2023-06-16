@@ -4,6 +4,7 @@ import { Navbar } from '../../common/navbar';
 import SignUp from './components/SignUp';
 import Contact from './components/Contact';
 import About from './components/About';
+import Shortener from './components/Shortener';
 export function Home() {
   return (
     <Box>
@@ -16,7 +17,7 @@ export function Home() {
           <About></About>
         </Element>
         <Element name="shortenpath" className="element">
-          <div style={{ height: '1000px', backgroundColor: '#8458b3' }}></div>
+          <Shortener></Shortener>
         </Element>
         <Element name="contact" className="element">
           <Contact></Contact>
