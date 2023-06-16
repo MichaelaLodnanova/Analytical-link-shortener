@@ -8,3 +8,6 @@ export const linkStatsZod = z
   .merge(dateRangeZod)
   .strict();
 export type LinkStatsSchema = z.infer<typeof linkStatsZod>;
+
+export const advertisementStatsZod = linkStatsZod;
+export type AdvertisementStatsSchema = z.infer<typeof advertisementStatsZod>;

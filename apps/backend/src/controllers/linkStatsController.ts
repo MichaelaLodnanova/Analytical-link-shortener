@@ -1,25 +1,22 @@
 import { Result } from '@badrap/result';
 import { PResult } from 'common';
+
 import { queryLinkStatistics } from '../repository/linkStatsRepository';
-import { DateRange } from 'common/types/api/utils';
+import { LinkQueryFilters } from '../types/query';
 import { statisticsToKeyMap } from '../utils/reducers';
 
 /**
  * Gets statistics by link id, user id, or date range.
- * @param data
+ * @param filter
  * @returns
  */
-export const getLinkStatistics: (data: {
-  linkId?: string;
-  userId?: string;
-  range?: DateRange;
-}) => PResult<{
+export const getLinkStatistics: (filter: LinkQueryFilters) => PResult<{
   impressions: number;
   region: Record<string, number>;
   language: Record<string, number>;
-}> = async (data) => {
+}> = async (filter) => {
   try {
-    const statisticsResult = await queryLinkStatistics(data);
+    const statisticsResult = await queryLinkStatistics(filter);
 
     if (statisticsResult.isErr) {
       return Result.err(statisticsResult.error);

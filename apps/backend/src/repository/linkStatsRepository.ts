@@ -1,23 +1,22 @@
 import { Result } from '@badrap/result';
 import { PResult } from 'common';
-import { DateRange } from 'common/types/api/utils';
 import { client, LinkStatistics } from 'model';
+
+import { LinkQueryFilters } from '../types/query';
 
 /**
  * Gets statistics by link id, user id, or date range.
  */
-export const queryLinkStatistics: (data: {
-  linkId?: string;
-  userId?: string;
-  range?: DateRange;
-}) => PResult<LinkStatistics[]> = async (data) => {
+export const queryLinkStatistics: (
+  filter: LinkQueryFilters
+) => PResult<LinkStatistics[]> = async (filter) => {
   try {
     const statistics = await client.linkStatistics.findMany({
       where: {
-        ...(data.linkId && { linkId: data.linkId }),
-        ...(data.userId && { link: { createdById: data.userId } }),
-        ...(data.range && {
-          createdAt: { gte: data.range.from, lte: data.range.to },
+        ...(filter.linkId && { linkId: filter.linkId }),
+        ...(filter.userId && { link: { createdById: filter.userId } }),
+        ...(filter.range && {
+          createdAt: { gte: filter.range.from, lte: filter.range.to },
         }),
       },
     });

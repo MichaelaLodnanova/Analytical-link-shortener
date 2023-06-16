@@ -1,13 +1,13 @@
 import {
   AnonymizedUser,
-  RequestStatsLinkGet,
-  ResponseStatsLinkGet,
+  RequestStatsAdsGet,
+  ResponseStatsAdsGet,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import { Request, Response, Router } from 'express';
 
-import { linkStatsZod } from '../../../../../packages/common/validators/statsZod';
-import { getLinkStatistics } from '../../controllers/linkStatsController';
+import { advertisementStatsZod } from '../../../../../packages/common/validators/statsZod';
+import { getAdvertisementStatistics } from '../../controllers/advertisementStatsController';
 import auth from '../../middleware/authMiddleware';
 import { validate } from '../../middleware/validationMiddleware';
 import { handleErrorResp, handleOkResp } from '../../utils';
@@ -15,17 +15,16 @@ import { handleErrorResp, handleOkResp } from '../../utils';
 const linkStatsRouter = Router();
 
 /**
- * This endpoint logs out a user. If the user is not logged in, then 400 is
- * returned.
+ * Endpoint for getting advertisement statistics
  */
-const linkStatsGetHandler = async (
-  req: Request<never, never, never, RequestStatsLinkGet>,
-  res: Response<ResponseStatsLinkGet | ErrorResponse>
+const advertisementsStatsGetHandler = async (
+  req: Request<never, never, never, RequestStatsAdsGet>,
+  res: Response<ResponseStatsAdsGet | ErrorResponse>
 ) => {
   // We expect the auth middleware to do its work, so we type cast this
   const user = req.session.user as AnonymizedUser;
 
-  const stats = await getLinkStatistics({
+  const stats = await getAdvertisementStatistics({
     userId: user.id,
     range:
       req.query.from && req.query.to
@@ -34,7 +33,7 @@ const linkStatsGetHandler = async (
             to: req.query.to,
           }
         : undefined,
-    linkId: req.query.id,
+    adId: req.query.id,
   });
 
   if (stats.isErr) {
@@ -52,9 +51,9 @@ const linkStatsGetHandler = async (
 };
 linkStatsRouter.get(
   '/',
-  auth(),
-  validate({ query: linkStatsZod }),
-  linkStatsGetHandler
+  auth('ADVERTISER'),
+  validate({ query: advertisementStatsZod }),
+  advertisementsStatsGetHandler
 );
 
 export default linkStatsRouter;
