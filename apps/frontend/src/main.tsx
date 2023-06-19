@@ -45,6 +45,8 @@ const theme = extendTheme({
       '950': '#131e47',
     },
   },
+  initialColorMode: 'light',
+  useSystemColorMode: false,
 });
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
