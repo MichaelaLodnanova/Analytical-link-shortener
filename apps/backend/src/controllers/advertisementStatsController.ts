@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { PResult } from 'common';
+import { PResult, TimelineEntry } from 'common';
 
 import {
   queryAdvertisementConversions,
@@ -23,9 +23,9 @@ export const getAdvertisementStatistics: (
   conversions: number;
   skips: number;
   conversionRate: number;
-  conversionTimeline: Record<string, number>;
-  impressionsTimeline: Record<string, number>;
-  skipsTimeline: Record<string, number>;
+  conversionTimeline: TimelineEntry[];
+  impressionsTimeline: TimelineEntry[];
+  skipsTimeline: TimelineEntry[];
 }> = async (data) => {
   try {
     const conversionsResult = await queryAdvertisementConversions(data);

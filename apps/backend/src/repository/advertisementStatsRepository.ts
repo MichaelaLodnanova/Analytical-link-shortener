@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { PResult } from 'common';
+import { PResult, TimelineEntry } from 'common';
 import { formatISO, parseISO } from 'date-fns';
 import { client, Prisma } from 'model';
 
@@ -149,13 +149,13 @@ const queryTimelineData: (
  */
 const postProcessTimelineData = (
   data: TimelineRawQueryData
-): Record<string, number> => {
-  const result: Record<string, number> = {};
+): TimelineEntry[] => {
+  const result: TimelineEntry[] = [];
   data.forEach((item) => {
     if (item.summarydate == null) {
       return;
     }
-    result[formatISO(item.summarydate)] = item.count;
+    result.push({ date: formatISO(item.summarydate), value: item.count });
   });
   return result;
 };

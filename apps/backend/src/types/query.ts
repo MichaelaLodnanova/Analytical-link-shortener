@@ -1,4 +1,4 @@
-import { PResult } from 'common';
+import { PResult, TimelineEntry } from 'common';
 import { DateRange } from 'common/types/api/utils';
 
 export type AdvertisementQueryFilters = {
@@ -24,4 +24,4 @@ export type AdStatsNumQuery = (
 
 export type AdStatsTimelineQuery = (
   filter: AdvertisementQueryFilters
-) => PResult<Record<string, number>>;
+) => PResult<TimelineEntry[]>;
