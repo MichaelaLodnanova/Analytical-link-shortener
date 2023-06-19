@@ -3,7 +3,7 @@ import { LoginUserSchema } from 'common';
 import SignInForm from './SignInForm';
 import useLogin from '../../../hooks/useLogin';
 export default function SignInCard() {
-  const { login } = useLogin({ redirect: '/' });
+  const { login } = useLogin({ redirect: '/auth' });
   const onSubmit = (data: LoginUserSchema) => {
     login(data);
   };

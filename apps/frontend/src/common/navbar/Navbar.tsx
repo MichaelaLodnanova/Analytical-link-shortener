@@ -1,10 +1,7 @@
-import { Flex, Image, HStack, Button, Box, IconButton } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, Image } from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
-import { useUser } from '../../hooks/useUser';
-import { CiLogout } from 'react-icons/ci';
-import useLogout from '../../hooks/useLogout';
 
 export function Navbar() {
   const navigate = useNavigate();
@@ -22,8 +19,7 @@ export function Navbar() {
     ],
     []
   );
-  const { authorized } = useUser();
-  const { logout } = useLogout({ redirect: '/' });
+
   return (
     <Box>
       <Flex
@@ -51,30 +47,15 @@ export function Navbar() {
           ))}
         </HStack>
         <HStack>
-          {!authorized && (
-            <Button
-              bg="cyan.50"
-              _hover={{ bg: 'cyan.100', borderColor: 'cyan.100' }}
-              borderColor={'cyan.50'}
-              marginX={'2'}
-              onClick={handleSignInClick}
-            >
-              Sign In
-            </Button>
-          )}
-          {authorized && (
-            <IconButton
-              aria-label="logout"
-              bg="transparent"
-              borderRadius={'full'}
-              _hover={{ bg: 'cyan.100', borderColor: 'cyan.100' }}
-              marginX={'2'}
-              type="button"
-              onClick={() => logout()}
-            >
-              <CiLogout size="1.5rem" />
-            </IconButton>
-          )}
+          <Button
+            bg="cyan.50"
+            _hover={{ bg: 'cyan.100', borderColor: 'cyan.100' }}
+            borderColor={'cyan.50'}
+            marginX={'2'}
+            onClick={handleSignInClick}
+          >
+            Sign In
+          </Button>
         </HStack>
       </Flex>
     </Box>

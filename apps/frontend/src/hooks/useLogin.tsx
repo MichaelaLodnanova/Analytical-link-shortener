@@ -28,6 +28,7 @@ export default function useLogin({ redirect }: UseLoginProps) {
         status: 'error',
         duration: 5000,
         isClosable: true,
+        position: 'top-right',
       });
     },
     onSuccess: () => {
@@ -38,6 +39,7 @@ export default function useLogin({ redirect }: UseLoginProps) {
         colorScheme: 'primary',
         duration: 5000,
         isClosable: true,
+        position: 'top-right',
       });
       navigate(redirect);
       queryClient.invalidateQueries(['auth']);
