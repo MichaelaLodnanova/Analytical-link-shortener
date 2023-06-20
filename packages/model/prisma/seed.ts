@@ -9,6 +9,8 @@ async function main() {
     create: {
       email: 'jdoe@sniplyt.io',
       username: 'jdoe',
+      name: 'John',
+      surname: 'Doe',
       passwordHash:
         '$argon2id$v=19$m=65536,t=3,p=4$hALQKDPNr3UeG3ZaTOSNrQ$HCnvJOYSsYgPp7N/+Ccq2LHlIjm49+UetnKIa+3HeqA', // 123456789
       role: 'ADMIN',
@@ -20,6 +22,8 @@ async function main() {
     create: {
       email: 'advertiser@sniplyt.io',
       username: 'advertiser',
+      name: 'Fero',
+      surname: 'Lakatoš',
       passwordHash:
         '$argon2id$v=19$m=65536,t=3,p=4$hALQKDPNr3UeG3ZaTOSNrQ$HCnvJOYSsYgPp7N/+Ccq2LHlIjm49+UetnKIa+3HeqA', // 123456789
       role: 'ADVERTISER',
@@ -31,6 +35,8 @@ async function main() {
     create: {
       email: 'user@sniplyt.io',
       username: 'user',
+      name: 'Jožo',
+      surname: 'Rožok',
       passwordHash:
         '$argon2id$v=19$m=65536,t=3,p=4$hALQKDPNr3UeG3ZaTOSNrQ$HCnvJOYSsYgPp7N/+Ccq2LHlIjm49+UetnKIa+3HeqA', // 123456789
       role: 'USER',

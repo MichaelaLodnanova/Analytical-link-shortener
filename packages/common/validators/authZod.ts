@@ -3,6 +3,8 @@ import z from 'zod';
 export const registerUserZod = z.object({
   email: z.string().nonempty().email(),
   username: z.string().nonempty().min(3).max(20),
+  name: z.string(),
+  surname: z.string(),
   password: z.string().nonempty().min(8).max(20),
 });
 export type RegisterUserSchema = z.infer<typeof registerUserZod>;

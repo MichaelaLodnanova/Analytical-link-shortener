@@ -3,6 +3,7 @@ import { useUser } from '../hooks/useUser';
 import { Spinner } from '@chakra-ui/react';
 import { useEffect } from 'react';
 import SidebarWithHeader from '../common/sidebar/SidebarWithHeader';
+import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
 
 export default function AuthorizedRouter() {
   const { isLoading, authorized } = useUser();
@@ -28,6 +29,7 @@ export default function AuthorizedRouter() {
         <Routes>
           <Route path="/dashboard" element={<p>asdasd</p>} />
           <Route path="/lol" element={<p>xdd</p>} />
+          <Route path="/profile" element={<ProfileSettings />} />
         </Routes>
       </SidebarWithHeader>
     </>

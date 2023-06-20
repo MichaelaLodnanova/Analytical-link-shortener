@@ -18,6 +18,8 @@ export const getUserById: (id: string) => PResult<AnonymizedUser> = async (
         id: true,
         email: true,
         username: true,
+        name: true,
+        surname: true,
         role: true,
       },
     });
@@ -41,8 +43,16 @@ export const getUserById: (id: string) => PResult<AnonymizedUser> = async (
 export const createUser: (data: {
   email: string;
   username: string;
+  name: string;
+  surname: string;
   passwordHash: string;
-}) => PResult<AnonymizedUser> = async ({ email, username, passwordHash }) => {
+}) => PResult<AnonymizedUser> = async ({
+  email,
+  username,
+  name,
+  surname,
+  passwordHash,
+}) => {
   try {
     const existingUser = await client.user.findFirst({
       where: {
@@ -62,12 +72,16 @@ export const createUser: (data: {
       data: {
         email,
         username,
+        name,
+        surname,
         passwordHash,
       },
       select: {
         id: true,
         email: true,
         username: true,
+        name: true,
+        surname: true,
         role: true,
       },
     });

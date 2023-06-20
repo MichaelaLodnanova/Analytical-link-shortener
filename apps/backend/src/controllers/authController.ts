@@ -12,11 +12,25 @@ import { UserNotFound } from '../repository/errors';
 export const registerUser: (data: {
   email: string;
   username: string;
+  name: string;
+  surname: string;
   password: string;
-}) => PResult<AnonymizedUser> = async ({ email, username, password }) => {
+}) => PResult<AnonymizedUser> = async ({
+  email,
+  username,
+  name,
+  surname,
+  password,
+}) => {
   const passwordHash = await hash(password);
 
-  const user = await createUser({ email, username, passwordHash });
+  const user = await createUser({
+    email,
+    username,
+    name,
+    surname,
+    passwordHash,
+  });
 
   return user;
 };
@@ -40,6 +54,8 @@ export const loginUser: (data: {
     id: user.value.id,
     email: user.value.email,
     username: user.value.username,
+    name: user.value.name,
+    surname: user.value.surname,
     role: user.value.role,
   });
 };
