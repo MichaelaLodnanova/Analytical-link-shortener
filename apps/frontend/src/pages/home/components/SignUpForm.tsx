@@ -18,7 +18,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
   });
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit, console.error)}>
       {formFields.map((field) => (
         <FormField
           errors={errors}

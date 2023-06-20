@@ -18,6 +18,7 @@ export default function SignUp() {
   const { register } = useRegister({ redirect: '/login' });
   const onSubmit = (data: RegisterUserSchema) => {
     register(data);
+    console.log(data);
   };
 
   const isMobile = useBreakpointValue({ base: true, md: false });
