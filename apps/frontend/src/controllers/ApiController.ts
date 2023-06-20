@@ -3,6 +3,7 @@ import {
   RequestAuthCreate,
   RequestAuthLogin,
   RequestStatsAdsGet,
+  RequestAuthUpdateUser,
   ResponseAuthGet,
   ResponseAuthLogout,
   ResponseStatsAdsGet,
@@ -40,6 +41,8 @@ export const register = async (data: RequestAuthCreate) => {
   const resp = await apiClient.post<RequestAuthCreate>('/auth/registration', {
     username: data.username,
     email: data.email,
+    name: '',
+    surname: '',
     password: data.password,
   });
   return resp.data;
@@ -52,6 +55,16 @@ export const adStatistics = async (data: RequestStatsAdsGet) => {
     ).toString()}`
   );
 
+  return resp.data;
+};
+
+export const update = async (data: RequestAuthUpdateUser) => {
+  const resp = await apiClient.put<RequestAuthUpdateUser>('/auth', {
+    name: data.name,
+    surname: data.surname,
+    oldPassword: data.oldPassword,
+    newPassword: data.newPassword,
+  });
   return resp.data;
 };
 

@@ -1,4 +1,8 @@
-import { LoginUserSchema, RegisterUserSchema } from '../../validators';
+import {
+  LoginUserSchema,
+  RegisterUserSchema,
+  UpdateUserSchema,
+} from '../../validators';
 import { AnonymizedUser } from '../entities';
 import { SuccessResponse } from './utils';
 
@@ -13,3 +17,6 @@ export type ResponseAuthLogin = SuccessResponse<unknown>;
 
 export type RequestAuthLogout = Record<string, never>;
 export type ResponseAuthLogout = SuccessResponse<unknown>;
+
+export type RequestAuthUpdateUser = UpdateUserSchema;
+export type ResponseAuthUpdateUser = SuccessResponse<unknown>;
