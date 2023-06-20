@@ -1,6 +1,11 @@
 import { hash, verify } from 'argon2';
 import { AnonymizedUser, PResult } from 'common';
-import { createUser, getUserByUsername } from '../repository/usersRepository';
+import {
+  createUser,
+  getUserAuthorizedById,
+  getUserByUsername,
+  updateUser as updateUserDB,
+} from '../repository/usersRepository';
 import { Result } from '@badrap/result';
 import { UserNotFound } from '../repository/errors';
 
@@ -34,7 +39,37 @@ export const registerUser: (data: {
 
   return user;
 };
+export const updateUser: (data: {
+  id: string;
+  name?: string;
+  surname?: string;
+  oldPassword?: string;
+  newPassword?: string;
+}) => PResult<AnonymizedUser> = async ({
+  id,
+  name,
+  surname,
+  oldPassword,
+  newPassword,
+}) => {
+  const userOld = await getUserAuthorizedById(id);
+  if (userOld.isErr) {
+    return Result.err(userOld.error);
+  }
+  if (oldPassword) {
+    const passwordOk = await verify(userOld.value.passwordHash, oldPassword);
+    if (!passwordOk) {
+      return Result.err(new UserNotFound());
+    }
+  }
+  const passwordHash: string | undefined = newPassword
+    ? await hash(newPassword)
+    : undefined;
 
+  const user = await updateUserDB({ id, name, surname, passwordHash });
+
+  return user;
+};
 export const loginUser: (data: {
   username: string;
   password: string;

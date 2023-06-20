@@ -7,12 +7,7 @@ import {
   Input,
   Stack,
   useColorModeValue,
-  Avatar,
-  AvatarBadge,
-  IconButton,
-  Center,
 } from '@chakra-ui/react';
-import { SmallCloseIcon } from '@chakra-ui/icons';
 
 export default function ProfileSettings(): JSX.Element {
   return (
@@ -30,27 +25,6 @@ export default function ProfileSettings(): JSX.Element {
         <Heading lineHeight={1.1} fontSize={{ base: '2xl', sm: '3xl' }}>
           User Profile Edit
         </Heading>
-        <FormControl id="userName">
-          <FormLabel>User Icon</FormLabel>
-          <Stack direction={['column', 'row']} spacing={6}>
-            <Center>
-              <Avatar size="xl" src="https://bit.ly/sage-adebayo">
-                <AvatarBadge
-                  as={IconButton}
-                  size="sm"
-                  rounded="full"
-                  top="-10px"
-                  colorScheme="red"
-                  aria-label="remove Image"
-                  icon={<SmallCloseIcon />}
-                />
-              </Avatar>
-            </Center>
-            <Center w="full">
-              <Button w="full">Change Icon</Button>
-            </Center>
-          </Stack>
-        </FormControl>
         <FormControl id="userName" isRequired>
           <FormLabel>User name</FormLabel>
           <Input

@@ -1,30 +1,24 @@
 import { useToast } from '@chakra-ui/react';
-import { RegisterUserSchema } from 'common';
+import { UpdateUserSchema } from 'common';
 import { useMutation, useQueryClient } from 'react-query';
-import { useNavigate } from 'react-router-dom';
-import { register as apiRegister } from '../controllers/ApiController';
+import { update as apiUpdate } from '../controllers/ApiController';
 
-type UseRegisterProps = {
-  redirect: string;
-};
-
-export default function useUpdateUser({ redirect }: UseRegisterProps) {
+export default function useUpdateUser() {
   const toast = useToast();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const {
-    mutateAsync: register,
+    mutateAsync: update,
     isLoading,
     isError,
   } = useMutation({
-    mutationFn: (data: RegisterUserSchema) => {
-      return apiRegister(data);
+    mutationFn: (data: UpdateUserSchema) => {
+      return apiUpdate(data);
     },
     onError: () => {
       toast({
-        title: 'User already registered!',
-        description: 'You already have an account',
+        title: 'Unable to change your account',
+        description: 'There is an error while updating your account',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -33,17 +27,16 @@ export default function useUpdateUser({ redirect }: UseRegisterProps) {
     },
     onSuccess: () => {
       toast({
-        title: 'Successfully registered!',
-        description: 'You were successfully registered',
+        title: 'Successfully changed!',
+        description: 'You have successfully changed your account',
         status: 'success',
         colorScheme: 'primary',
         duration: 5000,
         isClosable: true,
         position: 'top-right',
       });
-      navigate(redirect);
       queryClient.invalidateQueries(['auth']);
     },
   });
-  return { register, isLoading, isError };
+  return { update, isLoading, isError };
 }
