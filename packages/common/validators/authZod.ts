@@ -20,7 +20,10 @@ export const updateUserZod = z
     name: z.string().optional(),
     surname: z.string().optional(),
     oldPassword: z.string().optional(),
-    newPassword: z.string().min(8).max(20).optional(),
+    newPassword: z.preprocess((newPassword) => {
+      if (!newPassword || typeof newPassword !== 'string') return undefined;
+      return newPassword === '' ? undefined : newPassword;
+    }, z.string().min(8).max(20).optional()),
   })
   .superRefine((values, ctx) => {
     if (
