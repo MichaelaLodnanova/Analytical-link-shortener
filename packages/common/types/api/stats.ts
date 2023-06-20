@@ -5,16 +5,21 @@ export type RequestStatsLinkGet = DateRange & {
   id?: string;
 };
 
+export type PieChartEntry = {
+  key: string;
+  value: number;
+};
+
 export type ResponseStatsLinkGetData = {
   impressions: number;
   /**
    * Region code mapped to number of impressions
    */
-  region: Record<string, number>;
+  region: TimelineEntry[];
   /**
    * Language mapped to number of impressions
    */
-  language: Record<string, number>;
+  language: TimelineEntry[];
 };
 export type ResponseStatsLinkGet = SuccessResponse<ResponseStatsLinkGetData>;
 
@@ -50,9 +55,16 @@ export type ResponseStatsAdsGet = SuccessResponse<{
   /**
    * Region code mapped to number of impressions
    */
-  //region: Record<string, number>;
+  region: TimelineEntry[];
   /**
    * Language mapped to number of impressions
    */
-  //language: Record<string, number>;
+  language: TimelineEntry[];
+
+  today: {
+    impressions: number;
+    skips: number;
+    conversions: number;
+    conversionRate: number;
+  };
 }>;

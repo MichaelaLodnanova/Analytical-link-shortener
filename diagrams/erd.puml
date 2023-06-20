@@ -46,6 +46,8 @@ entity "Advertisement" as ad {
   * createdById: <<FK>>
   * title: text
   * adUrl: text
+  * region: text
+  * language: text
   * forwardUrl: text
   * type: ENUM(VIDEO, PHOTO)
   * createdAt: timestamp

@@ -6,3 +6,7 @@ export type OmitDates<T extends object> = Omit<
 >;
 
 export type PResult<T> = Promise<Result<T>>;
+
+export type KeysMatching<T, V> = keyof {
+  [P in keyof T as T[P] extends V ? P : never]: P;
+};
