@@ -7,9 +7,6 @@ export default function Shortener() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Perform any necessary logic or API calls with the entered URL
-    console.log('Submitted URL:', url);
-    // Clear the input field
     setUrl('');
   };
 

@@ -65,7 +65,6 @@ export const update = async (data: RequestAuthUpdateUser) => {
     oldPassword: data.oldPassword,
     newPassword: data.newPassword,
   });
-
   return resp.data;
 };
 
