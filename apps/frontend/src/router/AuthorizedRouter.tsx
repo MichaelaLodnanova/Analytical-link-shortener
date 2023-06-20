@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import SidebarWithHeader from '../common/sidebar/SidebarWithHeader';
 import { Dashboard } from '../pages/dashboard/Dashboard';
 import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
+import { Dashboard } from '../pages/dashboard/Dashboard';
 
 export default function AuthorizedRouter() {
   const { isLoading, authorized } = useUser();

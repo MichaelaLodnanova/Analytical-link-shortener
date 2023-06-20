@@ -4,6 +4,7 @@ import {
   RequestAuthLogin,
   RequestStatsAdsGet,
   RequestAuthUpdateUser,
+  RequestStatsAdsGet,
   ResponseAuthGet,
   ResponseAuthLogout,
   ResponseStatsAdsGet,
@@ -65,6 +66,17 @@ export const update = async (data: RequestAuthUpdateUser) => {
     oldPassword: data.oldPassword,
     newPassword: data.newPassword,
   });
+
+  return resp.data;
+};
+
+export const adStatistics = async (data: RequestStatsAdsGet) => {
+  const resp = await apiClient.get<ResponseStatsAdsGet>(
+    `/stats/advertisement?${new URLSearchParams(
+      sanitizeSearchParams(data)
+    ).toString()}`
+  );
+
   return resp.data;
 };
 
