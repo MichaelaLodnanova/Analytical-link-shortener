@@ -70,14 +70,4 @@ export const update = async (data: RequestAuthUpdateUser) => {
   return resp.data;
 };
 
-export const adStatistics = async (data: RequestStatsAdsGet) => {
-  const resp = await apiClient.get<ResponseStatsAdsGet>(
-    `/stats/advertisement?${new URLSearchParams(
-      sanitizeSearchParams(data)
-    ).toString()}`
-  );
-
-  return resp.data;
-};
-
 export default apiClient;
