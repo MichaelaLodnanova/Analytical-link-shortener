@@ -5,6 +5,7 @@ import SignUp from './components/SignUp';
 import Contact from './components/Contact';
 import About from './components/About';
 import Shortener from './components/Shortener';
+import { Footer } from '../../common/footer';
 export function Home() {
   return (
     <Box>
@@ -23,6 +24,7 @@ export function Home() {
           <Contact></Contact>
         </Element>
       </Box>
+      <Footer></Footer>
     </Box>
   );
 }
