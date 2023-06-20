@@ -1,4 +1,4 @@
-import { InputProps, Button, Divider } from '@chakra-ui/react';
+import { InputProps, Button, Divider, Box } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterUserSchema, registerUserZod } from 'common';
 import { useForm } from 'react-hook-form';
@@ -30,9 +30,15 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
         ></FormField>
       ))}
       <Divider marginY="4"></Divider>
-      <Button type="submit" width={'xl'} marginY={'4'}>
-        Sign Up
-      </Button>
+      <Box display="inline-block">
+        <Button
+          type="submit"
+          width={[null, null, null, 'md', 'xl']}
+          marginY="4"
+        >
+          Sign Up
+        </Button>
+      </Box>
     </form>
   );
 }

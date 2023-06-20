@@ -22,7 +22,7 @@ export default React.forwardRef(
       textAlign="center"
       isInvalid={!!errors[props.name]?.message}
     >
-      <Heading size={'md'}>{label}</Heading>
+      <Heading size={[null, 'md', 'md']}>{label}</Heading>
       <Input {...props} ref={ref} marginY={'3'} />
       <FormErrorMessage fontSize="sm" color="red">
         {errors[props.name]?.message as string}

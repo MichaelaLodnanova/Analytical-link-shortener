@@ -6,17 +6,22 @@ import {
   Heading,
   Image,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import BoxItem from './BoxItem';
 import SignUpForm from './SignUpForm';
 import { RegisterUserSchema } from 'common';
 import useRegister from '../../../hooks/useRegister';
 import smokeImage from '../../../assets/images/smoke.png';
+
 export default function SignUp() {
   const { register } = useRegister({ redirect: '/login' });
   const onSubmit = (data: RegisterUserSchema) => {
     register(data);
   };
+
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
     <BoxItem color="primary.400">
       <Card colorScheme="primary" size="md">
@@ -24,7 +29,7 @@ export default function SignUp() {
           <Heading size="lg">Sign Up with Email</Heading>
         </CardHeader>
         <CardBody>
-          <SignUpForm onSubmit={onSubmit}></SignUpForm>
+          <SignUpForm onSubmit={onSubmit} />
         </CardBody>
         <CardFooter>
           <Text>
@@ -32,7 +37,9 @@ export default function SignUp() {
           </Text>
         </CardFooter>
       </Card>
-      <Image src={smokeImage} alt="smoke image" width={'md'}></Image>
+      {isMobile ? null : (
+        <Image src={smokeImage} alt="smoke image" width="md" />
+      )}
     </BoxItem>
   );
 }
