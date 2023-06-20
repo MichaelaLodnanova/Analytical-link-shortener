@@ -4,6 +4,7 @@ import {
   Button,
   useColorModeValue,
   InputProps,
+  Container,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -12,24 +13,34 @@ import { UpdateUserSchema, updateUserZod } from 'common';
 import FormField from '../home/components/FormField';
 import { NavLink } from 'react-router-dom';
 import { DevTool } from '@hookform/devtools';
+import { useUser } from '../../hooks/useUser';
 
 export default function ProfileSettings(): JSX.Element {
   const { update } = useUpdateUser();
   const onSubmit = (data: UpdateUserSchema) => {
     update(data);
   };
+  const user = useUser();
   const {
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<UpdateUserSchema>({
     resolver: zodResolver(updateUserZod),
     mode: 'onChange',
+    defaultValues: {
+      name: user.authorized ? user.user.name : undefined,
+      surname: user.authorized ? user.user.surname : undefined,
+    },
   });
+  const fieldValues = Object.values(getValues());
+  const someOptionalFilled = fieldValues.some((fieldValue) => !!fieldValue);
 
+  console.log(someOptionalFilled);
   return (
-    <>
+    <Container>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack
           spacing={4}
@@ -78,6 +89,7 @@ export default function ProfileSettings(): JSX.Element {
               _hover={{
                 bg: 'blue.500',
               }}
+              isDisabled={!someOptionalFilled}
             >
               Submit
             </Button>
@@ -85,7 +97,7 @@ export default function ProfileSettings(): JSX.Element {
         </Stack>
       </form>
       <DevTool control={control} />
-    </>
+    </Container>
   );
 }
 const formFields: {
@@ -97,13 +109,13 @@ const formFields: {
   {
     label: 'Name',
     name: 'name',
-    placeholder: 'Name',
+    placeholder: 'name',
     type: 'text',
   },
   {
     label: 'Surname',
     name: 'surname',
-    placeholder: 'Surname',
+    placeholder: 'surname',
     type: 'text',
   },
   {
