@@ -1,10 +1,20 @@
-import { Box, Button, Flex, HStack, Image } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  IconButton,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
+import { HamburgerIcon } from '@chakra-ui/icons';
 
 export function Navbar() {
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleSignInClick = () => {
     navigate('/login');
@@ -31,9 +41,10 @@ export function Navbar() {
         justify="space-between"
         backgroundColor="primary.800"
       >
-        {/* TODO: Logo */}
-        <Image src="" h="50px" />
-        <HStack as="nav" spacing="5">
+        <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
+          Sniplyt
+        </Text>
+        <HStack as="nav" spacing="5" display={{ base: 'none', md: 'flex' }}>
           {navItems.map((item) => (
             <ScrollLink key={item.to} to={item.to} smooth={true} duration={500}>
               <Button
@@ -46,7 +57,7 @@ export function Navbar() {
             </ScrollLink>
           ))}
         </HStack>
-        <HStack>
+        <HStack display={{ base: 'none', md: 'flex' }}>
           <Button
             bg="cyan.50"
             _hover={{ bg: 'cyan.100', borderColor: 'cyan.100' }}
@@ -57,7 +68,47 @@ export function Navbar() {
             Sign In
           </Button>
         </HStack>
+        <IconButton
+          aria-label="Toggle navigation"
+          icon={<HamburgerIcon />}
+          size="md"
+          variant="ghost"
+          display={{ base: 'flex', md: 'none' }}
+          onClick={isOpen ? onClose : onOpen}
+        />
       </Flex>
+      {isOpen && (
+        <Flex
+          direction="column"
+          align="center"
+          backgroundColor="primary.800"
+          py="4"
+          display={{ base: 'flex', md: 'none' }}
+        >
+          {navItems.map((item) => (
+            <ScrollLink key={item.to} to={item.to} smooth={true} duration={500}>
+              <Button
+                w="full"
+                bg={'navbar.100'}
+                _hover={{ bg: 'navbar.200', borderColor: 'navbar.200' }}
+                borderColor={'navbar.100'}
+                my="2"
+              >
+                {item.label}
+              </Button>
+            </ScrollLink>
+          ))}
+          <Button
+            w="full"
+            bg="cyan.50"
+            _hover={{ bg: 'cyan.100', borderColor: 'cyan.100' }}
+            borderColor={'cyan.50'}
+            onClick={handleSignInClick}
+          >
+            Sign In
+          </Button>
+        </Flex>
+      )}
     </Box>
   );
 }

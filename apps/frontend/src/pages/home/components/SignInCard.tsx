@@ -1,4 +1,4 @@
-import { Card, CardBody, CardHeader, HStack, Heading } from '@chakra-ui/react';
+import { Box, Stack, Heading } from '@chakra-ui/react';
 import { LoginUserSchema } from 'common';
 import SignInForm from './SignInForm';
 import useLogin from '../../../hooks/useLogin';
@@ -9,15 +9,15 @@ export default function SignInCard() {
   };
 
   return (
-    <HStack>
-      <Card bg={'#ae97db'} size={'lg'}>
-        <CardHeader display={'flex'} justifyContent={'center'}>
-          <Heading size={'lg'}>Sign in</Heading>
-        </CardHeader>
-        <CardBody>
-          <SignInForm onSubmit={onSubmit} />
-        </CardBody>
-      </Card>
-    </HStack>
+    <Stack spacing={4}>
+      <Box bg={'#ae97db'} p={4}>
+        <Heading size={'lg'} textAlign={'center'}>
+          Sign in
+        </Heading>
+      </Box>
+      <Box bg={'#ae97db'} p={4}>
+        <SignInForm onSubmit={onSubmit} />
+      </Box>
+    </Stack>
   );
 }

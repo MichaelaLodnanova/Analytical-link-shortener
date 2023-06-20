@@ -7,19 +7,24 @@ import {
   Image,
   Spacer,
   Text,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import BoxItem from './BoxItem';
 import whiteSmoke from '../../../assets/images/smoke-white.png';
 export default function About() {
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
     <BoxItem color={'#a0d2eb'}>
       <Flex justifyContent={'space-evenly'}>
-        <Image
-          src={whiteSmoke}
-          alt="picture of smoke"
-          height={'lg'}
-          marginRight={'28'}
-        ></Image>
+        {isMobile ? null : (
+          <Image
+            src={whiteSmoke}
+            alt="picture of smoke"
+            height={'lg'}
+            marginRight={'28'}
+          ></Image>
+        )}
         <Grid>
           <GridItem>
             <Heading size={'2xl'} color={'white'}>

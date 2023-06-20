@@ -1,5 +1,5 @@
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { Input, Button, Flex } from '@chakra-ui/react';
+import { Input, Button, Flex, useBreakpointValue } from '@chakra-ui/react';
 import BoxItem from './BoxItem';
 
 export default function Shortener() {
@@ -17,19 +17,26 @@ export default function Shortener() {
     setUrl(event.target.value);
   };
 
+  const isMobile = useBreakpointValue({ base: true, md: false });
+
   return (
     <BoxItem color="#8458b3">
       <form onSubmit={handleSubmit}>
-        <Flex justifyContent="center" alignItems="center" direction={'row'}>
+        <Flex
+          justifyContent={isMobile ? 'center' : 'flex-start'}
+          alignItems="center"
+          direction={isMobile ? 'column' : 'row'}
+        >
           <Input
             type="url"
             placeholder="Enter URL"
             value={url}
             onChange={handleChange}
-            backgroundColor={'white'}
-            width={'2xl'}
+            backgroundColor="white"
+            width={isMobile ? '100%' : '2xl'}
+            mb={isMobile ? 2 : 0}
           />
-          <Button type="submit" colorScheme="twitter" ml={2}>
+          <Button type="submit" colorScheme="twitter" ml={isMobile ? 0 : 2}>
             Shorten
           </Button>
         </Flex>
