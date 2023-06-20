@@ -14,6 +14,7 @@ import {
   ResponseAuthUpdateUser,
   loginUserZod,
   registerUserZod,
+  updateUserZod,
 } from 'common';
 import {
   loginUser,
@@ -73,16 +74,19 @@ export const updateHandler = async (
   }
 
   if (user.isErr) {
-    return handleErrorResp(
-      400,
-      res,
-      'An error occurred while registering user'
-    );
+    return handleErrorResp(400, res, 'An error occurred while updating user');
   }
 
   return handleOkResp('ok', res);
 };
-authRouter.put('/', auth(), updateHandler);
+authRouter.put(
+  '/',
+  auth(),
+  validate({
+    body: updateUserZod,
+  }),
+  updateHandler
+);
 /**
  * This endpoint registers a new user. If the user already exists, then 400 is
  * returned.
