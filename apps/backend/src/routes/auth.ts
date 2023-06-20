@@ -6,14 +6,20 @@ import {
   RequestAuthGet,
   RequestAuthLogin,
   RequestAuthLogout,
+  RequestAuthUpdateUser,
   ResponseAuthCreate,
   ResponseAuthGet,
   ResponseAuthLogin,
   ResponseAuthLogout,
+  ResponseAuthUpdateUser,
   loginUserZod,
   registerUserZod,
 } from 'common';
-import { loginUser, registerUser } from '../controllers/authController';
+import {
+  loginUser,
+  registerUser,
+  updateUser,
+} from '../controllers/authController';
 import { UserAlreadyExists, UserNotFound } from '../repository/errors';
 import { validate } from '../middleware/validationMiddleware';
 import { ErrorResponse } from 'common/types/api/utils';
@@ -53,6 +59,30 @@ export const getHandler = async (
 };
 authRouter.get('/', auth(), getHandler);
 
+export const updateHandler = async (
+  req: Request<never, never, RequestAuthUpdateUser, never>,
+  res: Response<ResponseAuthUpdateUser | ErrorResponse>
+) => {
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we know that user is authorized using auth middleware
+  const id = req.session.user!.id;
+
+  const user = await updateUser({ id, ...req.body });
+
+  if (user.isErr && user.error instanceof UserAlreadyExists) {
+    return handleErrorResp(400, res, user.error.message);
+  }
+
+  if (user.isErr) {
+    return handleErrorResp(
+      400,
+      res,
+      'An error occurred while registering user'
+    );
+  }
+
+  return handleOkResp('ok', res);
+};
+authRouter.put('/', auth(), updateHandler);
 /**
  * This endpoint registers a new user. If the user already exists, then 400 is
  * returned.
