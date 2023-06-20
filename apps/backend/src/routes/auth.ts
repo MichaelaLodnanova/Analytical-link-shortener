@@ -39,6 +39,8 @@ export const getHandler = async (
       id: true,
       email: true,
       username: true,
+      name: true,
+      surname: true,
       role: true,
     },
   });

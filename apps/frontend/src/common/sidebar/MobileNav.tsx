@@ -18,6 +18,7 @@ import {
 import { FiBell, FiChevronDown, FiMenu } from 'react-icons/fi';
 import { useUser } from '../../hooks/useUser';
 import useLogout from '../../hooks/useLogout';
+import { NavLink } from 'react-router-dom';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -102,9 +103,12 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               bg={useColorModeValue('white', 'gray.900')}
               borderColor={useColorModeValue('gray.200', 'gray.700')}
             >
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <NavLink to="/auth/profile">
+                <MenuItem>Profile</MenuItem>
+              </NavLink>
+              <NavLink to="/auth/settings">
+                <MenuItem>Settings</MenuItem>
+              </NavLink>
               <MenuDivider />
               <MenuItem onClick={() => logout()}>Sign out</MenuItem>
             </MenuList>
