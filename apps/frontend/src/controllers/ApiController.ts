@@ -4,7 +4,6 @@ import {
   RequestAuthLogin,
   RequestStatsAdsGet,
   RequestAuthUpdateUser,
-  RequestStatsAdsGet,
   ResponseAuthGet,
   ResponseAuthLogout,
   ResponseStatsAdsGet,
