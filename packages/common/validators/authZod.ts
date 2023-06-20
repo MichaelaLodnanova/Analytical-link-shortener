@@ -14,3 +14,24 @@ export const loginUserZod = z.object({
   password: z.string().nonempty(),
 });
 export type LoginUserSchema = z.infer<typeof loginUserZod>;
+
+export const updateUserZod = z
+  .object({
+    name: z.string().optional(),
+    surname: z.string().optional(),
+    oldPassword: z.string().optional(),
+    newPassword: z.string().min(8).max(20).optional(),
+  })
+  .superRefine((values, ctx) => {
+    if (
+      (values.oldPassword && !values.newPassword) ||
+      (!values.oldPassword && values.newPassword)
+    ) {
+      ctx.addIssue({
+        message: 'Both old password and new password must be filled togertger.',
+        code: z.ZodIssueCode.custom,
+        path: ['oldPassword'],
+      });
+    }
+  });
+export type UpdateUserSchema = z.infer<typeof updateUserZod>;

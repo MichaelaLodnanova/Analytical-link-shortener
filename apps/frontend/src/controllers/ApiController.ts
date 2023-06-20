@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
   RequestAuthCreate,
   RequestAuthLogin,
+  RequestAuthUpdateUser,
   ResponseAuthGet,
   ResponseAuthLogout,
 } from 'common';
@@ -37,7 +38,19 @@ export const register = async (data: RequestAuthCreate) => {
   const resp = await apiClient.post<RequestAuthCreate>('/auth/registration', {
     username: data.username,
     email: data.email,
+    name: '',
+    surname: '',
     password: data.password,
+  });
+  return resp.data;
+};
+
+export const update = async (data: RequestAuthUpdateUser) => {
+  const resp = await apiClient.put<RequestAuthUpdateUser>('/auth', {
+    name: data.name,
+    surname: data.surname,
+    oldPassword: data.oldPassword,
+    newPassword: data.newPassword,
   });
   return resp.data;
 };
