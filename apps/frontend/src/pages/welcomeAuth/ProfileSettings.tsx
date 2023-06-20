@@ -71,18 +71,18 @@ export default function ProfileSettings(): JSX.Element {
           <Stack spacing={6} direction={['column', 'row']}>
             <NavLink to={'/auth'}>
               <Button
-                bg={'red.400'}
+                bg={'pink.200'}
                 color={'white'}
                 w="full"
                 _hover={{
-                  bg: 'red.500',
+                  bg: 'pink.500',
                 }}
               >
                 Cancel
               </Button>
             </NavLink>
             <Button
-              bg={'blue.400'}
+              bg={'blue.200'}
               color={'white'}
               w="full"
               type="submit"
