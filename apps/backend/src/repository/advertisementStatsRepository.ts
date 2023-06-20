@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { PResult } from 'common';
+import { PResult, TimelineEntry } from 'common';
 import { formatISO, parseISO } from 'date-fns';
 import { client, Prisma } from 'model';
 
@@ -122,15 +122,32 @@ const queryTimelineData: (
   filter: TimelineQueryFilters
 ) => PResult<TimelineRawQueryData> = async (filter) => {
   try {
+    let select = Prisma.raw(`DATE_TRUNC('hour', 
+    DATE_TRUNC('minute', 
+      DATE_TRUNC('second', 
+        "AdvertisementStatistics"."${filter.groupByKey}"))) as summaryDate`);
+
+    let days = 7;
+    if (filter.range) {
+      const from = parseISO(filter.range.from);
+      const to = parseISO(filter.range.to);
+      const diff = Math.abs(to.getTime() - from.getTime());
+      days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    }
+
+    if (days >= 7) {
+      select = Prisma.raw(`
+      DATE_TRUNC('day', 
+        DATE_TRUNC('hour', 
+          DATE_TRUNC('minute', 
+            DATE_TRUNC('second', 
+              "AdvertisementStatistics"."${filter.groupByKey}")))) as summaryDate`);
+    }
+
     return Result.ok(
       await client.$queryRaw`
         SELECT COUNT("AdvertisementStatistics"."id") as count,  
-          DATE_TRUNC('hour', 
-            DATE_TRUNC('minute', 
-              DATE_TRUNC('second', 
-                "AdvertisementStatistics"."${Prisma.raw(
-                  filter.groupByKey
-                )}"))) as summaryDate 
+          ${select}
         FROM "public"."AdvertisementStatistics"
         LEFT JOIN "public"."Advertisement" as "ad" ON "ad"."id" = "AdvertisementStatistics"."advertisementId"
         ${generateWhereClause(filter)}
@@ -149,13 +166,13 @@ const queryTimelineData: (
  */
 const postProcessTimelineData = (
   data: TimelineRawQueryData
-): Record<string, number> => {
-  const result: Record<string, number> = {};
+): TimelineEntry[] => {
+  const result: TimelineEntry[] = [];
   data.forEach((item) => {
     if (item.summarydate == null) {
       return;
     }
-    result[formatISO(item.summarydate)] = item.count;
+    result.push({ date: formatISO(item.summarydate), value: item.count });
   });
   return result;
 };
@@ -213,4 +230,25 @@ export const queryAdvertisementSkipsTimeline: AdStatsTimelineQuery = async (
   }
 
   return Result.ok(postProcessTimelineData(result.value));
+};
+
+export const queryAdvertisementStatisticsRegionLanguage: (
+  filter: AdvertisementQueryFilters
+) => PResult<{ region: string; language: string }[]> = async (filter) => {
+  try {
+    const statistics = await client.advertisementStatistics.findMany({
+      where: {
+        ...getQueryFilters(filter),
+      },
+      select: {
+        region: true,
+        language: true,
+      },
+    });
+
+    return Result.ok(statistics);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
 };

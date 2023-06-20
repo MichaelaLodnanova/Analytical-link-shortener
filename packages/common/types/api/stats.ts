@@ -5,21 +5,31 @@ export type RequestStatsLinkGet = DateRange & {
   id?: string;
 };
 
+export type PieChartEntry = {
+  key: string;
+  value: number;
+};
+
 export type ResponseStatsLinkGetData = {
   impressions: number;
   /**
    * Region code mapped to number of impressions
    */
-  region: Record<string, number>;
+  region: TimelineEntry[];
   /**
    * Language mapped to number of impressions
    */
-  language: Record<string, number>;
+  language: TimelineEntry[];
 };
 export type ResponseStatsLinkGet = SuccessResponse<ResponseStatsLinkGetData>;
 
 export type RequestStatsAdsGet = DateRange & {
   id?: string;
+};
+
+export type TimelineEntry = {
+  date: string;
+  value: number;
 };
 
 export type ResponseStatsAdsGet = SuccessResponse<{
@@ -39,15 +49,22 @@ export type ResponseStatsAdsGet = SuccessResponse<{
    * The percentage of people who clicked the ad after viewing it
    */
   conversionRate: number;
-  conversionTimeline: Record<string, number>;
-  impressionsTimeline: Record<string, number>;
-  skipsTimeline: Record<string, number>;
+  conversionTimeline: TimelineEntry[];
+  impressionsTimeline: TimelineEntry[];
+  skipsTimeline: TimelineEntry[];
   /**
    * Region code mapped to number of impressions
    */
-  //region: Record<string, number>;
+  region: TimelineEntry[];
   /**
    * Language mapped to number of impressions
    */
-  //language: Record<string, number>;
+  language: TimelineEntry[];
+
+  today: {
+    impressions: number;
+    skips: number;
+    conversions: number;
+    conversionRate: number;
+  };
 }>;

@@ -215,109 +215,45 @@ async function main() {
     click8,
   });
 
-  const [adStat1, adStat2, adStat3, adStat4, adStat5, adStat6, adStat7] =
-    await Promise.all([
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_1',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_1',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          clickedAt: addSeconds(new Date(), 5),
-        },
-      }),
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_2',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_2',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          clickedAt: addMinutes(addSeconds(new Date(), 10), 5),
-          createdAt: addMinutes(new Date(), 5),
-        },
-      }),
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_3',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_3',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          skippedAt: addMinutes(addSeconds(new Date(), 10), 10),
-          createdAt: addMinutes(new Date(), 10),
-        },
-      }),
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_4',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_4',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          clickedAt: addMinutes(addSeconds(new Date(), 10), 15),
-          createdAt: addMinutes(new Date(), 15),
-        },
-      }),
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_5',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_5',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          skippedAt: addMinutes(addSeconds(new Date(), 10), 20),
-          createdAt: addMinutes(new Date(), 20),
-        },
-      }),
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_6',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_6',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          clickedAt: addMinutes(addSeconds(new Date(), 10), 25),
-          createdAt: addMinutes(new Date(), 25),
-        },
-      }),
-      client.advertisementStatistics.upsert({
-        where: {
-          id: 'seed_advert_stat_7',
-        },
-        update: {},
-        create: {
-          id: 'seed_advert_stat_7',
-          linkId: link1.id,
-          advertisementId: ad1.id,
-          skippedAt: addMinutes(addSeconds(new Date(), 10), 30),
-          createdAt: addMinutes(new Date(), 30),
-        },
-      }),
-    ]);
+  // Generate 100 advertisement statistics with random region, language, createdAt and clickedAt, skippedAt (which can be null)
+  for (let i = 0; i < 10000; i++) {
+    const linkId = i % 2 === 0 ? link1.id : link2.id;
+    const region = ['CZ', 'SK', 'HU', 'DE', 'US'][
+      Math.floor(Math.random() * 5)
+    ];
+    const language = ['cs', 'sk', 'hu', 'de', 'en', 'sl'][
+      Math.floor(Math.random() * 6)
+    ];
+    // randomize createdAt and clickedAt/skipped at from last year
+    const createdAt = addSeconds(
+      addMinutes(new Date(), -Math.floor(Math.random() * 525600)),
+      Math.floor(Math.random() * 60 * 60 * 24)
+    );
+    const clickedAt = Math.random() > 0.5 ? addSeconds(createdAt, 30) : null;
+    const skippedAt = clickedAt == null ? addSeconds(createdAt, 40) : null;
 
-  console.log({
-    adStat1,
-    adStat2,
-    adStat3,
-    adStat4,
-    adStat5,
-    adStat6,
-    adStat7,
-  });
+    await client.advertisementStatistics.upsert({
+      where: {
+        id: `seed_advert_stat_${i}`,
+      },
+      update: {},
+      create: {
+        id: `seed_advert_stat_${i}`,
+        linkId,
+        region,
+        language,
+        advertisementId: ad1.id,
+        createdAt,
+        clickedAt,
+        skippedAt,
+      },
+    });
+
+    if (i % 1000 == 0) {
+      console.log(i);
+    }
+  }
+
   console.log('');
   console.log('DB READY! 🔥');
 }

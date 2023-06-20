@@ -2,10 +2,13 @@ import axios from 'axios';
 import {
   RequestAuthCreate,
   RequestAuthLogin,
+  RequestStatsAdsGet,
   RequestAuthUpdateUser,
   ResponseAuthGet,
   ResponseAuthLogout,
+  ResponseStatsAdsGet,
 } from 'common';
+import { sanitizeSearchParams } from '../utils/helpers';
 
 const apiClient = axios.create({
   baseURL: 'http://localhost:4000',
@@ -42,6 +45,16 @@ export const register = async (data: RequestAuthCreate) => {
     surname: '',
     password: data.password,
   });
+  return resp.data;
+};
+
+export const adStatistics = async (data: RequestStatsAdsGet) => {
+  const resp = await apiClient.get<ResponseStatsAdsGet>(
+    `/stats/advertisement?${new URLSearchParams(
+      sanitizeSearchParams(data)
+    ).toString()}`
+  );
+
   return resp.data;
 };
 

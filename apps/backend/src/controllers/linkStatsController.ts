@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { PResult } from 'common';
+import { PResult, TimelineEntry } from 'common';
 
 import { queryLinkStatistics } from '../repository/linkStatsRepository';
 import { LinkQueryFilters } from '../types/query';
@@ -12,8 +12,8 @@ import { statisticsToKeyMap } from '../utils/reducers';
  */
 export const getLinkStatistics: (filter: LinkQueryFilters) => PResult<{
   impressions: number;
-  region: Record<string, number>;
-  language: Record<string, number>;
+  region: TimelineEntry[];
+  language: TimelineEntry[];
 }> = async (filter) => {
   try {
     const statisticsResult = await queryLinkStatistics(filter);

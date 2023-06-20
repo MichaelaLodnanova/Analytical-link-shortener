@@ -1,14 +1,11 @@
-import { LinkStatistics } from 'model';
+import { KeysMatching, TimelineEntry } from 'common';
 
-type KeysMatching<T, V> = {
-  [K in keyof T]-?: T[K] extends V ? K : never;
-}[keyof T];
-
-export const statisticsToKeyMap: (
-  stats: LinkStatistics[],
-  key: KeysMatching<LinkStatistics, string>
-) => Record<string, number> = (stats, key) => {
-  return stats.reduce((acc, curr) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const statisticsToKeyMap: <T extends Record<string, any>>(
+  stats: T[],
+  key: KeysMatching<T, string>
+) => TimelineEntry[] = (stats, key) => {
+  const temp = stats.reduce((acc, curr) => {
     if (curr[key] in acc) {
       acc[curr[key]] += 1;
     } else {
@@ -17,4 +14,15 @@ export const statisticsToKeyMap: (
 
     return acc;
   }, {} as Record<string, number>);
+
+  const result: TimelineEntry[] = [];
+
+  for (const [key, value] of Object.entries(temp)) {
+    result.push({
+      date: key,
+      value,
+    });
+  }
+
+  return result;
 };

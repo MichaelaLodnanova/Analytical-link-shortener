@@ -76,6 +76,8 @@ model AdvertisementStatistics {
   skippedAt       DateTime?
   clickedAt       DateTime?
   deletedAt       DateTime?
+  region          String
+  language        String
   advertisementId String
   advertisement   Advertisement @relation(fields: [advertisementId], references: [id])
   linkId          String

@@ -1,5 +1,6 @@
 import { Result } from '@badrap/result';
-import { PResult } from 'common';
+import { PResult, TimelineEntry } from 'common';
+import { startOfToday, startOfTomorrow } from 'date-fns';
 
 import {
   queryAdvertisementConversions,
@@ -8,8 +9,41 @@ import {
   queryAdvertisementImpressionsTimeline,
   queryAdvertisementSkips,
   queryAdvertisementSkipsTimeline,
+  queryAdvertisementStatisticsRegionLanguage,
 } from '../repository/advertisementStatsRepository';
 import { AdvertisementQueryFilters } from '../types/query';
+import { statisticsToKeyMap } from '../utils/reducers';
+
+export const getAdvertisementNumericalStatistics: (
+  data: AdvertisementQueryFilters
+) => PResult<{
+  impressions: number;
+  conversions: number;
+  skips: number;
+  conversionRate: number;
+}> = async (data) => {
+  const conversionsResult = await queryAdvertisementConversions(data);
+  if (conversionsResult.isErr) {
+    return Result.err(conversionsResult.error);
+  }
+
+  const impressionsResult = await queryAdvertisementImpressions(data);
+  if (impressionsResult.isErr) {
+    return Result.err(impressionsResult.error);
+  }
+
+  const skipsResult = await queryAdvertisementSkips(data);
+  if (skipsResult.isErr) {
+    return Result.err(skipsResult.error);
+  }
+
+  return Result.ok({
+    impressions: impressionsResult.value,
+    conversions: conversionsResult.value,
+    skips: skipsResult.value,
+    conversionRate: conversionsResult.value / impressionsResult.value || 0,
+  });
+};
 
 /**
  * Gets statistics by link id, user id, or date range.
@@ -23,33 +57,38 @@ export const getAdvertisementStatistics: (
   conversions: number;
   skips: number;
   conversionRate: number;
-  conversionTimeline: Record<string, number>;
-  impressionsTimeline: Record<string, number>;
-  skipsTimeline: Record<string, number>;
+  conversionTimeline: TimelineEntry[];
+  impressionsTimeline: TimelineEntry[];
+  skipsTimeline: TimelineEntry[];
+  region: TimelineEntry[];
+  language: TimelineEntry[];
+  today: {
+    impressions: number;
+    conversions: number;
+    skips: number;
+    conversionRate: number;
+  };
 }> = async (data) => {
   try {
-    const conversionsResult = await queryAdvertisementConversions(data);
-
-    if (conversionsResult.isErr) {
-      return Result.err(conversionsResult.error);
+    const numerical = await getAdvertisementNumericalStatistics(data);
+    if (numerical.isErr) {
+      return Result.err(numerical.error);
     }
 
-    const impressionsResult = await queryAdvertisementImpressions(data);
-
-    if (impressionsResult.isErr) {
-      return Result.err(impressionsResult.error);
-    }
-
-    const skipsResult = await queryAdvertisementSkips(data);
-
-    if (skipsResult.isErr) {
-      return Result.err(skipsResult.error);
+    const numericalToday = await getAdvertisementNumericalStatistics({
+      ...data,
+      range: {
+        from: startOfToday().toISOString(),
+        to: startOfTomorrow().toISOString(),
+      },
+    });
+    if (numericalToday.isErr) {
+      return Result.err(numericalToday.error);
     }
 
     const conversionTimeline = await queryAdvertisementConversionsTimeline(
       data
     );
-
     if (conversionTimeline.isErr) {
       return Result.err(conversionTimeline.error);
     }
@@ -57,25 +96,28 @@ export const getAdvertisementStatistics: (
     const impressionsTimeline = await queryAdvertisementImpressionsTimeline(
       data
     );
-
     if (impressionsTimeline.isErr) {
       return Result.err(impressionsTimeline.error);
     }
 
     const skipsTimeline = await queryAdvertisementSkipsTimeline(data);
-
     if (skipsTimeline.isErr) {
       return Result.err(skipsTimeline.error);
     }
 
+    const statistics = await queryAdvertisementStatisticsRegionLanguage(data);
+    if (statistics.isErr) {
+      return Result.err(statistics.error);
+    }
+
     return Result.ok({
-      impressions: impressionsResult.value,
-      conversions: conversionsResult.value,
-      skips: skipsResult.value,
-      conversionRate: conversionsResult.value / impressionsResult.value || 0,
+      ...numerical.value,
       conversionTimeline: conversionTimeline.value,
       impressionsTimeline: impressionsTimeline.value,
       skipsTimeline: skipsTimeline.value,
+      region: statisticsToKeyMap(statistics.value, 'region'),
+      language: statisticsToKeyMap(statistics.value, 'language'),
+      today: numericalToday.value,
     });
   } catch (error) {
     console.error(error);
