@@ -9,19 +9,24 @@ import {
   DeleteAdvertisementSchema,
   GetAdvertisementSchema,
   GetAllAdvertisementsSchema,
+  PaginatedAdvertisement,
+  PaginationSchema,
   RequestAdvertisementIdParams,
   RequestAdvertisementPatchReqBody,
   RequestAdvertisementPostReqBody,
+  RequestAllAdvertisementsGetQuery,
   ResponseAdvertisementDelete,
   ResponseAdvertisementGet,
   ResponseAdvertisementPatch,
   ResponseAdvertisementPost,
+  ResponseAllAdvertisementsGet,
   UpdateAdvertisementBodySchema,
   UpdateAdvertisementParamsSchema,
   createAdvertisementZod,
   deleteAdvertisementZod,
   getAdvertisementZod,
   getAllAdvertisementsZod,
+  paginationZod,
   updateAdvertisementBodyZod,
   updateAdvertisementParamsZod,
 } from 'common';
@@ -57,14 +62,12 @@ const advertisementGetHandler = async (
     id,
   });
 
-  // TODO - handle specific error types
-
   res.locals.result = advertisement;
   next();
 };
 advertisementRouter.get(
   '/id/:id',
-  auth(Role.ADVERTISER),
+  auth(Role.ADVERTISER, Role.ADMIN),
   validate<GetAdvertisementSchema>({ params: getAdvertisementZod }),
   advertisementGetHandler,
   resolveResult<DateLessAdvertisement>()
@@ -77,25 +80,32 @@ advertisementRouter.get(
  * Advertisements are in desc order.
  */
 const allAdvertisementsOfAdvertiserGetHandler = async (
-  req: Request<RequestAdvertisementIdParams, never, never, never>,
+  req: Request<
+    RequestAdvertisementIdParams,
+    never,
+    never,
+    RequestAllAdvertisementsGetQuery
+  >,
   res: Response<
-    RequestAdvertisementIdParams | ErrorResponse,
-    Record<string, Result<DateLessAdvertisement[]>>
+    ResponseAllAdvertisementsGet | ErrorResponse,
+    Record<string, Result<PaginatedAdvertisement>>
   >,
   next: NextFunction
 ) => {
   const user = req.session.user as AnonymizedUser;
   const userId = req.params.userId as string;
+  const query = req.query as PaginationSchema;
 
   const advertisements = await getAllAdvertisments({
-    userId,
+    userId: userId,
     requesterId: user.id,
+    limit: query.limit,
+    offset: query.offset,
   });
 
-  // TODO - handle specific error types
   if (advertisements.isErr) {
-    console.error(advertisements.error.message);
     if (advertisements.error instanceof AccessRightsError) {
+      console.error(advertisements.error.message);
       return handleErrorResp(403, res, advertisements.error.message);
     }
   }
@@ -104,17 +114,19 @@ const allAdvertisementsOfAdvertiserGetHandler = async (
   next();
 };
 advertisementRouter.get(
-  '/all/:userId',
-  auth(Role.ADVERTISER),
-  validate<GetAllAdvertisementsSchema>({
+  '/all/:userId?',
+  auth(Role.ADVERTISER, Role.ADMIN),
+  validate<GetAllAdvertisementsSchema, unknown, PaginationSchema>({
     params: getAllAdvertisementsZod,
+    query: paginationZod,
   }),
   allAdvertisementsOfAdvertiserGetHandler,
-  resolveResult<DateLessAdvertisement[]>()
+  resolveResult<PaginatedAdvertisement>()
 );
 
 /**
- * Endpoint for creating advertisement - advertisement can be created only by registered and logged in user
+ * Endpoint for creating advertisement - advertisement can be created only by
+ * registered and logged in advertiser/admin.
  */
 const advertisementPostHandler = async (
   req: Request<never, never, RequestAdvertisementPostReqBody, never>,
@@ -132,14 +144,12 @@ const advertisementPostHandler = async (
     ...createAdvertisementData,
   });
 
-  // TODO - handle specific error types
-
   res.locals.result = createdAdvertisement;
   next();
 };
 advertisementRouter.post(
   '/',
-  auth(Role.ADVERTISER),
+  auth(Role.ADVERTISER, Role.ADMIN),
   validate<unknown, CreateAdvertisementSchema, unknown>({
     body: createAdvertisementZod,
   }),
@@ -173,10 +183,9 @@ const advertisementPatchHandler = async (
     requesterId: user.id,
   });
 
-  // TODO - handle specific error types
   if (updatedLink.isErr) {
-    console.error(updatedLink.error.message);
     if (updatedLink.error instanceof AccessRightsError) {
+      console.error(updatedLink.error.message);
       return handleErrorResp(403, res, updatedLink.error.message);
     }
   }
@@ -186,7 +195,7 @@ const advertisementPatchHandler = async (
 };
 advertisementRouter.patch(
   '/:id',
-  auth(Role.ADVERTISER),
+  auth(Role.ADVERTISER, Role.ADMIN),
   validate<UpdateAdvertisementParamsSchema, UpdateAdvertisementBodySchema>({
     params: updateAdvertisementParamsZod,
     body: updateAdvertisementBodyZod,
@@ -214,10 +223,9 @@ const advertisementDeleteHandler = async (
     requesterId: user.id,
   });
 
-  // TODO - handle specific error types
   if (deletedAdvertisement.isErr) {
-    console.error(deletedAdvertisement.error.message);
     if (deletedAdvertisement.error instanceof AccessRightsError) {
+      console.error(deletedAdvertisement.error.message);
       return handleErrorResp(403, res, deletedAdvertisement.error.message);
     }
   }
@@ -227,7 +235,7 @@ const advertisementDeleteHandler = async (
 };
 advertisementRouter.delete(
   '/:id',
-  auth(Role.ADVERTISER),
+  auth(Role.ADVERTISER, Role.ADMIN),
   validate<DeleteAdvertisementSchema>({ params: deleteAdvertisementZod }),
   advertisementDeleteHandler,
   resolveResult<Advertisement>()

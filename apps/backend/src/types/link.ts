@@ -4,6 +4,8 @@ export type GetLinkData = {
 export type GetAllLinksData = {
   userId?: string;
   requesterId: string;
+  limit?: number;
+  offset?: number;
 };
 export type CreateLinkData = {
   createdById: string;

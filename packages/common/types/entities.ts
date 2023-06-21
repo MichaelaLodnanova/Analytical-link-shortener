@@ -5,4 +5,20 @@ export type AnonymizedUser = OmitDates<Omit<User, 'passwordHash'>>;
 
 export type DateLessLink = OmitDates<Link>;
 
+export type PaginatedLink = {
+  next?: {
+    limit?: number;
+    offset?: number;
+  };
+  links: DateLessLink[];
+};
+
 export type DateLessAdvertisement = OmitDates<Advertisement>;
+
+export type PaginatedAdvertisement = {
+  next?: {
+    limit?: number;
+    offset?: number;
+  };
+  advertisements: DateLessAdvertisement[];
+};

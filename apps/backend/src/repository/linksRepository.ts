@@ -1,6 +1,6 @@
 import { hash, argon2d } from 'argon2';
 import { Result } from '@badrap/result';
-import { DateLessLink, PResult } from 'common';
+import { DateLessLink, PResult, PaginatedLink } from 'common';
 import { Link, Role, client } from 'model';
 import {
   GetAllLinksData,
@@ -88,7 +88,7 @@ export const getLinkByShortId: (
  */
 export const getAllLinksByUserId: (
   data: GetAllLinksData
-) => PResult<DateLessLink[]> = async (data) => {
+) => PResult<PaginatedLink> = async (data) => {
   try {
     // check requester access rights
     // we presume that requester exists and is not deleted
@@ -121,9 +121,14 @@ export const getAllLinksByUserId: (
       }
     }
 
+    let next = {};
+    if (data.limit !== undefined && data.offset !== undefined) {
+      next = { limit: data.limit, offset: data.offset + data.limit };
+    }
+
     const links = await client.link.findMany({
       where: {
-        createdById: data.userId,
+        createdById: data.userId ?? data.userId,
         deletedAt: null,
       },
       orderBy: {
@@ -136,9 +141,13 @@ export const getAllLinksByUserId: (
         isAdvertisementEnabled: true,
         createdById: true,
       },
+      take: data.limit ?? data.limit,
+      skip: data.offset ?? data.offset,
     });
-
-    return Result.ok(links);
+    return Result.ok({
+      links: links,
+      next: next,
+    });
   } catch (error) {
     console.error(error);
     return Result.err(error as Error);
@@ -214,9 +223,8 @@ export const updateLinkById: (
         id: data.id,
       },
       data: {
-        isAdvertisementEnabled: data.isAdvertisementEnabled
-          ? data.isAdvertisementEnabled
-          : undefined,
+        isAdvertisementEnabled:
+          data.isAdvertisementEnabled ?? data.isAdvertisementEnabled,
       },
       select: {
         id: true,

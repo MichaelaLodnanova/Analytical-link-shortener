@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { DateLessAdvertisement, PResult } from 'common';
+import { DateLessAdvertisement, PResult, PaginatedAdvertisement } from 'common';
 import { Advertisement, Role, client } from 'model';
 import {
   checkAdvertisement,
@@ -53,7 +53,7 @@ export const getAdvertisementById: (
  * Repository call that retrieves all advertisement or all advertisments af specified user.
  *
  * @param data object containing id of requester and possibly id of specific user
- * @returns - `Result.ok(DateLessAdvertisement[])` on success
+ * @returns - `Result.ok(PaginatedAdvertisement)` on success
  *          - `Result.err(_)` on failure
  *            - NonexistentRecordError('The specified user does not exist!')
  *            - DeletedRecordError('The specified user has already been deleted!')
@@ -62,7 +62,7 @@ export const getAdvertisementById: (
  */
 export const getAllAdvertismentsByUserId: (
   data: GetAllAdvertisementsData
-) => PResult<DateLessAdvertisement[]> = async (data) => {
+) => PResult<PaginatedAdvertisement> = async (data) => {
   try {
     // check requester access rights
     // we presume that requester exists and is not deleted
@@ -97,9 +97,14 @@ export const getAllAdvertismentsByUserId: (
       }
     }
 
+    let next = {};
+    if (data.limit !== undefined && data.offset !== undefined) {
+      next = { limit: data.limit, offset: data.offset + data.limit };
+    }
+
     const advertisements = await client.advertisement.findMany({
       where: {
-        createdById: data.userId ? data.userId : undefined,
+        createdById: data.userId ?? data.userId,
         deletedAt: null,
       },
       orderBy: {
@@ -112,9 +117,14 @@ export const getAllAdvertismentsByUserId: (
         forwardUrl: true,
         createdById: true,
       },
+      take: data.limit ?? data.limit,
+      skip: data.offset ?? data.offset,
     });
 
-    return Result.ok(advertisements);
+    return Result.ok({
+      advertisements: advertisements,
+      next: next,
+    });
   } catch (error) {
     console.error(error);
     return Result.err(error as Error);
@@ -188,9 +198,9 @@ export const updateAdvertisementById: (
         id: data.id,
       },
       data: {
-        title: data.title ? data.title : undefined,
-        adUrl: data.adUrl ? data.adUrl : undefined,
-        forwardUrl: data.forwardUrl ? data.forwardUrl : undefined,
+        title: data.title ?? data.title,
+        adUrl: data.adUrl ?? data.adUrl,
+        forwardUrl: data.forwardUrl ?? data.forwardUrl,
       },
       select: {
         id: true,

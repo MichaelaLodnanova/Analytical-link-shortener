@@ -1,4 +1,4 @@
-import { DateLessAdvertisement, PResult } from 'common';
+import { DateLessAdvertisement, PResult, PaginatedAdvertisement } from 'common';
 import {
   createNewAdvertisement,
   deleteAdvertisementById,
@@ -25,7 +25,7 @@ export const getAdvertisement: (
 
 export const getAllAdvertisments: (
   data: GetAllAdvertisementsData
-) => PResult<DateLessAdvertisement[]> = async (data) => {
+) => PResult<PaginatedAdvertisement> = async (data) => {
   const link = await getAllAdvertismentsByUserId(data);
 
   return link;

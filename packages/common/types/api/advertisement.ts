@@ -1,5 +1,6 @@
 import {
   CreateAdvertisementSchema,
+  PaginationSchema,
   UpdateAdvertisementBodySchema,
 } from '../../validators';
 import { DateLessAdvertisement } from '../entities';
@@ -7,6 +8,7 @@ import { SuccessResponse } from './utils';
 
 export type RequestAdvertisementIdParams = Record<string, unknown>;
 
+export type RequestAllAdvertisementsGetQuery = PaginationSchema;
 export type ResponseAllAdvertisementsGet = SuccessResponse<
   DateLessAdvertisement[]
 >;

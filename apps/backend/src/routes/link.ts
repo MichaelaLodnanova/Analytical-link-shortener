@@ -9,10 +9,12 @@ import {
   DeleteLinkSchema,
   GetAllLinksSchema,
   GetLinkSchema,
+  PaginationSchema,
   RequestLinkIdParams,
   RequestLinkPatchReqBody,
   RequestLinkPostReqBody,
   RequestViewLinkBody,
+  RequestAllLinksGetQuery,
   RequestViewLinkParams,
   ResponseLinkDelete,
   ResponseLinkGet,
@@ -21,12 +23,16 @@ import {
   deleteLinkZod,
   getAllLinksZod,
   getLinkZod,
+  paginationZod,
   updateLinkBodyZod,
   updateLinkParamsZod,
   viewLinkZod,
+  ResponseAllLinksGet,
+  PaginatedLink,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import {
+  ViewLinkData,
   createLink,
   deleteLink,
   getAllLinks,
@@ -58,8 +64,6 @@ const linkGetHandler = async (
     id,
   });
 
-  // TODO - handle specific error types
-
   res.locals.result = link;
   next();
 };
@@ -72,13 +76,59 @@ linkRouter.get(
 );
 
 /**
- * Endpoint for handling redirect reuest by short id
+ * Endpoint for getting paginated all links of user. Only a owner or admin can
+ * access the data.
+ *
+ * Links are in desc order.
+ */
+const allLinksOfUserGetHandler = async (
+  req: Request<RequestLinkIdParams, never, never, RequestAllLinksGetQuery>,
+  res: Response<
+    ResponseAllLinksGet | ErrorResponse,
+    Record<string, Result<PaginatedLink>>
+  >,
+  next: NextFunction
+) => {
+  const user = req.session.user as AnonymizedUser;
+  const userId = req.params.userId as string;
+  const query = req.query as PaginationSchema;
+
+  const links = await getAllLinks({
+    userId: userId,
+    requesterId: user.id,
+    limit: query.limit,
+    offset: query.offset,
+  });
+
+  if (links.isErr) {
+    if (links.error instanceof AccessRightsError) {
+      console.error(links.error.message);
+      return handleErrorResp(403, res, links.error.message);
+    }
+  }
+
+  res.locals.result = links;
+  next();
+};
+linkRouter.get(
+  '/all/:userId?',
+  auth(),
+  validate<GetAllLinksSchema, unknown, PaginationSchema>({
+    params: getAllLinksZod,
+    query: paginationZod,
+  }),
+  allLinksOfUserGetHandler,
+  resolveResult<PaginatedLink>()
+);
+
+/**
+ * Endpoint for handling redirect request by short id
  */
 const viewLinkGetHandler = async (
   req: Request<RequestViewLinkParams, never, RequestViewLinkBody, never>,
   res: Response<
     ResponseLinkGet | ErrorResponse,
-    Record<string, Result<unknown>>
+    Record<string, Result<ViewLinkData>>
   >,
   next: NextFunction
 ) => {
@@ -91,59 +141,17 @@ const viewLinkGetHandler = async (
     language: data.language,
   });
 
-  // TODO - handle specific error types
-
   res.locals.result = link;
   next();
 };
 linkRouter.get(
   '/:id',
-  validate<ViewLinkSchema>({ params: viewLinkZod }),
-  viewLinkGetHandler,
-  resolveResult<unknown>()
-);
-
-/**
- * Endpoint for getting paginated all links of user. Only a owner or admin can
- * access the data.
- *
- * Links are in desc order.
- */
-const allLinksOfUserGetHandler = async (
-  req: Request<RequestLinkIdParams, never, never, never>,
-  res: Response<
-    ResponseLinkGet | ErrorResponse,
-    Record<string, Result<DateLessLink[]>>
-  >,
-  next: NextFunction
-) => {
-  const user = req.session.user as AnonymizedUser;
-  const userId = req.params.userId as string;
-
-  const links = await getAllLinks({
-    userId,
-    requesterId: user.id,
-  });
-
-  // TODO - handle specific error types
-  if (links.isErr) {
-    console.error(links.error.message);
-    if (links.error instanceof AccessRightsError) {
-      return handleErrorResp(403, res, links.error.message);
-    }
-  }
-
-  res.locals.result = links;
-  next();
-};
-linkRouter.get(
-  '/all/:userId',
-  auth(),
-  validate<GetAllLinksSchema>({
-    params: getAllLinksZod,
+  validate<GetLinkSchema, ViewLinkSchema>({
+    params: getLinkZod,
+    body: viewLinkZod,
   }),
-  allLinksOfUserGetHandler,
-  resolveResult<DateLessLink[]>()
+  viewLinkGetHandler,
+  resolveResult<ViewLinkData>()
 );
 
 /**
@@ -164,8 +172,6 @@ const linkPostHandler = async (
     createdById: user.id,
     ...createLinkData,
   });
-
-  // TODO - handle specific error types
 
   res.locals.result = createdLink;
   next();
@@ -195,14 +201,13 @@ const linkPatchHandler = async (
 
   const updatedLink = await updateLink({
     id: linkId,
-    ...updateLinkData,
+    isAdvertisementEnabled: updateLinkData.isAdvertisementEnabled,
     requesterId: user.id,
   });
 
-  // TODO - handle specific error types
   if (updatedLink.isErr) {
-    console.error(updatedLink.error.message);
     if (updatedLink.error instanceof AccessRightsError) {
+      console.error(updatedLink.error.message);
       return handleErrorResp(403, res, updatedLink.error.message);
     }
   }
@@ -237,10 +242,9 @@ const linkDeleteHandler = async (
     requesterId: user.id,
   });
 
-  // TODO - handle specific error types
   if (deletedLink.isErr) {
-    console.error(deletedLink.error.message);
     if (deletedLink.error instanceof AccessRightsError) {
+      console.error(deletedLink.error.message);
       return handleErrorResp(403, res, deletedLink.error.message);
     }
   }

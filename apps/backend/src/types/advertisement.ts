@@ -4,9 +4,10 @@ export type GetAdvertisementData = {
 export type GetAllAdvertisementsData = {
   userId?: string;
   requesterId: string;
+  limit?: number;
+  offset?: number;
 };
 export type CreateAdvertisementData = {
-  requesterId: string;
   title: string;
   adUrl: string;
   forwardUrl: string;

@@ -1,4 +1,9 @@
-import { DateLessAdvertisement, DateLessLink, PResult } from 'common';
+import {
+  DateLessAdvertisement,
+  DateLessLink,
+  PResult,
+  PaginatedLink,
+} from 'common';
 import {
   getAllLinksByUserId,
   getLinkById,
@@ -62,7 +67,7 @@ export const viewLink: (data: {
 
 export const getAllLinks: (
   data: GetAllLinksData
-) => PResult<DateLessLink[]> = async (data) => {
+) => PResult<PaginatedLink> = async (data) => {
   const link = await getAllLinksByUserId(data);
 
   return link;
