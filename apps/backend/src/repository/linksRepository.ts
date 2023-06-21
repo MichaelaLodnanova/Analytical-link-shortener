@@ -115,15 +115,15 @@ export const createNewLink: (
 ) => PResult<DateLessLink> = async (data) => {
   try {
     const shortId = await hash(data.url, { hashLength: 15, type: argon2d, raw: true });
-    const shortIdString = shortId.toString('base64');
-    
+    const shortIdBase64 = shortId.toString('base64url');
+
     // to be bullet proof check into db should be made
 
     const newLink = await client.link.create({
       data: {
         createdById: data.createdById,
         url: data.url,
-        shortId: shortIdString,
+        shortId: shortIdBase64,
         isAdvertisementEnabled: data.isAdvertisementEnabled,
       },
       select: {
