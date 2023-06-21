@@ -43,6 +43,7 @@ export const register = async (data: RequestAuthCreate) => {
   const resp = await apiClient.post<RequestAuthCreate>('/auth/registration', {
     username: data.username,
     email: data.email,
+    role: data.role,
     name: '',
     surname: '',
     password: data.password,

@@ -107,12 +107,14 @@ export const createUser: (data: {
   name?: string;
   surname?: string;
   passwordHash: string;
+  role: 'USER' | 'ADVERTISER';
 }) => PResult<AnonymizedUser> = async ({
   email,
   username,
   name,
   surname,
   passwordHash,
+  role,
 }) => {
   try {
     const existingUser = await client.user.findFirst({
@@ -136,6 +138,7 @@ export const createUser: (data: {
         name,
         surname,
         passwordHash,
+        role,
       },
       select: {
         id: true,
