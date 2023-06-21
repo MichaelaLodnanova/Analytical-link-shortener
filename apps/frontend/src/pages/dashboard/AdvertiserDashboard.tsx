@@ -1,39 +1,44 @@
 import { Box, Divider, SimpleGrid } from '@chakra-ui/react';
-
-import TodaysStats from './components/TodaysStats';
-import TimelineChart from '../../common/charts/TimelineChart';
-import { RangeDatepicker } from 'chakra-dayzed-datepicker';
+import { addMonths } from 'date-fns';
 import { useMemo, useState } from 'react';
-import { startOfDay, endOfDay, addMonths } from 'date-fns';
+
+import TimelineChart from '../../common/charts/TimelineChart';
+import { useAdStats } from '../../hooks/useAdStats';
+import RangeDate from './components/RangeDate';
+import StatsRow from './components/StatsRow';
+import useMemoNumStats from './hook/useMemoNumStats';
 
 const today = new Date();
 export const AdvertiserDashboard = () => {
-  const [selectedDates, setSelectedDates] = useState<Date[]>([
-    addMonths(today, -1),
-    today,
+  const [selectedDates, setSelectedDates] = useState<[string, string]>([
+    addMonths(today, -1).toISOString(),
+    today.toISOString(),
   ]);
 
-  const [[oldFrom, oldTo], setFromToCache] = useState<[string, string]>([
-    '',
-    '',
-  ]);
+  const params = useMemo(() => {
+    return {
+      from: selectedDates[0],
+      to: selectedDates[1],
+    };
+  }, [selectedDates]);
 
-  const [from, to]: [string, string] = useMemo((): [string, string] => {
-    if (selectedDates.length == 2) {
-      const data: [string, string] = [
-        startOfDay(selectedDates[0]).toISOString(),
-        endOfDay(selectedDates[1]).toISOString(),
-      ];
+  const { stats, isFetching, isLoading } = useAdStats(params);
 
-      setFromToCache(data);
-    }
+  const todaysStatsData = useMemoNumStats(
+    useMemo(() => ({ stats: stats?.data.today }), [stats?.data])
+  );
 
-    return [oldFrom, oldTo];
-  }, [selectedDates, oldFrom, oldTo]);
+  const realtimeStatsData = useMemoNumStats(
+    useMemo(() => ({ stats: stats?.data }), [stats?.data])
+  );
 
   return (
     <Box>
-      <TodaysStats />
+      <StatsRow
+        label="Today's Stats"
+        isLoading={isLoading}
+        data={todaysStatsData}
+      />
       <Divider mt="8" mb="8" />
 
       <SimpleGrid
@@ -42,41 +47,25 @@ export const AdvertiserDashboard = () => {
       >
         <span></span>
         <span></span>
-        <RangeDatepicker
-          selectedDates={selectedDates}
-          onDateChange={setSelectedDates}
-          maxDate={today}
-        />
+        <RangeDate isLoading={isFetching} onChange={setSelectedDates} />
       </SimpleGrid>
+      <Box mt="4">
+        <StatsRow isLoading={isLoading} data={realtimeStatsData} />
+      </Box>
       <SimpleGrid columns={{ sm: 1, md: 1, lg: 2, xl: 2 }} spacing="8" mt="4">
         <TimelineChart
-          from={from}
-          to={to}
+          data={stats?.data.impressionsTimeline}
           isDate
           label="Impressions"
-          statType="impressionsTimeline"
         />
         <TimelineChart
-          from={from}
-          to={to}
+          data={stats?.data.conversionTimeline}
           isDate
           label="Conversions"
-          statType="conversionTimeline"
         />
-        <TimelineChart
-          from={from}
-          to={to}
-          isDate
-          label="Skips"
-          statType="skipsTimeline"
-        />
-        <TimelineChart
-          from={from}
-          to={to}
-          label="Language"
-          statType="language"
-        />
-        <TimelineChart from={from} to={to} label="Region" statType="region" />
+        <TimelineChart data={stats?.data.skipsTimeline} isDate label="Skips" />
+        <TimelineChart data={stats?.data.language} label="Language" />
+        <TimelineChart data={stats?.data.region} label="Region" />
       </SimpleGrid>
     </Box>
   );

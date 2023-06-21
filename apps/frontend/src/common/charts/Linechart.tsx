@@ -34,7 +34,9 @@ export const Linechart = ({ data, isDate }: LinechartProps) => {
 
   return (
     <Box height="64" width="100%">
-      <Heading size="sm">{data[0]?.label}</Heading>
+      <Heading size="sm" mb="3">
+        {data[0]?.label}
+      </Heading>
       {data[0]?.data.length ? (
         <Chart
           options={{
