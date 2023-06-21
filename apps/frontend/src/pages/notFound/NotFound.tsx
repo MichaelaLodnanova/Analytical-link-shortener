@@ -27,7 +27,7 @@ export default function NotFound() {
         variant="solid"
         transition="all 0.4s"
         _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
-        onClick={() => navigate(-1)}
+        onClick={() => navigate('/auth/dashboard')}
       >
         Take me back to safety
       </Button>
