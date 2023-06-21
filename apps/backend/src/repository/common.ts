@@ -1,5 +1,9 @@
 import { Result } from '@badrap/result';
-import { AccessRightsError, DeletedRecordError, NonexistentRecordError } from './errors';
+import {
+  AccessRightsError,
+  DeletedRecordError,
+  NonexistentRecordError,
+} from './errors';
 import { Prisma, PrismaClient, Role } from 'model';
 
 export type PrismaTransactionHandle = Omit<
@@ -57,7 +61,43 @@ export const checkLink = async (
 };
 
 /**
- * Function which checks if the link exists, it is not deleted and the requester has 
+ * Function which checks if the link exists and is not deleted.
+ *
+ * @param data - object containing id of the link
+ * @param tx transaction handle
+ * @throws on Prisma errors
+ * @returns - `Result.ok({})` on success
+ *          - `Result.err(_)` on failure
+ *            - NonexistentRecordError('The specified link does not exist!')
+ *            - DeletedRecordError('The specified link has already been deleted!')
+ */
+export const checkLinkShortId = async (
+  data: CheckByIdData,
+  tx: PrismaTransactionHandle
+): Promise<Result<unknown>> => {
+  const link = await tx.link.findFirst({
+    where: {
+      shortId: data.id,
+    },
+  });
+
+  if (link === null) {
+    return Result.err(
+      new NonexistentRecordError('The specified link does not exist!')
+    );
+  }
+
+  if (link.deletedAt !== null) {
+    return Result.err(
+      new DeletedRecordError('The specified link has already been deleted!')
+    );
+  }
+
+  return Result.ok({});
+};
+
+/**
+ * Function which checks if the link exists, it is not deleted and the requester has
  * the request rights.
  *
  * @param data - object containing id of the link and the requester id
@@ -99,7 +139,9 @@ export const checkLinkWithAccess = async (
   });
 
   if (data.requesterId !== link.createdById && requester.role !== Role.ADMIN) {
-    return Result.err(new AccessRightsError('Only admin and owner can update the link'));
+    return Result.err(
+      new AccessRightsError('Only admin and owner can update the link')
+    );
   }
 
   return Result.ok({});
