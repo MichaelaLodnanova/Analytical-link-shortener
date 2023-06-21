@@ -7,6 +7,8 @@ import {
   ResponseAuthGet,
   ResponseAuthLogout,
   ResponseStatsAdsGet,
+  RequestStatsLinkGet,
+  ResponseStatsLinkGet,
 } from 'common';
 import { sanitizeSearchParams } from '../utils/helpers';
 
@@ -48,6 +50,16 @@ export const register = async (data: RequestAuthCreate) => {
   return resp.data;
 };
 
+export const update = async (data: RequestAuthUpdateUser) => {
+  const resp = await apiClient.put<RequestAuthUpdateUser>('/auth', {
+    name: data.name,
+    surname: data.surname,
+    oldPassword: data.oldPassword,
+    newPassword: data.newPassword,
+  });
+  return resp.data;
+};
+
 export const adStatistics = async (data: RequestStatsAdsGet) => {
   const resp = await apiClient.get<ResponseStatsAdsGet>(
     `/stats/advertisement?${new URLSearchParams(
@@ -58,13 +70,11 @@ export const adStatistics = async (data: RequestStatsAdsGet) => {
   return resp.data;
 };
 
-export const update = async (data: RequestAuthUpdateUser) => {
-  const resp = await apiClient.put<RequestAuthUpdateUser>('/auth', {
-    name: data.name,
-    surname: data.surname,
-    oldPassword: data.oldPassword,
-    newPassword: data.newPassword,
-  });
+export const linkStatistics = async (data: RequestStatsLinkGet) => {
+  const resp = await apiClient.get<ResponseStatsLinkGet>(
+    `/stats/link?${new URLSearchParams(sanitizeSearchParams(data)).toString()}`
+  );
+
   return resp.data;
 };
 

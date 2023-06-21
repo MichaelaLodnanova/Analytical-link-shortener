@@ -12,6 +12,7 @@ export type PieChartEntry = {
 
 export type ResponseStatsLinkGetData = {
   impressions: number;
+  impressionsTimeline: TimelineEntry[];
   /**
    * Region code mapped to number of impressions
    */
@@ -20,6 +21,9 @@ export type ResponseStatsLinkGetData = {
    * Language mapped to number of impressions
    */
   language: TimelineEntry[];
+  today: {
+    impressions: number;
+  };
 };
 export type ResponseStatsLinkGet = SuccessResponse<ResponseStatsLinkGetData>;
 

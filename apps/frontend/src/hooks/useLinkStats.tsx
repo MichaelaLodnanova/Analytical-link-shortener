@@ -1,19 +1,18 @@
-import { RequestStatsAdsGet } from 'common';
+import { RequestStatsLinkGet } from 'common';
 import { useQuery } from 'react-query';
 import { useDebounce } from 'usehooks-ts';
-
-import { adStatistics } from '../controllers/ApiController';
+import { linkStatistics } from '../controllers/ApiController';
 import { useMemo } from 'react';
 
-export const useAdStats = ({ from, to, id }: RequestStatsAdsGet) => {
+export const useLinkStats = ({ from, to, id }: RequestStatsLinkGet) => {
   const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: useDebounce(
-      useMemo(() => ['ad', id, from, to], [id, from, to]),
+      useMemo(() => ['link', id, from, to], [id, from, to]),
       250
     ),
-    keepPreviousData: true,
     retry: false,
-    queryFn: () => adStatistics({ from, to, id }),
+    keepPreviousData: true,
+    queryFn: () => linkStatistics({ from, to, id }),
     staleTime: 1000 * 30, // 30 seconds
     refetchOnWindowFocus: false,
   });

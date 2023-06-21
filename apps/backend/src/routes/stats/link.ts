@@ -26,7 +26,7 @@ const linkStatsGetHandler = async (
   const user = req.session.user as AnonymizedUser;
 
   const stats = await getLinkStatistics({
-    userId: user.id,
+    userId: user.role == 'ADMIN' ? undefined : user.id,
     range:
       req.query.from && req.query.to
         ? {

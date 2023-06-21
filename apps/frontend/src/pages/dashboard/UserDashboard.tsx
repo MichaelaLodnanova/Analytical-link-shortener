@@ -3,13 +3,12 @@ import { addMonths } from 'date-fns';
 import { useMemo, useState } from 'react';
 
 import TimelineChart from '../../common/charts/TimelineChart';
-import { useAdStats } from '../../hooks/useAdStats';
+import { useLinkStats } from '../../hooks/useLinkStats';
 import RangeDate from './components/RangeDate';
 import StatsRow from './components/StatsRow';
-import useMemoNumStats from './hook/useMemoNumStats';
 
 const today = new Date();
-export const AdvertiserDashboard = () => {
+export const UserDashboard = () => {
   const [selectedDates, setSelectedDates] = useState<[string, string]>([
     addMonths(today, -1).toISOString(),
     today.toISOString(),
@@ -22,15 +21,23 @@ export const AdvertiserDashboard = () => {
     };
   }, [selectedDates]);
 
-  const { stats, isFetching, isLoading } = useAdStats(params);
+  const { stats, isFetching, isLoading } = useLinkStats(params);
 
-  const todaysStatsData = useMemoNumStats(
-    useMemo(() => ({ stats: stats?.data.today }), [stats?.data])
-  );
+  const todaysStatsData = useMemo(() => {
+    if (!stats?.data) {
+      return [{ label: 'Visits', count: 0 }];
+    }
 
-  const realtimeStatsData = useMemoNumStats(
-    useMemo(() => ({ stats: stats?.data }), [stats?.data])
-  );
+    return [{ label: 'Visits', count: stats?.data.today.impressions }];
+  }, [stats?.data]);
+
+  const realtimeStatsData = useMemo(() => {
+    if (!stats?.data) {
+      return [{ label: 'Visits', count: 0 }];
+    }
+
+    return [{ label: 'Visits', count: stats?.data.impressions }];
+  }, [stats?.data]);
 
   return (
     <Box>
@@ -55,15 +62,9 @@ export const AdvertiserDashboard = () => {
       <SimpleGrid columns={{ sm: 1, md: 1, lg: 2, xl: 2 }} spacing="8" mt="4">
         <TimelineChart
           data={stats?.data.impressionsTimeline}
+          label="Visits"
           isDate
-          label="Impressions"
         />
-        <TimelineChart
-          data={stats?.data.conversionTimeline}
-          isDate
-          label="Conversions"
-        />
-        <TimelineChart data={stats?.data.skipsTimeline} isDate label="Skips" />
         <TimelineChart data={stats?.data.language} label="Language" />
         <TimelineChart data={stats?.data.region} label="Region" />
       </SimpleGrid>

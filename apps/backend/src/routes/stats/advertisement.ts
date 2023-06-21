@@ -25,7 +25,7 @@ const advertisementsStatsGetHandler = async (
   const user = req.session.user as AnonymizedUser;
 
   const stats = await getAdvertisementStatistics({
-    userId: user.id,
+    userId: user.role == 'ADMIN' ? undefined : user.id,
     range:
       req.query.from && req.query.to
         ? {
@@ -51,7 +51,7 @@ const advertisementsStatsGetHandler = async (
 };
 linkStatsRouter.get(
   '/',
-  auth('ADVERTISER'),
+  auth('ADVERTISER', 'ADMIN'),
   validate({ query: advertisementStatsZod }),
   advertisementsStatsGetHandler
 );
