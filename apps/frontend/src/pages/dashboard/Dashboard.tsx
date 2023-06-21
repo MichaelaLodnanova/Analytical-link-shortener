@@ -1,5 +1,6 @@
 import { useUser } from '../../hooks/useUser';
 import { AdvertiserDashboard } from './AdvertiserDashboard';
+import { UserDashboard } from './UserDashboard';
 
 export function Dashboard() {
   const data = useUser();
@@ -12,7 +13,7 @@ export function Dashboard() {
   }
 
   if (data.user.role === 'USER') {
-    return <div>TODO: User dashboard</div>;
+    return <UserDashboard />;
   }
 
   if (data.user.role === 'ADMIN') {

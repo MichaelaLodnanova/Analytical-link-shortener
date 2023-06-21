@@ -5,16 +5,17 @@ import { linkStatistics } from '../controllers/ApiController';
 import { useMemo } from 'react';
 
 export const useLinkStats = ({ from, to, id }: RequestStatsLinkGet) => {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, isFetching } = useQuery({
     queryKey: useDebounce(
       useMemo(() => ['link', id, from, to], [id, from, to]),
       250
     ),
     retry: false,
+    keepPreviousData: true,
     queryFn: () => linkStatistics({ from, to, id }),
     staleTime: 1000 * 30, // 30 seconds
     refetchOnWindowFocus: false,
   });
 
-  return { stats: data, isLoading, isError };
+  return { stats: data, isLoading, isError, isFetching };
 };
