@@ -101,16 +101,24 @@ export const getAllLinksByUserId: (
       },
     });
 
-    if (data.requesterId !== data.userId && requester.role !== Role.ADMIN) {
-      return Result.err(
-        new AccessRightsError('Only admin and owner can retrieve all links')
-      );
-    }
+    if (requester.role !== Role.ADMIN) {
+      if (!data.userId) {
+        return Result.err(
+          new AccessRightsError('Only admin and owner can retrieve all links')
+        );
+      }
+      if (data.requesterId !== data.userId) {
+        return Result.err(
+          new AccessRightsError(
+            'Only admin and owner can retrieve all links of specific user'
+          )
+        );
+      }
+      const check = await checkUser({ id: data.userId }, client);
 
-    const check = await checkUser({ id: data.userId }, client);
-
-    if (check.isErr) {
-      return Result.err(check.error);
+      if (check.isErr) {
+        return Result.err(check.error);
+      }
     }
 
     const links = await client.link.findMany({
@@ -206,7 +214,9 @@ export const updateLinkById: (
         id: data.id,
       },
       data: {
-        isAdvertisementEnabled: data.isAdvertisementEnabled,
+        isAdvertisementEnabled: data.isAdvertisementEnabled
+          ? data.isAdvertisementEnabled
+          : undefined,
       },
       select: {
         id: true,

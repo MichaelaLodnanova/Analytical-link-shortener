@@ -2,7 +2,7 @@ export type GetAdvertisementData = {
   id: string;
 };
 export type GetAllAdvertisementsData = {
-  userId: string;
+  userId?: string;
   requesterId: string;
 };
 export type CreateAdvertisementData = {
@@ -15,9 +15,9 @@ export type CreateAdvertisementData = {
 export type UpdateAdvertisementData = {
   id: string;
   requesterId: string;
-  title: string;
-  adUrl: string;
-  forwardUrl: string;
+  title?: string;
+  adUrl?: string;
+  forwardUrl?: string;
 };
 export type DeleteAdvertisementData = {
   id: string;

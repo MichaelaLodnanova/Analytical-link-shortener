@@ -2,7 +2,7 @@ export type GetLinkData = {
   id: string;
 };
 export type GetAllLinksData = {
-  userId: string;
+  userId?: string;
   requesterId: string;
 };
 export type CreateLinkData = {
@@ -13,7 +13,7 @@ export type CreateLinkData = {
 export type UpdateLinkData = {
   id: string;
   requesterId: string;
-  isAdvertisementEnabled: boolean;
+  isAdvertisementEnabled?: boolean;
 };
 export type DeleteLinkData = {
   id: string;

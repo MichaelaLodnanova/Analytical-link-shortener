@@ -9,7 +9,7 @@ export type GetLinkSchema = z.infer<typeof getLinkZod>;
 
 export const getAllLinksZod = z
   .object({
-    userId: z.string().nonempty().uuid(),
+    userId: z.string().nonempty().uuid().optional(),
   })
   .strict();
 export type GetAllLinksSchema = z.infer<typeof getAllLinksZod>;
@@ -27,7 +27,7 @@ export type UpdateLinkParamsSchema = z.infer<typeof updateLinkParamsZod>;
 
 export const updateLinkBodyZod = z
   .object({
-    isAdvertisementEnabled: z.boolean(),
+    isAdvertisementEnabled: z.boolean().optional(),
   })
   .strict();
 export type UpdateLinkBodySchema = z.infer<typeof updateLinkBodyZod>;
