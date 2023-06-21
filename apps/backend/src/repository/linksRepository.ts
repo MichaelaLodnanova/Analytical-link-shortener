@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
 import { DateLessLink, PResult } from 'common';
-import { Role, client } from 'model';
+import { Link, Role, client } from 'model';
 import {
   GetAllLinksData,
   GetLinkData,
@@ -185,7 +185,7 @@ export const updateLinkById: (
  */
 export const deleteLinkById: (
   data: LinkDeleteData
-) => PResult<DateLessLink> = async (data) => {
+) => PResult<Link> = async (data) => {
   try {
     const check = await checkLinkWithAccess({
       id: data.id,
@@ -202,14 +202,7 @@ export const deleteLinkById: (
       },
       data: {
         deletedAt: formatISO(Date.now()),
-      },
-      select: {
-        id: true,
-        url: true,
-        shortId: true,
-        isAdvertisementEnabled: true,
-        createdById: true,
-      },
+      }
     });
 
     return Result.ok(deletedLink);

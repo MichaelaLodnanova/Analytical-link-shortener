@@ -30,6 +30,7 @@ import {
 import { Result } from '@badrap/result';
 import { AccessRightsError } from '../repository/errors';
 import { handleErrorResp } from '../utils';
+import { Link } from 'model';
 
 const linkRouter = Router();
 
@@ -182,7 +183,7 @@ const linkDeleteHandler = async (
   req: Request<RequestLinkIdParams, never, never, never>,
   res: Response<
     ResponseLinkDelete | ErrorResponse,
-    Record<string, Result<DateLessLink>>
+    Record<string, Result<Link>>
   >,
   next: NextFunction
 ) => {
@@ -210,7 +211,7 @@ linkRouter.delete(
   auth(),
   validate({}),
   linkDeleteHandler,
-  resolveResult<DateLessLink>()
+  resolveResult<Link>()
 );
 
 export default linkRouter;

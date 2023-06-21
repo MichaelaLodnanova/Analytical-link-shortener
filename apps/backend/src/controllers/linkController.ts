@@ -12,6 +12,7 @@ import {
   LinkDeleteData,
   LinkUpdateData,
 } from '../types/link';
+import { Link } from 'model';
 
 export const getLink: (data: { id: string }) => PResult<DateLessLink> = async ({
   id,
@@ -47,7 +48,7 @@ export const updateLink: (
 
 export const deleteLink: (
   data: LinkDeleteData
-) => PResult<DateLessLink> = async (data) => {
+) => PResult<Link> = async (data) => {
   const deletedLink = await deleteLinkById(data);
 
   return deletedLink;
