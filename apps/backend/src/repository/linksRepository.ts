@@ -5,9 +5,9 @@ import { Link, Role, client } from 'model';
 import {
   GetAllLinksData,
   GetLinkData,
-  LinkCreateData,
-  LinkDeleteData,
-  LinkUpdateData,
+  CreateLinkData,
+  DeleteLinkData,
+  UpdateLinkData,
 } from '../types/link';
 import {
   checkLink,
@@ -145,7 +145,7 @@ export const getAllLinksByUserId: (
  *          - On failure: a generic error
  */
 export const createNewLink: (
-  data: LinkCreateData
+  data: CreateLinkData
 ) => PResult<DateLessLink> = async (data) => {
   try {
     const shortId = await hash(data.url, {
@@ -186,7 +186,7 @@ export const createNewLink: (
  * @returns dateless link entity
  */
 export const updateLinkById: (
-  data: LinkUpdateData
+  data: UpdateLinkData
 ) => PResult<DateLessLink> = async (data) => {
   try {
     const check = await checkLinkWithAccess(
@@ -229,7 +229,7 @@ export const updateLinkById: (
  * @param id link id
  * @returns dateless link entity
  */
-export const deleteLinkById: (data: LinkDeleteData) => PResult<Link> = async (
+export const deleteLinkById: (data: DeleteLinkData) => PResult<Link> = async (
   data
 ) => {
   try {

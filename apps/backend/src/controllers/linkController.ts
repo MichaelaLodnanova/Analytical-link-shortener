@@ -8,9 +8,9 @@ import {
 } from '../repository/linksRepository';
 import {
   GetAllLinksData,
-  LinkCreateData,
-  LinkDeleteData,
-  LinkUpdateData,
+  CreateLinkData,
+  DeleteLinkData,
+  UpdateLinkData,
 } from '../types/link';
 import { Link } from 'model';
 
@@ -31,7 +31,7 @@ export const getAllLinks: (
 };
 
 export const createLink: (
-  data: LinkCreateData
+  data: CreateLinkData
 ) => PResult<DateLessLink> = async (data) => {
   const createdLink = await createNewLink(data);
 
@@ -39,16 +39,16 @@ export const createLink: (
 };
 
 export const updateLink: (
-  data: LinkUpdateData
+  data: UpdateLinkData
 ) => PResult<DateLessLink> = async (data) => {
   const updatedLink = await updateLinkById(data);
 
   return updatedLink;
 };
 
-export const deleteLink: (
-  data: LinkDeleteData
-) => PResult<Link> = async (data) => {
+export const deleteLink: (data: DeleteLinkData) => PResult<Link> = async (
+  data
+) => {
   const deletedLink = await deleteLinkById(data);
 
   return deletedLink;

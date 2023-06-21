@@ -5,17 +5,17 @@ export type GetAllLinksData = {
   userId: string;
   requesterId: string;
 };
-export type LinkCreateData = {
+export type CreateLinkData = {
   createdById: string;
   url: string;
   isAdvertisementEnabled: boolean;
 };
-export type LinkUpdateData = {
+export type UpdateLinkData = {
   id: string;
   requesterId: string;
   isAdvertisementEnabled: boolean;
 };
-export type LinkDeleteData = {
+export type DeleteLinkData = {
   id: string;
   requesterId: string;
 };
