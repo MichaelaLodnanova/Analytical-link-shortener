@@ -15,11 +15,11 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
-import { FiBell, FiChevronDown, FiMenu, FiPlus } from 'react-icons/fi';
-import { useUser } from '../../hooks/useUser';
-import useLogout from '../../hooks/useLogout';
+import { FiChevronDown, FiMenu } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-import { Button } from 'react-scroll';
+
+import useLogout from '../../hooks/useLogout';
+import { useUser } from '../../hooks/useUser';
 import AddNewMenu from './AddNewMenu';
 
 interface MobileProps extends FlexProps {
