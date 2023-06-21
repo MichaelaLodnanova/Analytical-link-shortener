@@ -56,7 +56,7 @@ const linkGetHandler = async (
   next();
 };
 linkRouter.get(
-  '/:id',
+  '/id/:id',
   validate<GetLinkSchema>({ params: getLinkZod }),
   linkGetHandler,
   resolveResult<DateLessLink>()
@@ -146,15 +146,23 @@ const linkPatchHandler = async (
   >,
   next: NextFunction
 ) => {
+  const user = req.session.user as AnonymizedUser;
   const linkId = req.params.id as string;
   const updateLinkData = req.body;
 
   const updatedLink = await updateLink({
     id: linkId,
     ...updateLinkData,
+    requesterId: user.id,
   });
 
   // TODO - handle specific error types
+  if (updatedLink.isErr) {
+    console.error(updatedLink.error.message);
+    if (updatedLink.error instanceof AccessRightsError) {
+      return handleErrorResp(403, res, updatedLink.error.message);
+    }
+  }
 
   res.locals.result = updatedLink;
   next();
@@ -178,13 +186,21 @@ const linkDeleteHandler = async (
   >,
   next: NextFunction
 ) => {
+  const user = req.session.user as AnonymizedUser;
   const linkId = req.params.id as string;
 
   const deletedLink = await deleteLink({
     id: linkId,
+    requesterId: user.id,
   });
 
   // TODO - handle specific error types
+  if (deletedLink.isErr) {
+    console.error(deletedLink.error.message);
+    if (deletedLink.error instanceof AccessRightsError) {
+      return handleErrorResp(403, res, deletedLink.error.message);
+    }
+  }
 
   res.locals.result = deletedLink;
   next();

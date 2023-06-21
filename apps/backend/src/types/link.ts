@@ -12,8 +12,10 @@ export type LinkCreateData = {
 };
 export type LinkUpdateData = {
   id: string;
+  requesterId: string;
   isAdvertisementEnabled: boolean;
 };
 export type LinkDeleteData = {
   id: string;
+  requesterId: string;
 };

@@ -8,8 +8,9 @@ import {
   LinkDeleteData,
   LinkUpdateData,
 } from '../types/link';
-import { checkLink, checkUser } from './common';
+import { checkLink, checkLinkWithAccess, checkUser } from './common';
 import { AccessRightsError } from './errors';
+import { formatISO } from 'date-fns';
 
 /**
  * Get link by id
@@ -55,7 +56,7 @@ export const getAllLinksByUserId: (
   data: GetAllLinksData
 ) => PResult<DateLessLink[]> = async (data) => {
   try {
-    // check requester
+    // check requester access rights
     // we presume that requester exists and is not deleted
     const requester = await client.user.findUniqueOrThrow({
       where: {
@@ -76,7 +77,7 @@ export const getAllLinksByUserId: (
       return Result.err(check.error);
     }
 
-    const link = await client.link.findMany({
+    const links = await client.link.findMany({
       where: {
         createdById: data.userId,
         deletedAt: null,
@@ -93,7 +94,7 @@ export const getAllLinksByUserId: (
       },
     });
 
-    return Result.ok(link);
+    return Result.ok(links);
   } catch (error) {
     console.error(error);
     return Result.err(error as Error);
@@ -145,7 +146,10 @@ export const updateLinkById: (
   data: LinkUpdateData
 ) => PResult<DateLessLink> = async (data) => {
   try {
-    const check = await checkLink(data, client);
+    const check = await checkLinkWithAccess({
+      id: data.id,
+      requesterId: data.requesterId
+    }, client);
 
     if (check.isErr) {
       return Result.err(check.error);
@@ -183,7 +187,10 @@ export const deleteLinkById: (
   data: LinkDeleteData
 ) => PResult<DateLessLink> = async (data) => {
   try {
-    const check = await checkLink(data, client);
+    const check = await checkLinkWithAccess({
+      id: data.id,
+      requesterId: data.requesterId
+    }, client);
 
     if (check.isErr) {
       return Result.err(check.error);
@@ -194,7 +201,7 @@ export const deleteLinkById: (
         id: data.id,
       },
       data: {
-        deletedAt: Date(),
+        deletedAt: formatISO(Date.now()),
       },
       select: {
         id: true,
