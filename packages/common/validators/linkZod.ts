@@ -16,7 +16,6 @@ export type GetAllLinksSchema = z.infer<typeof getAllLinksZod>;
 
 export const createLinkZod = z
   .object({
-    createdById: z.string().nonempty(),
     url: z.string().nonempty().url(),
     isAdvertisementEnabled: z.boolean(),
   })

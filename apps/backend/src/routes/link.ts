@@ -107,7 +107,7 @@ linkRouter.get(
 );
 
 /**
- * Endpoint for creating link
+ * Endpoint for creating link - link can be created only by registered and logged in user
  */
 const linkPostHandler = async (
   req: Request<never, never, RequestLinkPostReqBody, never>,
@@ -117,9 +117,11 @@ const linkPostHandler = async (
   >,
   next: NextFunction
 ) => {
+  const user = req.session.user as AnonymizedUser;
   const createLinkData = req.body;
 
   const createdLink = await createLink({
+    createdById: user.id,
     ...createLinkData,
   });
 
