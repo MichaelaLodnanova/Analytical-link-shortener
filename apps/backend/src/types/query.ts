@@ -12,7 +12,7 @@ export type LinkQueryFilters = {
   range?: DateRange;
 };
 
-export type TimelineQueryFilters = AdvertisementQueryFilters & {
+export type TimelineQueryFilters<T extends object> = T & {
   groupByKey: 'clickedAt' | 'skippedAt' | 'createdAt';
 };
 
@@ -24,4 +24,8 @@ export type AdStatsNumQuery = (
 
 export type AdStatsTimelineQuery = (
   filter: AdvertisementQueryFilters
+) => PResult<TimelineEntry[]>;
+
+export type LinkStatsTimelineQuery = (
+  filter: LinkQueryFilters
 ) => PResult<TimelineEntry[]>;

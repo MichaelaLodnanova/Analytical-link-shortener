@@ -215,6 +215,42 @@ async function main() {
     click8,
   });
 
+  console.log('Seeding 10000 link stats!');
+  // Generate 100 link statistics with random region, language and createdAt from the last year
+  for (let i = 0; i < 10000; i++) {
+    const linkId = i % 3 === 0 ? link1.id : i % 3 === 1 ? link2.id : link3.id;
+    const region = ['CZ', 'SK', 'HU', 'DE', 'US'][
+      Math.floor(Math.random() * 5)
+    ];
+    const language = ['cs', 'sk', 'hu', 'de', 'en', 'sl'][
+      Math.floor(Math.random() * 6)
+    ];
+    // randomize createdAt from last year
+    const createdAt = addSeconds(
+      addMinutes(new Date(), -Math.floor(Math.random() * 525600)),
+      Math.floor(Math.random() * 60 * 60 * 24)
+    );
+
+    await client.linkStatistics.upsert({
+      where: {
+        id: `seed_link_stat_${i}`,
+      },
+      update: {},
+      create: {
+        id: `seed_link_stat_${i}`,
+        linkId,
+        region,
+        language,
+        createdAt,
+      },
+    });
+
+    if (i % 1000 == 0) {
+      console.log(i);
+    }
+  }
+
+  console.log('Seeding 10000 advertisement stats!');
   // Generate 100 advertisement statistics with random region, language, createdAt and clickedAt, skippedAt (which can be null)
   for (let i = 0; i < 10000; i++) {
     const linkId = i % 2 === 0 ? link1.id : link2.id;

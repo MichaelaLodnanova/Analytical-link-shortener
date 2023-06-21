@@ -10,6 +10,7 @@ import {
   TimelineQueryFilters,
   TimelineRawQueryData,
 } from '../types/query';
+import { postProcessTimelineData } from '../utils/reducers';
 
 /**
  * Generates a where clause for the raw timeline statistics query.
@@ -119,7 +120,7 @@ export const queryAdvertisementConversions: AdStatsNumQuery = async (
  * Gets timeline statistics by the given filter
  */
 const queryTimelineData: (
-  filter: TimelineQueryFilters
+  filter: TimelineQueryFilters<AdvertisementQueryFilters>
 ) => PResult<TimelineRawQueryData> = async (filter) => {
   try {
     let select = Prisma.raw(`DATE_TRUNC('hour', 
@@ -157,24 +158,6 @@ const queryTimelineData: (
     console.error(error);
     return Result.err(error as Error);
   }
-};
-
-/**
- * Converts the raw timeline data to a Record<string, number> object.
- * Where the key is datetime in ISO format and the value is the count.
- * @returns A Record<string, number> object.
- */
-const postProcessTimelineData = (
-  data: TimelineRawQueryData
-): TimelineEntry[] => {
-  const result: TimelineEntry[] = [];
-  data.forEach((item) => {
-    if (item.summarydate == null) {
-      return;
-    }
-    result.push({ date: formatISO(item.summarydate), value: item.count });
-  });
-  return result;
 };
 
 /**
