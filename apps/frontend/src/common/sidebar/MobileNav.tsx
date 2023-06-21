@@ -15,10 +15,12 @@ import {
   useColorModeValue,
   VStack,
 } from '@chakra-ui/react';
-import { FiBell, FiChevronDown, FiMenu } from 'react-icons/fi';
+import { FiBell, FiChevronDown, FiMenu, FiPlus } from 'react-icons/fi';
 import { useUser } from '../../hooks/useUser';
 import useLogout from '../../hooks/useLogout';
 import { NavLink } from 'react-router-dom';
+import { Button } from 'react-scroll';
+import AddNewMenu from './AddNewMenu';
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -57,13 +59,8 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       </Text>
 
       <HStack spacing={{ base: '0', md: '6' }}>
-        <IconButton
-          size="lg"
-          variant="ghost"
-          aria-label="open menu"
-          icon={<FiBell />}
-        />
         <Flex alignItems={'center'}>
+          <AddNewMenu />
           <Menu>
             <MenuButton
               py={2}
