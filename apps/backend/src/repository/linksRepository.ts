@@ -1,3 +1,5 @@
+import { hash, argon2d } from 'argon2';
+import { Buffer } from 'buffer';
 import { Result } from '@badrap/result';
 import { DateLessLink, PResult } from 'common';
 import { Link, Role, client } from 'model';
@@ -112,13 +114,16 @@ export const createNewLink: (
   data: LinkCreateData
 ) => PResult<DateLessLink> = async (data) => {
   try {
-    const shortId = ''; // generate short id
+    const shortId = await hash(data.url, { hashLength: 15, type: argon2d, raw: true });
+    const shortIdString = shortId.toString('base64');
+    
+    // to be bullet proof check into db should be made
 
     const newLink = await client.link.create({
       data: {
         createdById: data.createdById,
         url: data.url,
-        shortId: shortId,
+        shortId: shortIdString,
         isAdvertisementEnabled: data.isAdvertisementEnabled,
       },
       select: {
