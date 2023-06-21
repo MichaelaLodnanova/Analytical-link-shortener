@@ -2,14 +2,14 @@ import z from 'zod';
 
 export const getLinkZod = z
   .object({
-    id: z.string().nonempty(),
+    id: z.string().nonempty(), // should be .uuid(), but seed data uses basic strings
   })
   .strict();
 export type GetLinkSchema = z.infer<typeof getLinkZod>;
 
 export const getAllLinksZod = z
   .object({
-    userId: z.string().nonempty(),
+    userId: z.string().nonempty().uuid(),
   })
   .strict();
 export type GetAllLinksSchema = z.infer<typeof getAllLinksZod>;
@@ -32,10 +32,13 @@ export const updateLinkBodyZod = z
   .strict();
 export type UpdateLinkBodySchema = z.infer<typeof updateLinkBodyZod>;
 
-export const paginationZod = z
+export const deleteLinkZod = getLinkZod;
+export type DeleteLinkSchema = z.infer<typeof deleteLinkZod>;
+
+export const viewLinkZod = z
   .object({
-    page: z.coerce.number().int().positive().optional(),
-    size: z.coerce.number().int().positive().optional(),
+    region: z.string(),
+    language: z.string(),
   })
   .strict();
-export type PaginationSchema = z.infer<typeof paginationZod>;
+export type ViewLinkSchema = z.infer<typeof viewLinkZod>;
