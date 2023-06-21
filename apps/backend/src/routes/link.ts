@@ -6,18 +6,24 @@ import {
   AnonymizedUser,
   CreateLinkSchema,
   DateLessLink,
+  DeleteLinkSchema,
   GetAllLinksSchema,
   GetLinkSchema,
   RequestLinkIdParams,
   RequestLinkPatchReqBody,
   RequestLinkPostReqBody,
+  RequestViewLinkBody,
+  RequestViewLinkParams,
   ResponseLinkDelete,
   ResponseLinkGet,
+  ViewLinkSchema,
   createLinkZod,
+  deleteLinkZod,
   getAllLinksZod,
   getLinkZod,
   updateLinkBodyZod,
   updateLinkParamsZod,
+  viewLinkZod,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import {
@@ -26,6 +32,7 @@ import {
   getAllLinks,
   getLink,
   updateLink,
+  viewLink,
 } from '../controllers/linkController';
 import { Result } from '@badrap/result';
 import { AccessRightsError } from '../repository/errors';
@@ -35,7 +42,7 @@ import { Link } from 'model';
 const linkRouter = Router();
 
 /**
- * Endpoint for getting link
+ * Endpoint for getting link by original id
  */
 const linkGetHandler = async (
   req: Request<RequestLinkIdParams, never, never, never>,
@@ -58,9 +65,42 @@ const linkGetHandler = async (
 };
 linkRouter.get(
   '/id/:id',
+  auth(),
   validate<GetLinkSchema>({ params: getLinkZod }),
   linkGetHandler,
   resolveResult<DateLessLink>()
+);
+
+/**
+ * Endpoint for handling redirect reuest by short id
+ */
+const viewLinkGetHandler = async (
+  req: Request<RequestViewLinkParams, never, RequestViewLinkBody, never>,
+  res: Response<
+    ResponseLinkGet | ErrorResponse,
+    Record<string, Result<unknown>>
+  >,
+  next: NextFunction
+) => {
+  const shortId = req.params.id as string;
+  const data = req.body;
+
+  const link = await viewLink({
+    shortId,
+    region: data.region,
+    language: data.language,
+  });
+
+  // TODO - handle specific error types
+
+  res.locals.result = link;
+  next();
+};
+linkRouter.get(
+  '/:id',
+  validate<ViewLinkSchema>({ params: viewLinkZod }),
+  viewLinkGetHandler,
+  resolveResult<unknown>()
 );
 
 /**
@@ -211,7 +251,7 @@ const linkDeleteHandler = async (
 linkRouter.delete(
   '/:id',
   auth(),
-  validate({}),
+  validate<DeleteLinkSchema>({ params: deleteLinkZod }),
   linkDeleteHandler,
   resolveResult<Link>()
 );

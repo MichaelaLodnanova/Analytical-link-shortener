@@ -1,8 +1,15 @@
-import { CreateLinkSchema, UpdateLinkBodySchema } from '../../validators';
+import {
+  CreateLinkSchema,
+  UpdateLinkBodySchema,
+  ViewLinkSchema,
+} from '../../validators';
 import { DateLessLink } from '../entities';
 import { SuccessResponse } from './utils';
 
 export type RequestLinkIdParams = Record<string, unknown>;
+
+export type RequestViewLinkParams = Record<string, unknown>;
+export type RequestViewLinkBody = ViewLinkSchema;
 
 export type ResponseAllLinksGet = SuccessResponse<DateLessLink[]>;
 export type RequestLinkPostReqBody = CreateLinkSchema;
