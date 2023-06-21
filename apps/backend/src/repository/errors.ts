@@ -14,3 +14,17 @@ export class UserAlreadyExists extends Error {
     Object.setPrototypeOf(this, UserAlreadyExists.prototype);
   }
 }
+
+export class DeletedRecordError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, DeletedRecordError.prototype);
+  }
+}
+
+export class NonexistentRecordError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, NonexistentRecordError.prototype);
+  }
+}
