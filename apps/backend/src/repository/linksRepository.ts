@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
 import { DateLessLink, PResult } from 'common';
-import { client } from 'model';
+import { Role, client } from 'model';
 import {
   GetAllLinksData,
   GetLinkData,
@@ -9,6 +9,7 @@ import {
   LinkUpdateData,
 } from '../types/link';
 import { checkLink, checkUser } from './common';
+import { AccessRightsError } from './errors';
 
 /**
  * Get link by id
@@ -54,6 +55,21 @@ export const getAllLinksByUserId: (
   data: GetAllLinksData
 ) => PResult<DateLessLink[]> = async (data) => {
   try {
+    // check requester
+    // we presume that requester exists and is not deleted
+    const requester = await client.user.findUniqueOrThrow({
+      where: {
+        id: data.requesterId,
+      },
+      select: {
+        role: true,
+      },
+    })
+
+    if (data.requesterId !== data.userId && requester.role !== Role.ADMIN) {
+      return Result.err(new AccessRightsError('Only admin and owner can retrieve all links'));
+    }
+
     const check = await checkUser({ id: data.userId }, client);
 
     if (check.isErr) {

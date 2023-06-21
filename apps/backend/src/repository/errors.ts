@@ -28,3 +28,10 @@ export class NonexistentRecordError extends Error {
     Object.setPrototypeOf(this, NonexistentRecordError.prototype);
   }
 }
+
+export class AccessRightsError extends Error {
+  constructor(message: string) {
+    super(message);
+    Object.setPrototypeOf(this, AccessRightsError.prototype);
+  }
+}

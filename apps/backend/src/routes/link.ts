@@ -28,6 +28,8 @@ import {
   updateLink,
 } from '../controllers/linkController';
 import { Result } from '@badrap/result';
+import { AccessRightsError } from '../repository/errors';
+import { handleErrorResp } from '../utils';
 
 const linkRouter = Router();
 
@@ -83,6 +85,12 @@ const allLinksOfUserGetHandler = async (
   });
 
   // TODO - handle specific error types
+  if (links.isErr) {
+    console.error(links.error.message);
+    if (links.error instanceof AccessRightsError) {
+      return handleErrorResp(403, res, links.error.message);
+    }
+  }
 
   res.locals.result = links;
   next();
