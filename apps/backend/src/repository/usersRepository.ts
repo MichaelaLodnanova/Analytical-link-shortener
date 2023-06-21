@@ -104,8 +104,8 @@ export const updateUser: (data: {
 export const createUser: (data: {
   email: string;
   username: string;
-  name: string;
-  surname: string;
+  name?: string;
+  surname?: string;
   passwordHash: string;
 }) => PResult<AnonymizedUser> = async ({
   email,

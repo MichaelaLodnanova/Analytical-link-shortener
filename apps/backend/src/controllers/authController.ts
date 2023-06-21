@@ -17,8 +17,8 @@ import { UserNotFound } from '../repository/errors';
 export const registerUser: (data: {
   email: string;
   username: string;
-  name: string;
-  surname: string;
+  name?: string;
+  surname?: string;
   password: string;
 }) => PResult<AnonymizedUser> = async ({
   email,
