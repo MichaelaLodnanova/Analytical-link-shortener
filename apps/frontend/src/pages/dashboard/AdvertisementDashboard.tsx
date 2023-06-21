@@ -8,8 +8,14 @@ import RangeDate from './components/RangeDate';
 import StatsRow from './components/StatsRow';
 import useMemoNumStats from './hook/useMemoNumStats';
 
+type AdvertisementDashboardProps = {
+  adId?: string;
+};
+
 const today = new Date();
-export const AdvertiserDashboard = () => {
+export const AdvertisementDashboard = ({
+  adId,
+}: AdvertisementDashboardProps) => {
   const [selectedDates, setSelectedDates] = useState<[string, string]>([
     addMonths(today, -1).toISOString(),
     today.toISOString(),
@@ -19,8 +25,9 @@ export const AdvertiserDashboard = () => {
     return {
       from: selectedDates[0],
       to: selectedDates[1],
+      id: adId,
     };
-  }, [selectedDates]);
+  }, [selectedDates, adId]);
 
   const { stats, isFetching, isLoading } = useAdStats(params);
 

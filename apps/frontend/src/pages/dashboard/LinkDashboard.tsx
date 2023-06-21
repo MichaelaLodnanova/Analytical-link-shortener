@@ -7,8 +7,12 @@ import { useLinkStats } from '../../hooks/useLinkStats';
 import RangeDate from './components/RangeDate';
 import StatsRow from './components/StatsRow';
 
+type LinkDashboardProps = {
+  linkId?: string;
+};
+
 const today = new Date();
-export const UserDashboard = () => {
+export const LinkDashboard = ({ linkId }: LinkDashboardProps) => {
   const [selectedDates, setSelectedDates] = useState<[string, string]>([
     addMonths(today, -1).toISOString(),
     today.toISOString(),
@@ -18,8 +22,9 @@ export const UserDashboard = () => {
     return {
       from: selectedDates[0],
       to: selectedDates[1],
+      id: linkId,
     };
-  }, [selectedDates]);
+  }, [selectedDates, linkId]);
 
   const { stats, isFetching, isLoading } = useLinkStats(params);
 
@@ -38,6 +43,9 @@ export const UserDashboard = () => {
 
     return [{ label: 'Visits', count: stats?.data.impressions }];
   }, [stats?.data]);
+
+  // TODO: When single link GET endpoint is merged, then add a header
+  // with the link name if ID is provided
 
   return (
     <Box>
