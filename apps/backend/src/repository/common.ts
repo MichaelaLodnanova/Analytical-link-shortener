@@ -182,3 +182,97 @@ export const checkUser = async (
 
   return Result.ok({});
 };
+
+/**
+ * Function which checks if the advertisement exists.
+ *
+ * @param data - object containing id of the advertisement and the requester id
+ * @param tx transaction handle
+ * @throws on Prisma errors
+ * @returns - `Result.ok({})` on success
+ *          - `Result.err(_)` on failure
+ *            - NonexistentRecordError('The specified advertisement does not exist!')
+ *            - DeletedRecordError('The specified advertisement has already been deleted!')
+ */
+export const checkAdvertisement = async (
+  data: CheckByIdData,
+  tx: PrismaTransactionHandle
+): Promise<Result<unknown>> => {
+  const advertisement = await tx.advertisement.findUnique({
+    where: {
+      id: data.id,
+    },
+  });
+
+  if (advertisement === null) {
+    return Result.err(
+      new NonexistentRecordError('The specified advertisement does not exist!')
+    );
+  }
+
+  if (advertisement.deletedAt !== null) {
+    return Result.err(
+      new DeletedRecordError(
+        'The specified advertisement has already been deleted!'
+      )
+    );
+  }
+
+  return Result.ok({});
+};
+
+/**
+ * Function which checks if the advertisement exists, it is not deleted and the requester has
+ * the request rights.
+ *
+ * @param data - object containing id of the advertisement and the requester id
+ * @param tx transaction handle
+ * @throws on Prisma errors
+ * @returns - `Result.ok({})` on success
+ *          - `Result.err(_)` on failure
+ *            - NonexistentRecordError('The specified advertisement does not exist!')
+ *            - DeletedRecordError('The specified advertisement has already been deleted!')
+ *            - AccessRightsError('Only admin and owner can update the advertisement')
+ */
+export const checkAdvertisementWithAccess = async (
+  data: CheckByIdWithAccessData,
+  tx: PrismaTransactionHandle
+): Promise<Result<unknown>> => {
+  const advertisement = await tx.advertisement.findUnique({
+    where: {
+      id: data.id,
+    },
+  });
+
+  if (advertisement === null) {
+    return Result.err(
+      new NonexistentRecordError('The specified advertisement does not exist!')
+    );
+  }
+
+  if (advertisement.deletedAt !== null) {
+    return Result.err(
+      new DeletedRecordError(
+        'The specified advertisement has already been deleted!'
+      )
+    );
+  }
+
+  // we pressume that requester exists
+  const requester = await tx.user.findUniqueOrThrow({
+    where: {
+      id: data.requesterId,
+    },
+  });
+
+  if (
+    data.requesterId !== advertisement.createdById &&
+    requester.role !== Role.ADMIN
+  ) {
+    return Result.err(
+      new AccessRightsError('Only admin and owner can access the advertisement')
+    );
+  }
+
+  return Result.ok({});
+};
