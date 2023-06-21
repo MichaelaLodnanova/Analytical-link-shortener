@@ -1,5 +1,4 @@
 import { hash, argon2d } from 'argon2';
-import { Buffer } from 'buffer';
 import { Result } from '@badrap/result';
 import { DateLessLink, PResult } from 'common';
 import { Link, Role, client } from 'model';
@@ -10,7 +9,12 @@ import {
   LinkDeleteData,
   LinkUpdateData,
 } from '../types/link';
-import { checkLink, checkLinkWithAccess, checkUser } from './common';
+import {
+  checkLink,
+  checkLinkShortId,
+  checkLinkWithAccess,
+  checkUser,
+} from './common';
 import { AccessRightsError } from './errors';
 import { formatISO } from 'date-fns';
 
@@ -19,7 +23,7 @@ import { formatISO } from 'date-fns';
  * @param id link id
  * @returns dateless link entity
  */
-export const getLinkById: (data: GetLinkData) => PResult<DateLessLink> = async (
+export const getLinkById: (data: GetLinkData) => PResult<Link> = async (
   data
 ) => {
   try {
@@ -32,6 +36,34 @@ export const getLinkById: (data: GetLinkData) => PResult<DateLessLink> = async (
     const link = await client.link.findUniqueOrThrow({
       where: {
         id: data.id,
+      },
+    });
+
+    return Result.ok(link);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+/**
+ * Get link by short id
+ * @param id link id
+ * @returns dateless link entity
+ */
+export const getLinkByShortId: (
+  data: GetLinkData
+) => PResult<DateLessLink> = async (data) => {
+  try {
+    const check = await checkLinkShortId(data, client);
+
+    if (check.isErr) {
+      return Result.err(check.error);
+    }
+
+    const link = await client.link.findFirstOrThrow({
+      where: {
+        shortId: data.id,
       },
       select: {
         id: true,
@@ -67,10 +99,12 @@ export const getAllLinksByUserId: (
       select: {
         role: true,
       },
-    })
+    });
 
     if (data.requesterId !== data.userId && requester.role !== Role.ADMIN) {
-      return Result.err(new AccessRightsError('Only admin and owner can retrieve all links'));
+      return Result.err(
+        new AccessRightsError('Only admin and owner can retrieve all links')
+      );
     }
 
     const check = await checkUser({ id: data.userId }, client);
@@ -114,7 +148,11 @@ export const createNewLink: (
   data: LinkCreateData
 ) => PResult<DateLessLink> = async (data) => {
   try {
-    const shortId = await hash(data.url, { hashLength: 15, type: argon2d, raw: true });
+    const shortId = await hash(data.url, {
+      hashLength: 15,
+      type: argon2d,
+      raw: true,
+    });
     const shortIdBase64 = shortId.toString('base64url');
 
     // to be bullet proof check into db should be made
@@ -151,10 +189,13 @@ export const updateLinkById: (
   data: LinkUpdateData
 ) => PResult<DateLessLink> = async (data) => {
   try {
-    const check = await checkLinkWithAccess({
-      id: data.id,
-      requesterId: data.requesterId
-    }, client);
+    const check = await checkLinkWithAccess(
+      {
+        id: data.id,
+        requesterId: data.requesterId,
+      },
+      client
+    );
 
     if (check.isErr) {
       return Result.err(check.error);
@@ -188,14 +229,17 @@ export const updateLinkById: (
  * @param id link id
  * @returns dateless link entity
  */
-export const deleteLinkById: (
-  data: LinkDeleteData
-) => PResult<Link> = async (data) => {
+export const deleteLinkById: (data: LinkDeleteData) => PResult<Link> = async (
+  data
+) => {
   try {
-    const check = await checkLinkWithAccess({
-      id: data.id,
-      requesterId: data.requesterId
-    }, client);
+    const check = await checkLinkWithAccess(
+      {
+        id: data.id,
+        requesterId: data.requesterId,
+      },
+      client
+    );
 
     if (check.isErr) {
       return Result.err(check.error);
@@ -207,7 +251,7 @@ export const deleteLinkById: (
       },
       data: {
         deletedAt: formatISO(Date.now()),
-      }
+      },
     });
 
     return Result.ok(deletedLink);
