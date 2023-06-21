@@ -1,7 +1,7 @@
 import { useUser } from '../../hooks/useUser';
 import { AdminDashboard } from './AdminDashboard';
-import { AdvertiserDashboard } from './AdvertiserDashboard';
-import { UserDashboard } from './UserDashboard';
+import { AdvertisementDashboard } from './AdvertisementDashboard';
+import { LinkDashboard } from './LinkDashboard';
 
 export function Dashboard() {
   const data = useUser();
@@ -10,11 +10,11 @@ export function Dashboard() {
   }
 
   if (data.user.role === 'ADVERTISER') {
-    return <AdvertiserDashboard />;
+    return <AdvertisementDashboard />;
   }
 
   if (data.user.role === 'USER') {
-    return <UserDashboard />;
+    return <LinkDashboard />;
   }
 
   if (data.user.role === 'ADMIN') {

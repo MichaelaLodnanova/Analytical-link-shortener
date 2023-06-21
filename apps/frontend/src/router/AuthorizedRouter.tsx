@@ -1,13 +1,17 @@
-import { Route, Routes, useMatch, useNavigate } from 'react-router-dom';
-import { useUser } from '../hooks/useUser';
 import { Spinner } from '@chakra-ui/react';
 import { useEffect } from 'react';
+import { Route, Routes, useMatch, useNavigate } from 'react-router-dom';
+
 import SidebarWithHeader from '../common/sidebar/SidebarWithHeader';
+import { useUser } from '../hooks/useUser';
 import { Dashboard } from '../pages/dashboard/Dashboard';
+import { SingleAdStats } from '../pages/singleAdStats';
+import { SingleLinkStats } from '../pages/singleLinkStats';
 import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
+import NotFound from '../pages/notFound/NotFound';
 
 export default function AuthorizedRouter() {
-  const { isLoading, authorized } = useUser();
+  const { isLoading, authorized, hasRole } = useUser();
   const matchesAuth = useMatch('/auth');
   const navigate = useNavigate();
 
@@ -29,8 +33,12 @@ export default function AuthorizedRouter() {
       <SidebarWithHeader>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/lol" element={<p>xdd</p>} />
+          <Route path="/link-stats/:id" element={<SingleLinkStats />} />
+          {hasRole('ADVERTISER', 'ADMIN') && (
+            <Route path="/ad-stats/:id" element={<SingleAdStats />} />
+          )}
           <Route path="/profile" element={<ProfileSettings />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </SidebarWithHeader>
     </>
