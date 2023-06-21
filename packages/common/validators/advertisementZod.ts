@@ -18,7 +18,6 @@ export type GetAllAdvertisementsSchema = z.infer<
 
 export const createAdvertisementZod = z
   .object({
-    requesterId: z.string().nonempty().uuid(),
     title: z.string().nonempty(),
     adUrl: z.string().nonempty().url(),
     forwardUrl: z.string().nonempty().url(),
