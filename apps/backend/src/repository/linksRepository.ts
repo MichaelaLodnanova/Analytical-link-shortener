@@ -1,0 +1,197 @@
+import { Result } from '@badrap/result';
+import { DateLessLink, PResult } from 'common';
+import { client } from 'model';
+import {
+  GetAllLinksData,
+  GetLinkData,
+  LinkCreateData,
+  LinkDeleteData,
+  LinkUpdateData,
+} from '../types/link';
+import { checkLink, checkUser } from './common';
+
+/**
+ * Get link by id
+ * @param id link id
+ * @returns dateless link entity
+ */
+export const getLinkById: (data: GetLinkData) => PResult<DateLessLink> = async (
+  data
+) => {
+  try {
+    const check = await checkLink(data, client);
+
+    if (check.isErr) {
+      return Result.err(check.error);
+    }
+
+    const link = await client.link.findUniqueOrThrow({
+      where: {
+        id: data.id,
+      },
+      select: {
+        id: true,
+        url: true,
+        shortId: true,
+        isAdvertisementEnabled: true,
+        createdById: true,
+      },
+    });
+
+    return Result.ok(link);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+/**
+ * Get link by id
+ * @param id link id
+ * @returns dateless link entity
+ */
+export const getAllLinksByUserId: (
+  data: GetAllLinksData
+) => PResult<DateLessLink[]> = async (data) => {
+  try {
+    const check = await checkUser({ id: data.userId }, client);
+
+    if (check.isErr) {
+      return Result.err(check.error);
+    }
+
+    const link = await client.link.findMany({
+      where: {
+        createdById: data.userId,
+        deletedAt: null,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        id: true,
+        url: true,
+        shortId: true,
+        isAdvertisementEnabled: true,
+        createdById: true,
+      },
+    });
+
+    return Result.ok(link);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+/**
+ * Repository call that creates new link.
+ *
+ * @param data object containing necessary data to create a new link record
+ * @returns - On success: the created link record
+ *          - On failure: a generic error
+ */
+export const createNewLink: (
+  data: LinkCreateData
+) => PResult<DateLessLink> = async (data) => {
+  try {
+    const shortId = ''; // generate short id
+
+    const newLink = await client.link.create({
+      data: {
+        createdById: data.createdById,
+        url: data.url,
+        shortId: shortId,
+        isAdvertisementEnabled: data.isAdvertisementEnabled,
+      },
+      select: {
+        id: true,
+        url: true,
+        shortId: true,
+        isAdvertisementEnabled: true,
+        createdById: true,
+      },
+    });
+
+    return Result.ok(newLink);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+/**
+ * Update link by id
+ * @param id link id
+ * @returns dateless link entity
+ */
+export const updateLinkById: (
+  data: LinkUpdateData
+) => PResult<DateLessLink> = async (data) => {
+  try {
+    const check = await checkLink(data, client);
+
+    if (check.isErr) {
+      return Result.err(check.error);
+    }
+
+    const updatedLink = await client.link.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        isAdvertisementEnabled: data.isAdvertisementEnabled,
+      },
+      select: {
+        id: true,
+        url: true,
+        shortId: true,
+        isAdvertisementEnabled: true,
+        createdById: true,
+      },
+    });
+
+    return Result.ok(updatedLink);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+/**
+ * Delete link by id
+ * @param id link id
+ * @returns dateless link entity
+ */
+export const deleteLinkById: (
+  data: LinkDeleteData
+) => PResult<DateLessLink> = async (data) => {
+  try {
+    const check = await checkLink(data, client);
+
+    if (check.isErr) {
+      return Result.err(check.error);
+    }
+
+    const deletedLink = await client.link.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        deletedAt: Date(),
+      },
+      select: {
+        id: true,
+        url: true,
+        shortId: true,
+        isAdvertisementEnabled: true,
+        createdById: true,
+      },
+    });
+
+    return Result.ok(deletedLink);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
