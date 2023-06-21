@@ -1,6 +1,8 @@
-import { Link, User } from 'model';
+import { Advertisement, Link, User } from 'model';
 import { OmitDates } from './utils';
 
 export type AnonymizedUser = OmitDates<Omit<User, 'passwordHash'>>;
 
 export type DateLessLink = OmitDates<Link>;
+
+export type DateLessAdvertisement = OmitDates<Advertisement>;
