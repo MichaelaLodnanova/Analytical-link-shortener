@@ -75,7 +75,8 @@ const queryTimelineData: (
         FROM "public"."LinkStatistics"
         LEFT JOIN "public"."Link" as "link" ON "link"."id" = "LinkStatistics"."linkId"
         ${generateWhereClause(filter)}
-        GROUP BY summaryDate;`
+        GROUP BY summaryDate
+        ORDER BY summaryDate ASC;`
     );
   } catch (error) {
     console.error(error);

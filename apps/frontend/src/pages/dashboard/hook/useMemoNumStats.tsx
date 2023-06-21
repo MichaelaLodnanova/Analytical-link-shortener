@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 type UseMemoNumStatsProps = {
   stats?: {
@@ -26,7 +26,7 @@ export default function useMemoNumStats({ stats }: UseMemoNumStatsProps) {
           count: 0,
         },
         {
-          label: 'Conversion Rate',
+          label: 'Conv. Rate',
           count: 0,
         },
       ];
@@ -46,8 +46,8 @@ export default function useMemoNumStats({ stats }: UseMemoNumStatsProps) {
         count: stats.skips,
       },
       {
-        label: 'Conversion Rate',
-        count: Math.round(stats.conversionRate * 1000) / 10,
+        label: 'Conv. Rate',
+        count: Math.round(stats.conversionRate * 1000) / 10 + '%',
       },
     ];
   }, [stats]);

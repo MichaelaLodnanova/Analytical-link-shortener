@@ -1,7 +1,7 @@
+import { HStack, Spinner } from '@chakra-ui/react';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
-import { useEffect, useMemo, useState } from 'react';
-import { startOfDay, endOfDay, addMonths } from 'date-fns';
-import { Box, HStack, Spinner } from '@chakra-ui/react';
+import { addMonths, endOfDay, startOfDay } from 'date-fns';
+import { useEffect, useState } from 'react';
 
 type RangeDateProps = {
   onChange: (dates: [string, string]) => void;

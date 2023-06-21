@@ -12,7 +12,7 @@ import {
 
 type StatsRowProps = {
   label?: string;
-  data: { label: string; count: number }[];
+  data: { label: string; count: number | string }[];
   isLoading?: boolean;
 };
 

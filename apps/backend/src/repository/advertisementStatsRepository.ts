@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
-import { PResult, TimelineEntry } from 'common';
-import { formatISO, parseISO } from 'date-fns';
+import { PResult } from 'common';
+import { parseISO } from 'date-fns';
 import { client, Prisma } from 'model';
 
 import {
@@ -152,7 +152,8 @@ const queryTimelineData: (
         FROM "public"."AdvertisementStatistics"
         LEFT JOIN "public"."Advertisement" as "ad" ON "ad"."id" = "AdvertisementStatistics"."advertisementId"
         ${generateWhereClause(filter)}
-        GROUP BY summaryDate;`
+        GROUP BY summaryDate
+        ORDER BY summaryDate ASC;`
     );
   } catch (error) {
     console.error(error);
