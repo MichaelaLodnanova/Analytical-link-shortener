@@ -1,14 +1,14 @@
-import { Result } from '@badrap/result';
-import { DateLessAdvertisement, PResult } from 'common';
+import { PResult } from 'common';
+import { getAdvertisementById } from '../repository/advertisementRepository';
+import { Advertisement } from 'model';
 
 /**
  * Assign random advertisement
  */
-export const pickAdvertisement: () => PResult<DateLessAdvertisement> =
-  async () => {
-    // come up with some logic how an ad should be picked
+export const pickAdvertisement: () => PResult<Advertisement> = async () => {
+  // come up with some logic how an ad should be picked
 
-    const advertisement = await getAdvertisementById();
+  const advertisement = await getAdvertisementById({ id: '' });
 
-    return Result.ok(advertisement);
-  };
+  return advertisement;
+};
