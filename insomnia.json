@@ -1,101 +1,13 @@
 {
   "_type": "export",
   "__export_format": 4,
-  "__export_date": "2023-06-21T21:35:27.712Z",
+  "__export_date": "2023-06-16T10:08:32.266Z",
   "__export_source": "insomnia.desktop.app:v2023.2.2",
   "resources": [
     {
-      "_id": "req_93950f052cae442e86a3541f870b0b19",
-      "parentId": "wrk_df8d27dc81ed469fb3793c485245ecd8",
-      "modified": 1687382959641,
-      "created": 1687382937853,
-      "url": "{{ _.url }}/advertisements",
-      "name": "Advertisements",
-      "description": "",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "id": "pair_5528115e4c1a49108e2caa82660e91f1",
-          "name": "limit",
-          "value": "1",
-          "description": ""
-        },
-        {
-          "id": "pair_2b9395ae79e349fdb57322fee9872e91",
-          "name": "offset",
-          "value": "0",
-          "description": ""
-        }
-      ],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1687382937853,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
-      "_id": "wrk_df8d27dc81ed469fb3793c485245ecd8",
-      "parentId": null,
-      "modified": 1686209380281,
-      "created": 1686209380281,
-      "name": "New Document",
-      "description": "",
-      "scope": "design",
-      "_type": "workspace"
-    },
-    {
-      "_id": "req_5b447d4c42814879b418cc232a7c1c38",
-      "parentId": "wrk_df8d27dc81ed469fb3793c485245ecd8",
-      "modified": 1687383156567,
-      "created": 1687382369584,
-      "url": "{{ _.url }}/links",
-      "name": "Links",
-      "description": "",
-      "method": "GET",
-      "body": {},
-      "parameters": [
-        {
-          "id": "pair_9f7dcac3aafb465da6710c535a851f76",
-          "name": "limit",
-          "value": "3",
-          "description": ""
-        },
-        {
-          "id": "pair_65e7a1aab6b24a5e8351b95469ce16e0",
-          "name": "offset",
-          "value": "0",
-          "description": ""
-        },
-        {
-          "id": "pair_e391fcef6b924d239bbffb329eb85e51",
-          "name": "search",
-          "value": "oog",
-          "description": ""
-        }
-      ],
-      "headers": [],
-      "authentication": {},
-      "metaSortKey": -1687382369584,
-      "isPrivate": false,
-      "settingStoreCookies": true,
-      "settingSendCookies": true,
-      "settingDisableRenderRequestBody": false,
-      "settingEncodeUrl": true,
-      "settingRebuildPath": true,
-      "settingFollowRedirects": "global",
-      "_type": "request"
-    },
-    {
       "_id": "req_6e9d5d743b4b41ba8d3c12cc4cebfa56",
       "parentId": "fld_0fa3d9e5860a49f7beb5eeda3681c4e9",
-      "modified": 1687377123811,
+      "modified": 1686757346575,
       "created": 1686585302630,
       "url": "{{ _.url }}/stats/link",
       "name": "Link stats",
@@ -106,21 +18,20 @@
         {
           "id": "pair_99f7de70f5a841ccbf95a74a616be104",
           "name": "id",
-          "value": "seed_link_1",
-          "description": "",
-          "disabled": false
+          "value": "seed_link_5",
+          "description": ""
         },
         {
           "id": "pair_56f54624aab54f83a08db087a35d4f8d",
           "name": "from",
-          "value": "2022-05-21T18:31:41.906Z",
+          "value": "2023-06-13T18:31:41.906Z",
           "description": "",
           "disabled": false
         },
         {
           "id": "pair_6d52bb3b850243c588ecbfcf3c1949ae",
           "name": "to",
-          "value": "2023-06-23T19:32:41.906Z",
+          "value": "2023-06-13T19:32:41.906Z",
           "description": "",
           "disabled": false
         }
@@ -150,9 +61,19 @@
       "_type": "request_group"
     },
     {
+      "_id": "wrk_df8d27dc81ed469fb3793c485245ecd8",
+      "parentId": null,
+      "modified": 1686209380281,
+      "created": 1686209380281,
+      "name": "New Document",
+      "description": "",
+      "scope": "design",
+      "_type": "workspace"
+    },
+    {
       "_id": "req_95935f36fecf46bd8648270df6e4e0cb",
       "parentId": "fld_0fa3d9e5860a49f7beb5eeda3681c4e9",
-      "modified": 1687278921261,
+      "modified": 1686910076797,
       "created": 1686857583966,
       "url": "{{ _.url }}/stats/advertisement",
       "name": "Ad stats",
@@ -163,21 +84,21 @@
         {
           "id": "pair_99f7de70f5a841ccbf95a74a616be104",
           "name": "id",
-          "value": "seed_advert_1",
+          "value": "seed_advert_2",
           "description": "",
-          "disabled": true
+          "disabled": false
         },
         {
           "id": "pair_56f54624aab54f83a08db087a35d4f8d",
           "name": "from",
-          "value": "2023-06-18T15:37:29.729Z",
+          "value": "2023-06-13T18:31:41.906Z",
           "description": "",
           "disabled": false
         },
         {
           "id": "pair_6d52bb3b850243c588ecbfcf3c1949ae",
           "name": "to",
-          "value": "2023-06-28T15:37:29.729Z",
+          "value": "2023-06-13T19:38:41.906Z",
           "description": "",
           "disabled": false
         }
@@ -258,7 +179,7 @@
     {
       "_id": "req_7b461526d44f4f66b46e602d89ae3cd5",
       "parentId": "fld_c0ddbdf1df8c465183bc51b07deb1511",
-      "modified": 1687360605136,
+      "modified": 1686857616093,
       "created": 1686226865527,
       "url": "{{ _.url }}/auth/login",
       "name": "Login user",
@@ -266,7 +187,7 @@
       "method": "POST",
       "body": {
         "mimeType": "application/json",
-        "text": "{\n\t\"username\": \"jdoe\",\n\t\"password\": \"123456789\"\n}"
+        "text": "{\n\t\"username\": \"advertiser\",\n\t\"password\": \"123456789\"\n}"
       },
       "parameters": [],
       "headers": [{ "name": "Content-Type", "value": "application/json" }],
@@ -320,7 +241,7 @@
     {
       "_id": "jar_87dea76f8f84d12956eff2bc3febbf464893fce3",
       "parentId": "wrk_df8d27dc81ed469fb3793c485245ecd8",
-      "modified": 1687383140275,
+      "modified": 1686910043256,
       "created": 1686209380286,
       "name": "Default Jar",
       "cookies": [
@@ -334,7 +255,7 @@
           "hostOnly": false,
           "creation": "2023-06-08T07:30:30.019Z",
           "lastAccessed": "2023-06-08T07:30:30.019Z",
-          "id": "15229185052006167"
+          "id": "6683874345907137"
         },
         {
           "key": "SOCS",
@@ -347,7 +268,7 @@
           "hostOnly": false,
           "creation": "2023-06-08T07:30:30.019Z",
           "lastAccessed": "2023-06-08T07:30:30.019Z",
-          "id": "8878393971625302"
+          "id": "07202539126093699"
         },
         {
           "key": "AEC",
@@ -361,7 +282,7 @@
           "hostOnly": false,
           "creation": "2023-06-08T07:30:30.019Z",
           "lastAccessed": "2023-06-08T07:30:30.019Z",
-          "id": "3559852384866231"
+          "id": "7502375214335015"
         },
         {
           "key": "__Secure-ENID",
@@ -375,18 +296,18 @@
           "hostOnly": false,
           "creation": "2023-06-08T07:30:30.020Z",
           "lastAccessed": "2023-06-08T07:30:30.020Z",
-          "id": "25905835359539053"
+          "id": "983271141434785"
         },
         {
           "key": "connect.sid",
-          "value": "s%3At1nJ8w3lGiU9EOCOYVWNJ5F0Hd-XAr3H.5LVlnA2OXWU4iAEJa%2FjHvrHzBS%2BTAL1XxJBIrn0wzdQ",
+          "value": "s%3AxgJWz14lER8TLTKs0T5e9qAFZuIN3ZVR.RCPlTCe%2BUwgzSj3hyj9rvOY6J5qSJm3%2BUbuLypE7oOU",
           "domain": "localhost",
           "path": "/",
           "httpOnly": true,
           "hostOnly": true,
           "creation": "2023-06-08T11:46:32.004Z",
-          "lastAccessed": "2023-06-21T21:32:20.275Z",
-          "id": "4408435121502996"
+          "lastAccessed": "2023-06-16T10:07:23.255Z",
+          "id": "7011287849255177"
         }
       ],
       "_type": "cookie_jar"
@@ -394,7 +315,7 @@
     {
       "_id": "spc_3a3ccbe4baf34239b26f6328eb4860ab",
       "parentId": "wrk_df8d27dc81ed469fb3793c485245ecd8",
-      "modified": 1687347200248,
+      "modified": 1686209380282,
       "created": 1686209380282,
       "fileName": "New Document",
       "contents": "",
