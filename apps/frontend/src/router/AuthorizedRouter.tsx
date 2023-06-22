@@ -10,6 +10,7 @@ import { SingleLinkStats } from '../pages/singleLinkStats';
 import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
 import NotFound from '../pages/notFound/NotFound';
 import Shortener from '../pages/home/components/Shortener';
+import Advertisement from '../pages/home/components/Advertisement';
 
 export default function AuthorizedRouter() {
   const { isLoading, authorized, hasRole } = useUser();
@@ -40,6 +41,10 @@ export default function AuthorizedRouter() {
           )}
           <Route path="/profile" element={<ProfileSettings />} />
           <Route path="/add-link" element={<Shortener></Shortener>} />
+          <Route
+            path="/add-advertisement"
+            element={<Advertisement></Advertisement>}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SidebarWithHeader>

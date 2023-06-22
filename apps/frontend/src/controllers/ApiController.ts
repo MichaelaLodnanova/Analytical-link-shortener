@@ -11,6 +11,8 @@ import {
   ResponseStatsLinkGet,
   RequestLinkPostReqBody,
   ResponseLinkPost,
+  RequestAdvertisementPostReqBody,
+  ResponseAdvertisementPost,
 } from 'common';
 import { sanitizeSearchParams } from '../utils/helpers';
 
@@ -85,6 +87,16 @@ export const shortenLink = async (data: RequestLinkPostReqBody) => {
   const resp = await apiClient.post<ResponseLinkPost>('/link', data);
 
   return resp.data;
+};
+
+export const createAdvertisement = async (
+  data: RequestAdvertisementPostReqBody
+) => {
+  const resp = await apiClient.post<ResponseAdvertisementPost>(
+    '/advertisement',
+    data
+  );
+  return resp;
 };
 
 export default apiClient;
