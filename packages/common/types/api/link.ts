@@ -4,7 +4,7 @@ import {
   ViewLinkSchema,
 } from '../../validators';
 import { PaginationSchema } from '../../validators/paginationZod';
-import { DateLessLink } from '../entities';
+import { DateLessLink, ViewLinkData } from '../entities';
 import { SuccessResponse } from './utils';
 
 export type RequestLinkIdParams = {
@@ -26,6 +26,7 @@ export type RequestLinkPostReqBody = CreateLinkSchema;
 
 export type RequestLinkPatchReqBody = UpdateLinkBodySchema;
 export type ResponseLinkGet = SuccessResponse<DateLessLink>;
+export type ResponseViewLinkGet = SuccessResponse<ViewLinkData>;
 export type ResponseLinkPatch = SuccessResponse<DateLessLink>;
 export type ResponseLinkPost = SuccessResponse<DateLessLink>;
 export type ResponseLinkDelete = SuccessResponse<DateLessLink>;

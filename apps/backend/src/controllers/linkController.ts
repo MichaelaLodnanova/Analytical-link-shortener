@@ -1,9 +1,4 @@
-import {
-  DateLessAdvertisement,
-  DateLessLink,
-  PResult,
-  PaginatedLink,
-} from 'common';
+import { DateLessLink, PResult, PaginatedLink, ViewLinkData } from 'common';
 import {
   getAllLinksByUserId,
   getLinkById,
@@ -22,7 +17,7 @@ import {
 import { Link } from 'model';
 import { Result } from '@badrap/result';
 import { createLinkStatistic } from '../repository/linkStatsRepository';
-import { pickAdvertisement } from './advertiser';
+import { pickAdvertisement } from '../repository/advertiser';
 
 export const getLink: (data: GetLinkData) => PResult<DateLessLink> = async ({
   id,
@@ -30,11 +25,6 @@ export const getLink: (data: GetLinkData) => PResult<DateLessLink> = async ({
   const link = await getLinkById({ id });
 
   return link;
-};
-
-export type ViewLinkData = {
-  link: DateLessLink;
-  advertisement?: Result<DateLessAdvertisement>;
 };
 
 export const viewLink: (data: {
@@ -62,7 +52,11 @@ export const viewLink: (data: {
 
   const advertisement = await pickAdvertisement();
 
-  return Result.ok({ link: link, advertisement: advertisement });
+  if (advertisement.isErr) {
+    return Result.ok({ link: link });
+  }
+
+  return Result.ok({ link: link, advertisement: advertisement.value });
 };
 
 export const getAllLinks: (
