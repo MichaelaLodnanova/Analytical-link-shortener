@@ -1,14 +1,14 @@
 import axios from 'axios';
 import {
-  RequestAdvertisementUserIdParams,
   RequestAllAdvertisementsGetQuery,
+  RequestAllAdvertisementsIdParams,
   RequestAllLinksGetQuery,
+  RequestAllLinksIdParams,
   RequestAuthCreate,
   RequestAuthLogin,
   RequestAuthUpdateUser,
   RequestLinkIdParams,
   RequestLinkPatchReqBody,
-  RequestLinkUserIdParams,
   RequestStatsAdsGet,
   RequestStatsLinkGet,
   ResponseAdvertisementGet,
@@ -53,6 +53,7 @@ export const register = async (data: RequestAuthCreate) => {
   const resp = await apiClient.post<RequestAuthCreate>('/auth/registration', {
     username: data.username,
     email: data.email,
+    role: data.role,
     name: '',
     surname: '',
     password: data.password,
@@ -91,7 +92,7 @@ export const linkStatistics = async (data: RequestStatsLinkGet) => {
 export const allAdvertisements = async ({
   userId,
   ...query
-}: RequestAdvertisementUserIdParams & RequestAllAdvertisementsGetQuery) => {
+}: RequestAllAdvertisementsIdParams & RequestAllAdvertisementsGetQuery) => {
   const resp = await apiClient.get<ResponseAllAdvertisementsGet>(
     `/advertisement/all/${userId ? userId : ''}?${new URLSearchParams(
       sanitizeSearchParams(query)
@@ -112,7 +113,7 @@ export const deleteAdvertisement = async (id: string) => {
 export const allLinks = async ({
   userId,
   ...query
-}: RequestLinkUserIdParams & RequestAllLinksGetQuery) => {
+}: RequestAllLinksIdParams & RequestAllLinksGetQuery) => {
   const resp = await apiClient.get<ResponseAllLinksGet>(
     `/link/all/${userId ? userId : ''}?${new URLSearchParams(
       sanitizeSearchParams(query)

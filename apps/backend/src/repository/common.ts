@@ -186,7 +186,7 @@ export const checkUser = async (
 /**
  * Function which checks if the advertisement exists.
  *
- * @param data - object containing id of the advertisement and the requester id
+ * @param data - object containing id of the advertisement
  * @param tx transaction handle
  * @throws on Prisma errors
  * @returns - `Result.ok({})` on success
@@ -271,6 +271,46 @@ export const checkAdvertisementWithAccess = async (
   ) {
     return Result.err(
       new AccessRightsError('Only admin and owner can access the advertisement')
+    );
+  }
+
+  return Result.ok({});
+};
+
+/**
+ * Function which checks if the advertisement stat exists.
+ *
+ * @param data - object containing id of the advertisement stat
+ * @param tx transaction handle
+ * @throws on Prisma errors
+ * @returns - `Result.ok({})` on success
+ *          - `Result.err(_)` on failure
+ *            - NonexistentRecordError('The specified advertisement does not exist!')
+ *            - DeletedRecordError('The specified advertisement has already been deleted!')
+ */
+export const checkAdvertisementStats = async (
+  data: CheckByIdData,
+  tx: PrismaTransactionHandle
+): Promise<Result<unknown>> => {
+  const advertisementStat = await tx.advertisementStatistics.findUnique({
+    where: {
+      id: data.id,
+    },
+  });
+
+  if (advertisementStat === null) {
+    return Result.err(
+      new NonexistentRecordError(
+        'The specified advertisement stat does not exist!'
+      )
+    );
+  }
+
+  if (advertisementStat.deletedAt !== null) {
+    return Result.err(
+      new DeletedRecordError(
+        'The specified advertisement stat has already been deleted!'
+      )
     );
   }
 

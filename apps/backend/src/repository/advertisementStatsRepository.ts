@@ -1,5 +1,5 @@
 import { Result } from '@badrap/result';
-import { PResult, ResponseStatsAdsPostData } from 'common';
+import { PResult, OptionalAdvertisementStatistics } from 'common';
 import { parseISO } from 'date-fns';
 import { client, Prisma } from 'model';
 
@@ -11,8 +11,15 @@ import {
   TimelineRawQueryData,
 } from '../types/query';
 import { postProcessTimelineData } from '../utils/reducers';
-import { PostAdvertisementStatisticsData } from '../types/advertisementStats';
-import { checkAdvertisement, checkLink } from './common';
+import {
+  CreateAdvertisementStatisticsData,
+  UpdateAdvertisementStatisticsData,
+} from '../types/advertisementStats';
+import {
+  checkAdvertisement,
+  checkAdvertisementStats,
+  checkLink,
+} from './common';
 
 /**
  * Generates a where clause for the raw timeline statistics query.
@@ -239,7 +246,7 @@ export const queryAdvertisementStatisticsRegionLanguage: (
   }
 };
 
-const getUpsertQueryFilters = (filter: PostAdvertisementStatisticsData) => ({
+const getUpsertQueryFilters = (filter: CreateAdvertisementStatisticsData) => ({
   advertisementId: filter.advertisementId,
   linkId: filter.linkId,
   skippedAt: filter.skippedAt ? parseISO(filter.skippedAt) : undefined,
@@ -249,8 +256,8 @@ const getUpsertQueryFilters = (filter: PostAdvertisementStatisticsData) => ({
 });
 
 export const createNewAdvertisementStatistics: (
-  data: PostAdvertisementStatisticsData
-) => PResult<ResponseStatsAdsPostData> = async (data) => {
+  data: CreateAdvertisementStatisticsData
+) => PResult<OptionalAdvertisementStatistics> = async (data) => {
   try {
     // check that link exists
     const linkCheck = await checkLink({ id: data.linkId }, client);
@@ -272,6 +279,58 @@ export const createNewAdvertisementStatistics: (
     const statistics = await client.advertisementStatistics.create({
       data: {
         ...getUpsertQueryFilters(data),
+      },
+      select: {
+        id: true,
+        advertisementId: true,
+        linkId: true,
+        region: true,
+        language: true,
+        skippedAt: true,
+        clickedAt: true,
+      },
+    });
+
+    const convertedStats = {
+      id: statistics.id,
+      advertisementId: statistics.advertisementId,
+      linkId: statistics.linkId,
+      skippedAt:
+        statistics.skippedAt !== null
+          ? statistics.skippedAt.toISOString()
+          : undefined,
+      clickedAt:
+        statistics.clickedAt !== null
+          ? statistics.clickedAt.toISOString()
+          : undefined,
+      region: statistics.region,
+      language: statistics.language,
+    };
+
+    return Result.ok(convertedStats);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+export const updateAdvertisementStatisticsById: (
+  data: UpdateAdvertisementStatisticsData
+) => PResult<OptionalAdvertisementStatistics> = async (data) => {
+  try {
+    const statCheck = await checkAdvertisementStats({ id: data.id }, client);
+
+    if (statCheck.isErr) {
+      return Result.err(statCheck.error);
+    }
+
+    const statistics = await client.advertisementStatistics.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        ...(data.skippedAt && { skippedAt: data.skippedAt }),
+        ...(data.clickedAt && { clickedAt: data.clickedAt }),
       },
       select: {
         id: true,

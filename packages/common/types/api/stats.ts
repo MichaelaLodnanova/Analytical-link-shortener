@@ -1,3 +1,4 @@
+import { OptionalAdvertisementStatistics } from '../entities';
 import { type DateRange } from './utils';
 import { SuccessResponse } from 'common/types/api/utils';
 
@@ -73,8 +74,11 @@ export type ResponseStatsAdsGet = SuccessResponse<{
   };
 }>;
 
+export type RequestStatsAdsIdParams = {
+  id: string;
+};
+
 export type RequestStatsAdsPost = {
-  id?: string;
   advertisementId: string;
   linkId: string;
   skippedAt?: string;
@@ -83,14 +87,13 @@ export type RequestStatsAdsPost = {
   language: string;
 };
 
-export type ResponseStatsAdsPostData = {
-  id: string;
-  advertisementId: string;
-  linkId: string;
-  skippedAt?: string | null;
-  clickedAt?: string | null;
-  region?: string;
-  language?: string;
+export type ResponseStatsAdsPost =
+  SuccessResponse<OptionalAdvertisementStatistics>;
+
+export type RequestStatsAdsPatch = {
+  skippedAt?: string;
+  clickedAt?: string;
 };
 
-export type ResponseStatsAdsPost = SuccessResponse<ResponseStatsAdsPostData>;
+export type ResponseStatsAdsPatch =
+  SuccessResponse<OptionalAdvertisementStatistics>;

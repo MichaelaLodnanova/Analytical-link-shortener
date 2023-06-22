@@ -1,6 +1,6 @@
 import {
-  RequestAdvertisementUserIdParams,
   RequestAllAdvertisementsGetQuery,
+  RequestAllAdvertisementsIdParams,
 } from 'common';
 import { useMemo } from 'react';
 import { useQuery } from 'react-query';
@@ -12,7 +12,7 @@ export const useAllAdvertisements = ({
   offset,
   search,
   userId,
-}: RequestAdvertisementUserIdParams & RequestAllAdvertisementsGetQuery) => {
+}: RequestAllAdvertisementsIdParams & RequestAllAdvertisementsGetQuery) => {
   const { data, isLoading, isError, isFetching, isPreviousData } = useQuery({
     queryKey: useMemo(
       () => ['allAds', limit, offset, search, userId],

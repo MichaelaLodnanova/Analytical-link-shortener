@@ -6,6 +6,7 @@ export const registerUserZod = z.object({
   name: z.string().optional(),
   surname: z.string().optional(),
   password: z.string().nonempty().min(8).max(20),
+  role: z.enum(['USER', 'ADVERTISER']),
 });
 export type RegisterUserSchema = z.infer<typeof registerUserZod>;
 

@@ -6,12 +6,12 @@ import {
 import { DateLessAdvertisement } from '../entities';
 import { SuccessResponse } from './utils';
 
-export type RequestAdvertisementUserIdParams = {
-  userId?: string;
-};
-
 export type RequestAdvertisementIdParams = {
   id?: string;
+};
+
+export type RequestAllAdvertisementsIdParams = {
+  userId?: string;
 };
 
 export type RequestAllAdvertisementsGetQuery = PaginationSchema;

@@ -1,4 +1,4 @@
-import { RequestAllLinksGetQuery, RequestLinkUserIdParams } from 'common';
+import { RequestAllLinksGetQuery, RequestAllLinksIdParams } from 'common';
 import { useMemo } from 'react';
 import { useQuery } from 'react-query';
 
@@ -9,7 +9,7 @@ export const useAllLink = ({
   offset,
   search,
   userId,
-}: RequestLinkUserIdParams & RequestAllLinksGetQuery) => {
+}: RequestAllLinksIdParams & RequestAllLinksGetQuery) => {
   const { data, isLoading, isError, isFetching, isPreviousData } = useQuery({
     queryKey: useMemo(
       () => ['allLinks', limit, offset, search, userId],

@@ -15,7 +15,6 @@ import {
   RequestLinkPostReqBody,
   RequestViewLinkBody,
   RequestAllLinksGetQuery,
-  RequestViewLinkParams,
   ResponseLinkDelete,
   ResponseLinkGet,
   ViewLinkSchema,
@@ -29,11 +28,11 @@ import {
   viewLinkZod,
   ResponseAllLinksGet,
   PaginatedLink,
-  RequestLinkUserIdParams,
+  RequestAllLinksIdParams,
+  ViewLinkData,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import {
-  ViewLinkData,
   createLink,
   deleteLink,
   getAllLinks,
@@ -83,7 +82,7 @@ linkRouter.get(
  * Links are in desc order.
  */
 const allLinksOfUserGetHandler = async (
-  req: Request<RequestLinkUserIdParams, never, never, RequestAllLinksGetQuery>,
+  req: Request<RequestAllLinksIdParams, never, never, RequestAllLinksGetQuery>,
   res: Response<
     ResponseAllLinksGet | ErrorResponse,
     Record<string, Result<PaginatedLink>>
@@ -125,7 +124,7 @@ linkRouter.get(
  * Endpoint for handling redirect request by short id
  */
 const viewLinkGetHandler = async (
-  req: Request<RequestViewLinkParams, never, RequestViewLinkBody, never>,
+  req: Request<RequestLinkIdParams, never, RequestViewLinkBody, never>,
   res: Response<
     ResponseLinkGet | ErrorResponse,
     Record<string, Result<ViewLinkData>>
