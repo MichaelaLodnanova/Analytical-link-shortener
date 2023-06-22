@@ -24,7 +24,6 @@ export function Navbar() {
     () => [
       { label: 'Home', to: 'home' },
       { label: 'About', to: 'about' },
-      { label: 'Shorten Path', to: 'shortenpath' },
       { label: 'Contact', to: 'contact' },
     ],
     []

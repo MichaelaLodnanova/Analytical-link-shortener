@@ -38,7 +38,7 @@ export default function AddNewMenu() {
           Add new Advertisement
           {!isAdvertiser && (
             <Text as="sub" position="absolute" left="3" bottom="1">
-              Becom advertiser!
+              Become advertiser!
             </Text>
           )}
         </MenuItem>

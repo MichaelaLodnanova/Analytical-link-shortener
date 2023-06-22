@@ -9,6 +9,7 @@ import { SingleAdStats } from '../pages/singleAdStats';
 import { SingleLinkStats } from '../pages/singleLinkStats';
 import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
 import NotFound from '../pages/notFound/NotFound';
+import Shortener from '../pages/home/components/Shortener';
 
 export default function AuthorizedRouter() {
   const { isLoading, authorized, hasRole } = useUser();
@@ -38,6 +39,7 @@ export default function AuthorizedRouter() {
             <Route path="/ad-stats/:id" element={<SingleAdStats />} />
           )}
           <Route path="/profile" element={<ProfileSettings />} />
+          <Route path="/add-link" element={<Shortener></Shortener>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SidebarWithHeader>

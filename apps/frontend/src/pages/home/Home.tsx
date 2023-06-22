@@ -4,7 +4,6 @@ import { Navbar } from '../../common/navbar';
 import SignUp from './components/SignUp';
 import Contact from './components/Contact';
 import About from './components/About';
-import Shortener from './components/Shortener';
 import { Footer } from '../../common/footer';
 export function Home() {
   return (
@@ -16,9 +15,6 @@ export function Home() {
         </Element>
         <Element name="about" className="element">
           <About></About>
-        </Element>
-        <Element name="shortenpath" className="element">
-          <Shortener></Shortener>
         </Element>
         <Element name="contact" className="element">
           <Contact></Contact>
