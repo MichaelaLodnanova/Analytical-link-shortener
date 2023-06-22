@@ -4,13 +4,16 @@ import { Route, Routes, useMatch, useNavigate } from 'react-router-dom';
 
 import SidebarWithHeader from '../common/sidebar/SidebarWithHeader';
 import { useUser } from '../hooks/useUser';
-import { Dashboard } from '../pages/dashboard/Dashboard';
+
 import { SingleAdStats } from '../pages/singleAdStats';
 import { SingleLinkStats } from '../pages/singleLinkStats';
 import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
 import NotFound from '../pages/notFound/NotFound';
 import Shortener from '../pages/home/components/Shortener';
 import Advertisement from '../pages/home/components/Advertisement';
+import { AdvertisementsList } from '../pages/advertisementsList';
+import { Dashboard } from '../pages/dashboard';
+import { LinksList } from '../pages/linksList';
 
 export default function AuthorizedRouter() {
   const { isLoading, authorized, hasRole } = useUser();
@@ -35,6 +38,7 @@ export default function AuthorizedRouter() {
       <SidebarWithHeader>
         <Routes>
           <Route path="/dashboard" element={<Dashboard />} />
+
           <Route path="/link-stats/:id" element={<SingleLinkStats />} />
           {hasRole('ADVERTISER', 'ADMIN') && (
             <Route path="/ad-stats/:id" element={<SingleAdStats />} />
@@ -45,6 +49,8 @@ export default function AuthorizedRouter() {
             path="/add-advertisement"
             element={<Advertisement></Advertisement>}
           />
+          <Route path="/advertisements" element={<AdvertisementsList />} />
+          <Route path="/links" element={<LinksList />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SidebarWithHeader>

@@ -27,13 +27,13 @@ const LinkItems: Array<LinkItemProps> = [
   {
     name: 'Adverts',
     icon: FiPaperclip,
-    url: '/auth/dashboard',
+    url: '/auth/advertisements',
     roles: ['ADVERTISER', 'ADMIN'],
   },
   {
     name: 'Links',
     icon: FiLink,
-    url: '/auth/dashboard',
+    url: '/auth/links',
   },
 ];
 

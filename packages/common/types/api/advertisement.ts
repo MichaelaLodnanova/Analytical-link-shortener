@@ -7,17 +7,18 @@ import { DateLessAdvertisement } from '../entities';
 import { SuccessResponse } from './utils';
 
 export type RequestAdvertisementIdParams = {
-  id: string;
+  id?: string;
 };
 
 export type RequestAllAdvertisementsIdParams = {
-  userId: string;
+  userId?: string;
 };
 
 export type RequestAllAdvertisementsGetQuery = PaginationSchema;
-export type ResponseAllAdvertisementsGet = SuccessResponse<
-  DateLessAdvertisement[]
->;
+export type ResponseAllAdvertisementsGet = SuccessResponse<{
+  advertisements: DateLessAdvertisement[];
+  next: { limit?: number; offset?: number };
+}>;
 export type RequestAdvertisementPostReqBody = CreateAdvertisementSchema;
 
 export type RequestAdvertisementPatchReqBody = UpdateAdvertisementBodySchema;
