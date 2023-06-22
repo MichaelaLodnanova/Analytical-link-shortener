@@ -29,6 +29,7 @@ import {
   viewLinkZod,
   ResponseAllLinksGet,
   PaginatedLink,
+  RequestLinkUserIdParams,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import {
@@ -82,7 +83,7 @@ linkRouter.get(
  * Links are in desc order.
  */
 const allLinksOfUserGetHandler = async (
-  req: Request<RequestLinkIdParams, never, never, RequestAllLinksGetQuery>,
+  req: Request<RequestLinkUserIdParams, never, never, RequestAllLinksGetQuery>,
   res: Response<
     ResponseAllLinksGet | ErrorResponse,
     Record<string, Result<PaginatedLink>>
@@ -90,8 +91,8 @@ const allLinksOfUserGetHandler = async (
   next: NextFunction
 ) => {
   const user = req.session.user as AnonymizedUser;
-  const userId = req.params.userId as string;
-  const query = req.query as PaginationSchema;
+  const userId = req.params.userId;
+  const query = req.query;
 
   const links = await getAllLinks({
     userId: userId,

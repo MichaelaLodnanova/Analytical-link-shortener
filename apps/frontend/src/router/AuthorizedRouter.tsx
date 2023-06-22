@@ -11,6 +11,7 @@ import ProfileSettings from '../pages/welcomeAuth/ProfileSettings';
 import NotFound from '../pages/notFound/NotFound';
 import { AdvertisementsList } from '../pages/advertisementsList';
 import { Dashboard } from '../pages/dashboard';
+import { LinksList } from '../pages/linksList';
 
 export default function AuthorizedRouter() {
   const { isLoading, authorized, hasRole } = useUser();
@@ -42,6 +43,7 @@ export default function AuthorizedRouter() {
           )}
           <Route path="/profile" element={<ProfileSettings />} />
           <Route path="/advertisements" element={<AdvertisementsList />} />
+          <Route path="/links" element={<LinksList />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </SidebarWithHeader>

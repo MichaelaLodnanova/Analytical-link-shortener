@@ -1,4 +1,4 @@
-import { AttachmentIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { AttachmentIcon, DeleteIcon } from '@chakra-ui/icons';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -9,6 +9,7 @@ import {
   Button,
   ButtonGroup,
   IconButton,
+  Switch,
   Table,
   TableCaption,
   TableContainer,
@@ -27,35 +28,37 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { DateLessAdvertisement } from 'common';
+import { DateLessLink } from 'common';
 import { useMemo, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { Paginator } from '../../../common/paginator';
-import { useAllAdvertisements } from '../../../hooks/useAllAdvertisements';
-import useDeleteAdvertisement from '../../../hooks/useDeleteAdvertisement';
+import { useAllLink } from '../../../hooks/useAllLinks';
+import useDeleteLink from '../../../hooks/useDeleteLink';
+import useUpdateLink from '../../../hooks/useUpdateLink';
 import { useUser } from '../../../hooks/useUser';
-import { useNavigate } from 'react-router-dom';
 
 const limit = 8;
 
-export function AdvertisementTable() {
+export function LinksTable() {
   const [pageNumber, setPageNumber] = useState(0);
   const [toDelete, setToDelete] = useState<string>('');
   const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = useRef();
-
-  const { deleteAd } = useDeleteAdvertisement();
-
   const navigate = useNavigate();
+
+  const { deleteAd } = useDeleteLink();
+  const { update } = useUpdateLink();
+
   const user = useUser();
-  const { advertisements, isFetching } = useAllAdvertisements({
+  const { links, isFetching } = useAllLink({
     limit: limit,
     offset: pageNumber * limit,
     userId:
       user.authorized && !user.hasRole('ADMIN') ? user.user.id : undefined,
   });
 
-  const columns = useMemo<ColumnDef<DateLessAdvertisement>[]>(
+  const columns = useMemo<ColumnDef<DateLessLink>[]>(
     () => [
       {
         header: 'Detail',
@@ -64,48 +67,53 @@ export function AdvertisementTable() {
             <IconButton
               as={AttachmentIcon}
               size="xs"
-              aria-label="Detail link"
               variant="ghost"
+              aria-label="Detail link"
               onClick={() => {
-                navigate(`/auth/ad-stats/${row.row.original.id}`);
+                navigate(`/auth/link-stats/${row.row.original.id}`);
               }}
             />
           </ButtonGroup>
         ),
       },
       {
-        header: 'Title',
+        header: 'Url',
         footer: (props) => props.column.id,
         cell: (info) => info.getValue(),
-        accessorKey: 'title',
+        accessorKey: 'url',
       },
       {
-        header: 'Ad Url',
+        header: 'Short Url',
         footer: (props) => props.column.id,
-        accessorKey: 'adUrl',
+        accessorKey: 'shortId',
       },
       {
-        header: 'Forward Url',
-        footer: (props) => props.column.id,
-        accessorKey: 'forwardUrl',
+        header: 'Ads Enabled',
+        cell: (row) => (
+          <ButtonGroup>
+            <Switch
+              isChecked={row.row.original.isAdvertisementEnabled}
+              onChange={() =>
+                update({
+                  id: row.row.original.id,
+                  isAdvertisementEnabled:
+                    !row.row.original.isAdvertisementEnabled,
+                })
+              }
+            />
+          </ButtonGroup>
+        ),
       },
       {
-        header: 'Edit',
+        header: 'Delete',
         cell: (row) => (
           <ButtonGroup>
             <IconButton
-              as={EditIcon}
-              size="xs"
-              aria-label="Edit advertisement"
-              variant="ghost"
-              onClick={() => alert(row.row.original.id)}
-            />
-            <IconButton
               as={DeleteIcon}
               colorScheme="red"
-              size="xs"
-              aria-label="Delete advertisement"
               variant="ghost"
+              size="xs"
+              aria-label="Delete link"
               onClick={() => {
                 setToDelete(row.row.original.id);
                 onOpen();
@@ -115,11 +123,11 @@ export function AdvertisementTable() {
         ),
       },
     ],
-    [onOpen, navigate]
+    [onOpen, navigate, update]
   );
 
   const table = useReactTable({
-    data: advertisements?.data.advertisements ?? [],
+    data: links?.data.links ?? [],
     columns,
     // Pipeline
     getCoreRowModel: getCoreRowModel(),
@@ -188,7 +196,7 @@ export function AdvertisementTable() {
         <AlertDialogOverlay>
           <AlertDialogContent>
             <AlertDialogHeader fontSize="lg" fontWeight="bold">
-              Delete Advertisement
+              Delete Link
             </AlertDialogHeader>
             <AlertDialogBody>
               Are you sure? You can't undo this action afterwards.

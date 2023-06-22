@@ -1,19 +1,25 @@
 import axios from 'axios';
 import {
+  RequestAdvertisementUserIdParams,
+  RequestAllAdvertisementsGetQuery,
+  RequestAllLinksGetQuery,
   RequestAuthCreate,
   RequestAuthLogin,
-  RequestStatsAdsGet,
   RequestAuthUpdateUser,
+  RequestLinkIdParams,
+  RequestLinkPatchReqBody,
+  RequestLinkUserIdParams,
+  RequestStatsAdsGet,
+  RequestStatsLinkGet,
+  ResponseAdvertisementGet,
+  ResponseAllAdvertisementsGet,
+  ResponseAllLinksGet,
   ResponseAuthGet,
   ResponseAuthLogout,
   ResponseStatsAdsGet,
-  RequestStatsLinkGet,
   ResponseStatsLinkGet,
-  RequestAdvertisementUserIdParams,
-  RequestAllAdvertisementsGetQuery,
-  ResponseAdvertisementGet,
-  ResponseAllAdvertisementsGet,
 } from 'common';
+
 import { sanitizeSearchParams } from '../utils/helpers';
 
 const apiClient = axios.create({
@@ -98,6 +104,37 @@ export const allAdvertisements = async ({
 export const deleteAdvertisement = async (id: string) => {
   const resp = await apiClient.delete<ResponseAdvertisementGet>(
     `/advertisement/${id}`
+  );
+
+  return resp.data;
+};
+
+export const allLinks = async ({
+  userId,
+  ...query
+}: RequestLinkUserIdParams & RequestAllLinksGetQuery) => {
+  const resp = await apiClient.get<ResponseAllLinksGet>(
+    `/link/all/${userId ? userId : ''}?${new URLSearchParams(
+      sanitizeSearchParams(query)
+    ).toString()}`
+  );
+
+  return resp.data;
+};
+
+export const deleteLink = async (id: string) => {
+  const resp = await apiClient.delete<ResponseAdvertisementGet>(`/link/${id}`);
+
+  return resp.data;
+};
+
+export const updateLink = async ({
+  id,
+  ...data
+}: RequestLinkPatchReqBody & RequestLinkIdParams) => {
+  const resp = await apiClient.patch<RequestLinkPatchReqBody>(
+    `/link${id ? '/' + id : ''}`,
+    data
   );
 
   return resp.data;
