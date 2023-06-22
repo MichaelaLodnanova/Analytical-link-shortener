@@ -10,6 +10,7 @@ import {
 } from '../types/query';
 import { parseISO } from 'date-fns';
 import { postProcessTimelineData } from '../utils/reducers';
+import { CreateLinkStatsData } from '../types/linkStats';
 
 /**
  * Generates a where clause for the raw timeline statistics query.
@@ -125,4 +126,21 @@ export const queryLinkImpressionsTimeline: LinkStatsTimelineQuery = async (
   }
 
   return Result.ok(postProcessTimelineData(result.value));
+};
+
+/**
+ * Creates new recod with sattistics
+ */
+export const createLinkStatistic: (
+  data: CreateLinkStatsData
+) => PResult<LinkStatistics> = async (data) => {
+  try {
+    const linkStatistic = await client.linkStatistics.create({
+      data: data,
+    });
+    return Result.ok(linkStatistic);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
 };

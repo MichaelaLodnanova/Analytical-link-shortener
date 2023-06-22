@@ -72,3 +72,25 @@ export type ResponseStatsAdsGet = SuccessResponse<{
     conversionRate: number;
   };
 }>;
+
+export type RequestStatsAdsPost = {
+  id?: string;
+  advertisementId: string;
+  linkId: string;
+  skippedAt?: string;
+  clickedAt?: string;
+  region: string;
+  language: string;
+};
+
+export type ResponseStatsAdsPostData = {
+  id: string;
+  advertisementId: string;
+  linkId: string;
+  skippedAt?: string | null;
+  clickedAt?: string | null;
+  region?: string;
+  language?: string;
+};
+
+export type ResponseStatsAdsPost = SuccessResponse<ResponseStatsAdsPostData>;
