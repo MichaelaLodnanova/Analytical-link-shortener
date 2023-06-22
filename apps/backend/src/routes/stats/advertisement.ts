@@ -1,16 +1,25 @@
 import {
   AnonymizedUser,
   RequestStatsAdsGet,
+  RequestStatsAdsPost,
   ResponseStatsAdsGet,
+  ResponseStatsAdsPost,
+  ResponseStatsAdsPostData,
+  advertisementStatsZod,
+  postAdvertisementStatsZod,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
-import { Request, Response, Router } from 'express';
+import { NextFunction, Request, Response, Router } from 'express';
 
-import { advertisementStatsZod } from '../../../../../packages/common/validators/statsZod';
-import { getAdvertisementStatistics } from '../../controllers/advertisementStatsController';
+import {
+  createAdvertisementStatistics,
+  getAdvertisementStatistics,
+} from '../../controllers/advertisementStatsController';
 import auth from '../../middleware/authMiddleware';
 import { validate } from '../../middleware/validationMiddleware';
 import { handleErrorResp, handleOkResp } from '../../utils';
+import resolveResult from '../../middleware/resolutionMiddleware';
+import { Result } from '@badrap/result';
 
 const linkStatsRouter = Router();
 
@@ -54,6 +63,29 @@ linkStatsRouter.get(
   auth('ADVERTISER', 'ADMIN'),
   validate({ query: advertisementStatsZod }),
   advertisementsStatsGetHandler
+);
+
+/**
+ * Endpoint for creating advertisement statistics
+ */
+const advertisementsStatsPostHandler = async (
+  req: Request<never, never, RequestStatsAdsPost, never>,
+  res: Response<
+    ResponseStatsAdsPost | ErrorResponse,
+    Record<string, Result<ResponseStatsAdsPostData>>
+  >,
+  next: NextFunction
+) => {
+  const stats = await createAdvertisementStatistics(req.body);
+
+  res.locals.result = stats;
+  next();
+};
+linkStatsRouter.post(
+  '/',
+  validate({ body: postAdvertisementStatsZod }),
+  advertisementsStatsPostHandler,
+  resolveResult<ResponseStatsAdsPostData>()
 );
 
 export default linkStatsRouter;

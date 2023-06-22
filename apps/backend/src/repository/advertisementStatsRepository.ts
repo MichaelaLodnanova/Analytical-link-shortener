@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
-import { PResult } from 'common';
-import { parseISO } from 'date-fns';
+import { PResult, ResponseStatsAdsPostData } from 'common';
+import { formatISO, parseISO } from 'date-fns';
 import { client, Prisma } from 'model';
 
 import {
@@ -11,6 +11,8 @@ import {
   TimelineRawQueryData,
 } from '../types/query';
 import { postProcessTimelineData } from '../utils/reducers';
+import { PostAdvertisementStatisticsData } from '../types/advertisementStats';
+import { checkAdvertisement, checkLink } from './common';
 
 /**
  * Generates a where clause for the raw timeline statistics query.
@@ -231,6 +233,74 @@ export const queryAdvertisementStatisticsRegionLanguage: (
     });
 
     return Result.ok(statistics);
+  } catch (error) {
+    console.error(error);
+    return Result.err(error as Error);
+  }
+};
+
+const getUpsertQueryFilters = (filter: PostAdvertisementStatisticsData) => ({
+  advertisementId: filter.advertisementId,
+  linkId: filter.linkId,
+  skippedAt: filter.skippedAt ? parseISO(filter.skippedAt) : undefined,
+  clickedAt: filter.clickedAt ? parseISO(filter.clickedAt) : undefined,
+  region: filter.region,
+  language: filter.language,
+});
+
+export const createNewAdvertisementStatistics: (
+  data: PostAdvertisementStatisticsData
+) => PResult<ResponseStatsAdsPostData> = async (data) => {
+  try {
+    // check that link exists
+    const linkCheck = await checkLink({ id: data.linkId }, client);
+
+    if (linkCheck.isErr) {
+      return Result.err(linkCheck.error);
+    }
+
+    // check that ad exists
+    const advertisementCheck = await checkAdvertisement(
+      { id: data.advertisementId },
+      client
+    );
+
+    if (advertisementCheck.isErr) {
+      return Result.err(advertisementCheck.error);
+    }
+
+    const statistics = await client.advertisementStatistics.create({
+      data: {
+        ...getUpsertQueryFilters(data),
+      },
+      select: {
+        id: true,
+        advertisementId: true,
+        linkId: true,
+        region: true,
+        language: true,
+        skippedAt: true,
+        clickedAt: true,
+      },
+    });
+
+    const convertedStats = {
+      id: statistics.id,
+      advertisementId: statistics.advertisementId,
+      linkId: statistics.linkId,
+      skippedAt:
+        statistics.skippedAt !== null
+          ? formatISO(statistics.skippedAt)
+          : undefined,
+      clickedAt:
+        statistics.clickedAt !== null
+          ? formatISO(statistics.clickedAt)
+          : undefined,
+      region: statistics.region,
+      language: statistics.language,
+    };
+
+    return Result.ok(convertedStats);
   } catch (error) {
     console.error(error);
     return Result.err(error as Error);

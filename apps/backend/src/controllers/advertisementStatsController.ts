@@ -1,8 +1,9 @@
 import { Result } from '@badrap/result';
-import { PResult, TimelineEntry } from 'common';
+import { PResult, ResponseStatsAdsPostData, TimelineEntry } from 'common';
 import { startOfToday, startOfTomorrow } from 'date-fns';
 
 import {
+  createNewAdvertisementStatistics,
   queryAdvertisementConversions,
   queryAdvertisementConversionsTimeline,
   queryAdvertisementImpressions,
@@ -13,6 +14,7 @@ import {
 } from '../repository/advertisementStatsRepository';
 import { AdvertisementQueryFilters } from '../types/query';
 import { statisticsToKeyMap } from '../utils/reducers';
+import { PostAdvertisementStatisticsData } from '../types/advertisementStats';
 
 export const getAdvertisementNumericalStatistics: (
   data: AdvertisementQueryFilters
@@ -123,4 +125,12 @@ export const getAdvertisementStatistics: (
     console.error(error);
     return Result.err(error as Error);
   }
+};
+
+export const createAdvertisementStatistics: (
+  data: PostAdvertisementStatisticsData
+) => PResult<ResponseStatsAdsPostData> = async (data) => {
+  const stats = await createNewAdvertisementStatistics(data);
+
+  return stats;
 };
