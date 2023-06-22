@@ -96,8 +96,7 @@ const allLinksOfUserGetHandler = async (
   const links = await getAllLinks({
     userId: userId,
     requesterId: user.role !== Role.ADMIN ? user.id : undefined,
-    limit: query.limit,
-    offset: query.offset,
+    ...query,
   });
 
   if (links.isErr) {

@@ -1,12 +1,12 @@
+import { PaginationSchema } from 'common';
+
 export type GetAdvertisementData = {
   id: string;
 };
 export type GetAllAdvertisementsData = {
   userId?: string;
   requesterId?: string;
-  limit?: number;
-  offset?: number;
-};
+} & PaginationSchema;
 export type CreateAdvertisementData = {
   title: string;
   adUrl: string;

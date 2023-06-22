@@ -1,12 +1,12 @@
+import { PaginationSchema } from 'common';
+
 export type GetLinkData = {
   id: string;
 };
 export type GetAllLinksData = {
   userId?: string;
   requesterId?: string;
-  limit?: number;
-  offset?: number;
-};
+} & PaginationSchema;
 export type CreateLinkData = {
   createdById: string;
   url: string;

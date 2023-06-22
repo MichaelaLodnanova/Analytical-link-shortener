@@ -124,7 +124,15 @@ export const getAllLinksByUserId: (
 
     const links = await client.link.findMany({
       where: {
-        createdById: data.userId ?? data.userId,
+        ...(data.userId && { createdById: data.userId }),
+        ...(data.search && {
+          OR: [
+            { url: data.search },
+            { shortId: data.search },
+            { url: { contains: data.search } },
+            { shortId: { contains: data.search } },
+          ],
+        }),
         deletedAt: null,
       },
       orderBy: {

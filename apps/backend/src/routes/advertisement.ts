@@ -99,8 +99,7 @@ const getAllHandler = async (
   const advertisements = await getAllAdvertisments({
     userId: userId,
     requesterId: user.role !== Role.ADMIN ? user.id : undefined,
-    limit: query.limit,
-    offset: query.offset,
+    ...query,
   });
 
   if (advertisements.isErr) {

@@ -98,7 +98,17 @@ export const getAllAdvertismentsByUserId: (
 
     const advertisements = await client.advertisement.findMany({
       where: {
-        createdById: data.userId ?? data.userId,
+        ...(data.userId && { createdById: data.userId }),
+        ...(data.search && {
+          OR: [
+            { adUrl: data.search },
+            { forwardUrl: data.search },
+            { title: data.search },
+            { adUrl: { contains: data.search } },
+            { forwardUrl: { contains: data.search } },
+            { title: { contains: data.search } },
+          ],
+        }),
         deletedAt: null,
       },
       orderBy: {
