@@ -4,6 +4,7 @@ import SignIn from '../pages/home/components/SignIn';
 import { Box } from '@chakra-ui/react';
 import AuthorizedRouter from './AuthorizedRouter';
 import NotFound from '../pages/notFound/NotFound';
+import { LinkView } from '../pages/redirect';
 
 export function Router() {
   return (
@@ -13,6 +14,7 @@ export function Router() {
           <Route index element={<Home />} />
           <Route path="/login" element={<SignIn />} />
           <Route path="/auth/*" element={<AuthorizedRouter />} />
+          <Route path="/link/:id" element={<LinkView />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Box>

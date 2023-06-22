@@ -22,6 +22,8 @@ import {
   ResponseLinkPost,
   RequestAdvertisementPostReqBody,
   ResponseAdvertisementPost,
+  RequestViewLinkQuery,
+  ResponseViewLinkGet,
 } from 'common';
 
 import { sanitizeSearchParams } from '../utils/helpers';
@@ -117,6 +119,18 @@ export const createAdvertisement = async (
     '/advertisement',
     data
   );
+  return resp.data;
+};
+export const viewLink = async (
+  { id }: RequestLinkIdParams,
+  query: RequestViewLinkQuery
+) => {
+  const resp = await apiClient.get<ResponseViewLinkGet>(
+    `/link/${id ? id : ''}?${new URLSearchParams(
+      sanitizeSearchParams(query)
+    ).toString()}`
+  );
+
   return resp.data;
 };
 
