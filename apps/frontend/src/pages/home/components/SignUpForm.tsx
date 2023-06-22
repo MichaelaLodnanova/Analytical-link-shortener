@@ -1,17 +1,8 @@
-import {
-  InputProps,
-  Button,
-  Divider,
-  Box,
-  Flex,
-  Radio,
-  RadioGroup,
-} from '@chakra-ui/react';
+import { InputProps, Button, Divider, Box, Select } from '@chakra-ui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterUserSchema, registerUserZod } from 'common';
 import { useForm } from 'react-hook-form';
 import FormField from './FormField';
-import { useState } from 'react';
 
 type SignUpFormProps = {
   onSubmit: (data: RegisterUserSchema) => void;
@@ -26,19 +17,8 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
     resolver: zodResolver(registerUserZod),
   });
 
-  const [role, setRole] = useState<'USER' | 'ADVERTISER'>('USER');
-
-  const handleRoleChange = (value: 'USER' | 'ADVERTISER') => {
-    setRole(value as 'USER' | 'ADVERTISER');
-  };
-
-  const handleFormSubmit = (data: RegisterUserSchema) => {
-    data.role = role; // Assign the selected role to the form data
-    onSubmit(data);
-  };
-
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit, console.error)}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       {formFields.map((field) => (
         <FormField
           errors={errors}
@@ -51,16 +31,10 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
       ))}
       <Divider marginY="4" />
       <Box display="inline-block">
-        <RadioGroup defaultValue="USER" onChange={handleRoleChange}>
-          <Flex
-            justifyContent="space-evenly"
-            alignItems="center"
-            direction="row"
-          >
-            <Radio value="USER">User</Radio>
-            <Radio value="ADVERTISER">Advertiser</Radio>
-          </Flex>
-        </RadioGroup>
+        <Select defaultValue="USER" {...register('role')}>
+          <option value="USER">User</option>
+          <option value="ADVERTISER">Advertiser</option>
+        </Select>
         <Button
           type="submit"
           width={[null, null, null, 'md', 'xl']}
