@@ -25,3 +25,13 @@ export type PaginatedAdvertisement = {
 
 export type DateLessAdvertisementStatistics =
   OmitDates<AdvertisementStatistics>;
+
+export type OptionalAdvertisementStatistics = {
+  id: string;
+  advertisementId: string;
+  linkId: string;
+  skippedAt?: string | null;
+  clickedAt?: string | null;
+  region?: string;
+  language?: string;
+};

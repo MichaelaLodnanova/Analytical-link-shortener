@@ -7,9 +7,14 @@ import { PaginationSchema } from '../../validators/paginationZod';
 import { DateLessLink } from '../entities';
 import { SuccessResponse } from './utils';
 
-export type RequestLinkIdParams = Record<string, unknown>;
+export type RequestLinkIdParams = {
+  id: string;
+};
 
-export type RequestViewLinkParams = Record<string, unknown>;
+export type RequestAllLinksIdParams = {
+  userId: string;
+};
+
 export type RequestViewLinkBody = ViewLinkSchema;
 
 export type RequestAllLinksGetQuery = PaginationSchema;

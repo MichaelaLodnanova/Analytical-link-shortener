@@ -14,6 +14,7 @@ import {
   RequestAdvertisementIdParams,
   RequestAdvertisementPatchReqBody,
   RequestAdvertisementPostReqBody,
+  RequestAllAdvertisementsIdParams,
   RequestAllAdvertisementsGetQuery,
   ResponseAdvertisementDelete,
   ResponseAdvertisementGet,
@@ -81,7 +82,7 @@ advertisementRouter.get(
  */
 const getAllHandler = async (
   req: Request<
-    RequestAdvertisementIdParams,
+    RequestAllAdvertisementsIdParams,
     never,
     never,
     RequestAllAdvertisementsGetQuery
