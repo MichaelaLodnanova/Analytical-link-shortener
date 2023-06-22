@@ -1,5 +1,9 @@
 import { Result } from '@badrap/result';
-import { PResult, ResponseStatsAdsPostData, TimelineEntry } from 'common';
+import {
+  PResult,
+  OptionalAdvertisementStatistics,
+  TimelineEntry,
+} from 'common';
 import { startOfToday, startOfTomorrow } from 'date-fns';
 
 import {
@@ -11,10 +15,14 @@ import {
   queryAdvertisementSkips,
   queryAdvertisementSkipsTimeline,
   queryAdvertisementStatisticsRegionLanguage,
+  updateAdvertisementStatisticsById,
 } from '../repository/advertisementStatsRepository';
 import { AdvertisementQueryFilters } from '../types/query';
 import { statisticsToKeyMap } from '../utils/reducers';
-import { PostAdvertisementStatisticsData } from '../types/advertisementStats';
+import {
+  UpdateAdvertisementStatisticsData,
+  CreateAdvertisementStatisticsData,
+} from '../types/advertisementStats';
 
 export const getAdvertisementNumericalStatistics: (
   data: AdvertisementQueryFilters
@@ -128,9 +136,17 @@ export const getAdvertisementStatistics: (
 };
 
 export const createAdvertisementStatistics: (
-  data: PostAdvertisementStatisticsData
-) => PResult<ResponseStatsAdsPostData> = async (data) => {
+  data: CreateAdvertisementStatisticsData
+) => PResult<OptionalAdvertisementStatistics> = async (data) => {
   const stats = await createNewAdvertisementStatistics(data);
+
+  return stats;
+};
+
+export const updateAdvertisementStatistics: (
+  data: UpdateAdvertisementStatisticsData
+) => PResult<OptionalAdvertisementStatistics> = async (data) => {
+  const stats = await updateAdvertisementStatisticsById(data);
 
   return stats;
 };

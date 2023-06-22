@@ -4,9 +4,16 @@ import {
   RequestStatsAdsPost,
   ResponseStatsAdsGet,
   ResponseStatsAdsPost,
-  ResponseStatsAdsPostData,
+  OptionalAdvertisementStatistics,
   advertisementStatsZod,
   postAdvertisementStatsZod,
+  RequestStatsAdsPatch,
+  ResponseStatsAdsPatch,
+  RequestStatsAdsIdParams,
+  patchAdvertisementStatsParamsZod,
+  patchAdvertisementStatsBodyZod,
+  PatchAdvertisementStatsParamsSchema,
+  PatchAdvertisementStatsBodySchema,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import { NextFunction, Request, Response, Router } from 'express';
@@ -14,6 +21,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import {
   createAdvertisementStatistics,
   getAdvertisementStatistics,
+  updateAdvertisementStatistics,
 } from '../../controllers/advertisementStatsController';
 import auth from '../../middleware/authMiddleware';
 import { validate } from '../../middleware/validationMiddleware';
@@ -72,7 +80,7 @@ const advertisementsStatsPostHandler = async (
   req: Request<never, never, RequestStatsAdsPost, never>,
   res: Response<
     ResponseStatsAdsPost | ErrorResponse,
-    Record<string, Result<ResponseStatsAdsPostData>>
+    Record<string, Result<OptionalAdvertisementStatistics>>
   >,
   next: NextFunction
 ) => {
@@ -85,7 +93,41 @@ linkStatsRouter.post(
   '/',
   validate({ body: postAdvertisementStatsZod }),
   advertisementsStatsPostHandler,
-  resolveResult<ResponseStatsAdsPostData>()
+  resolveResult<OptionalAdvertisementStatistics>()
+);
+
+/**
+ * Endpoint for updating advertisement statistics
+ */
+const advertisementsStatsPatchHandler = async (
+  req: Request<RequestStatsAdsIdParams, never, RequestStatsAdsPatch, never>,
+  res: Response<
+    ResponseStatsAdsPatch | ErrorResponse,
+    Record<string, Result<OptionalAdvertisementStatistics>>
+  >,
+  next: NextFunction
+) => {
+  const id = req.params.id as string;
+
+  const stats = await updateAdvertisementStatistics({
+    id: id,
+    ...req.body,
+  });
+
+  res.locals.result = stats;
+  next();
+};
+linkStatsRouter.patch(
+  '/:id',
+  validate<
+    PatchAdvertisementStatsParamsSchema,
+    PatchAdvertisementStatsBodySchema
+  >({
+    params: patchAdvertisementStatsParamsZod,
+    body: patchAdvertisementStatsBodyZod,
+  }),
+  advertisementsStatsPatchHandler,
+  resolveResult<OptionalAdvertisementStatistics>()
 );
 
 export default linkStatsRouter;

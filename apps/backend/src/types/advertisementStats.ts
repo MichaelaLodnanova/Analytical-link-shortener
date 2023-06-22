@@ -1,4 +1,4 @@
-export type PostAdvertisementStatisticsData = {
+export type CreateAdvertisementStatisticsData = {
   id?: string;
   advertisementId: string;
   linkId: string;
@@ -6,4 +6,10 @@ export type PostAdvertisementStatisticsData = {
   clickedAt?: string;
   region: string;
   language: string;
+};
+
+export type UpdateAdvertisementStatisticsData = {
+  id: string;
+  skippedAt?: string;
+  clickedAt?: string;
 };
