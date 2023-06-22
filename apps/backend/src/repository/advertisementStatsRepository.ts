@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
 import { PResult, ResponseStatsAdsPostData } from 'common';
-import { formatISO, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
 import { client, Prisma } from 'model';
 
 import {
@@ -290,11 +290,11 @@ export const createNewAdvertisementStatistics: (
       linkId: statistics.linkId,
       skippedAt:
         statistics.skippedAt !== null
-          ? formatISO(statistics.skippedAt)
+          ? statistics.skippedAt.toISOString()
           : undefined,
       clickedAt:
         statistics.clickedAt !== null
-          ? formatISO(statistics.clickedAt)
+          ? statistics.clickedAt.toISOString()
           : undefined,
       region: statistics.region,
       language: statistics.language,

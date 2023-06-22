@@ -16,7 +16,6 @@ import {
   checkUser,
 } from './common';
 import { AccessRightsError } from './errors';
-import { formatISO } from 'date-fns';
 
 /**
  * Get link by id
@@ -266,7 +265,7 @@ export const deleteLinkById: (data: DeleteLinkData) => PResult<Link> = async (
         id: data.id,
       },
       data: {
-        deletedAt: formatISO(Date.now()),
+        deletedAt: new Date().toISOString(),
       },
     });
 

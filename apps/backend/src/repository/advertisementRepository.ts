@@ -7,7 +7,6 @@ import {
   checkUser,
 } from './common';
 import { AccessRightsError } from './errors';
-import { formatISO } from 'date-fns';
 import {
   CreateAdvertisementData,
   DeleteAdvertisementData,
@@ -246,7 +245,7 @@ export const deleteAdvertisementById: (
         id: data.id,
       },
       data: {
-        deletedAt: formatISO(Date.now()),
+        deletedAt: new Date().toISOString(),
       },
     });
 
