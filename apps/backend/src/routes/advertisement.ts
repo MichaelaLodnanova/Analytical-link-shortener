@@ -48,7 +48,7 @@ const advertisementRouter = Router();
 /**
  * Endpoint for getting advertisement by original id with ads statistics
  */
-const advertisementGetHandler = async (
+const getHandler = async (
   req: Request<RequestAdvertisementIdParams, never, never, never>,
   res: Response<
     ResponseAdvertisementGet | ErrorResponse,
@@ -69,7 +69,7 @@ advertisementRouter.get(
   '/id/:id',
   auth(Role.ADVERTISER, Role.ADMIN),
   validate<GetAdvertisementSchema>({ params: getAdvertisementZod }),
-  advertisementGetHandler,
+  getHandler,
   resolveResult<DateLessAdvertisement>()
 );
 
@@ -79,7 +79,7 @@ advertisementRouter.get(
  *
  * Advertisements are in desc order.
  */
-const allAdvertisementsOfAdvertiserGetHandler = async (
+const getAllHandler = async (
   req: Request<
     RequestAdvertisementIdParams,
     never,
@@ -120,7 +120,7 @@ advertisementRouter.get(
     params: getAllAdvertisementsZod,
     query: paginationZod,
   }),
-  allAdvertisementsOfAdvertiserGetHandler,
+  getAllHandler,
   resolveResult<PaginatedAdvertisement>()
 );
 
@@ -128,7 +128,7 @@ advertisementRouter.get(
  * Endpoint for creating advertisement - advertisement can be created only by
  * registered and logged in advertiser/admin.
  */
-const advertisementPostHandler = async (
+const postHandler = async (
   req: Request<never, never, RequestAdvertisementPostReqBody, never>,
   res: Response<
     ResponseAdvertisementPost | ErrorResponse,
@@ -153,14 +153,14 @@ advertisementRouter.post(
   validate<unknown, CreateAdvertisementSchema, unknown>({
     body: createAdvertisementZod,
   }),
-  advertisementPostHandler,
+  postHandler,
   resolveResult<DateLessAdvertisement>()
 );
 
 /**
  * Endpoint for updating advertisement
  */
-const advertisementPatchHandler = async (
+const patchHandler = async (
   req: Request<
     RequestAdvertisementIdParams,
     never,
@@ -200,14 +200,14 @@ advertisementRouter.patch(
     params: updateAdvertisementParamsZod,
     body: updateAdvertisementBodyZod,
   }),
-  advertisementPatchHandler,
+  patchHandler,
   resolveResult<DateLessAdvertisement>()
 );
 
 /**
  * Endpoint for removing advertisement
  */
-const advertisementDeleteHandler = async (
+const deleteHandler = async (
   req: Request<RequestAdvertisementIdParams, never, never, never>,
   res: Response<
     ResponseAdvertisementDelete | ErrorResponse,
@@ -237,7 +237,7 @@ advertisementRouter.delete(
   '/:id',
   auth(Role.ADVERTISER, Role.ADMIN),
   validate<DeleteAdvertisementSchema>({ params: deleteAdvertisementZod }),
-  advertisementDeleteHandler,
+  deleteHandler,
   resolveResult<Advertisement>()
 );
 
