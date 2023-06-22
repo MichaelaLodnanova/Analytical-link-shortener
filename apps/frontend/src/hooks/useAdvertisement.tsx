@@ -2,11 +2,13 @@ import { useToast } from '@chakra-ui/react';
 import { CreateAdvertisementSchema } from 'common';
 import { useMutation, useQueryClient } from 'react-query';
 import { createAdvertisement as apiCreateAdvertisement } from '../controllers/ApiController';
+import { useNavigate } from 'react-router-dom';
 
 export default function useAdvertisement() {
   const toast = useToast();
   const queryClient = useQueryClient();
 
+  const navigate = useNavigate();
   const {
     mutateAsync: createAdvertisement,
     isLoading,
@@ -36,6 +38,7 @@ export default function useAdvertisement() {
         position: 'top-right',
       });
       queryClient.invalidateQueries(['allAds']);
+      navigate('/auth/advertisements');
     },
   });
   return { createAdvertisement, isLoading, isError };
