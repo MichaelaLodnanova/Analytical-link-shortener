@@ -29,10 +29,10 @@ import {
   ResponseAllLinksGet,
   PaginatedLink,
   RequestAllLinksIdParams,
+  ViewLinkData,
 } from 'common';
 import { ErrorResponse } from 'common/types/api/utils';
 import {
-  ViewLinkData,
   createLink,
   deleteLink,
   getAllLinks,

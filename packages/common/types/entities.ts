@@ -35,3 +35,8 @@ export type OptionalAdvertisementStatistics = {
   region?: string;
   language?: string;
 };
+
+export type ViewLinkData = {
+  link: DateLessLink;
+  advertisement?: DateLessAdvertisement;
+};
