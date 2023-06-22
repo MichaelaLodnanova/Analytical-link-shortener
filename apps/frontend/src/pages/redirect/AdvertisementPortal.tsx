@@ -7,7 +7,7 @@ export function AdvertisementPortal({ link, advertisement }: ViewLinkData) {
       <HStack justifyContent="flex-end" backgroundColor="primary.main">
         <Center flexGrow="1">
           <Heading size="md" noOfLines={1}>
-            {advertisement?.title}
+            {advertisement?.title} - {link.shortId}
           </Heading>
         </Center>
         <Button my="4" mx="2">
