@@ -3,7 +3,7 @@ export type GetAdvertisementData = {
 };
 export type GetAllAdvertisementsData = {
   userId?: string;
-  requesterId: string;
+  requesterId?: string;
   limit?: number;
   offset?: number;
 };

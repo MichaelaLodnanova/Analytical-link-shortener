@@ -43,7 +43,7 @@ import {
 import { Result } from '@badrap/result';
 import { AccessRightsError } from '../repository/errors';
 import { handleErrorResp } from '../utils';
-import { Link } from 'model';
+import { Link, Role } from 'model';
 
 const linkRouter = Router();
 
@@ -95,7 +95,7 @@ const allLinksOfUserGetHandler = async (
 
   const links = await getAllLinks({
     userId: userId,
-    requesterId: user.id,
+    requesterId: user.role !== Role.ADMIN ? user.id : undefined,
     limit: query.limit,
     offset: query.offset,
   });

@@ -1,6 +1,6 @@
 import { Result } from '@badrap/result';
 import { DateLessAdvertisement, PResult, PaginatedAdvertisement } from 'common';
-import { Advertisement, Role, client } from 'model';
+import { Advertisement, client } from 'model';
 import {
   checkAdvertisement,
   checkAdvertisementWithAccess,
@@ -64,18 +64,8 @@ export const getAllAdvertismentsByUserId: (
   data: GetAllAdvertisementsData
 ) => PResult<PaginatedAdvertisement> = async (data) => {
   try {
-    // check requester access rights
-    // we presume that requester exists and is not deleted
-    const requester = await client.user.findUniqueOrThrow({
-      where: {
-        id: data.requesterId,
-      },
-      select: {
-        role: true,
-      },
-    });
-
-    if (requester.role !== Role.ADMIN) {
+    if (data.requesterId) {
+      // all data can retrieve only admin
       if (!data.userId) {
         return Result.err(
           new AccessRightsError(
@@ -83,6 +73,7 @@ export const getAllAdvertismentsByUserId: (
           )
         );
       }
+      // data of specific user can retrieve only that user or admin
       if (data.requesterId !== data.userId) {
         return Result.err(
           new AccessRightsError(
@@ -90,6 +81,10 @@ export const getAllAdvertismentsByUserId: (
           )
         );
       }
+    }
+
+    if (data.userId) {
+      // check if the specified user exists
       const check = await checkUser({ id: data.userId }, client);
 
       if (check.isErr) {
@@ -245,6 +240,7 @@ export const deleteAdvertisementById: (
       return Result.err(check.error);
     }
 
+    // should we delete also the stats?
     const deletedAdvertisement = await client.advertisement.update({
       where: {
         id: data.id,

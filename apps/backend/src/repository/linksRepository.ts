@@ -1,7 +1,7 @@
 import { hash, argon2d } from 'argon2';
 import { Result } from '@badrap/result';
 import { DateLessLink, PResult, PaginatedLink } from 'common';
-import { Link, Role, client } from 'model';
+import { Link, client } from 'model';
 import {
   GetAllLinksData,
   GetLinkData,
@@ -90,30 +90,27 @@ export const getAllLinksByUserId: (
   data: GetAllLinksData
 ) => PResult<PaginatedLink> = async (data) => {
   try {
-    // check requester access rights
-    // we presume that requester exists and is not deleted
-    const requester = await client.user.findUniqueOrThrow({
-      where: {
-        id: data.requesterId,
-      },
-      select: {
-        role: true,
-      },
-    });
-
-    if (requester.role !== Role.ADMIN) {
+    if (data.requesterId) {
+      // all data can retrieve only admin
       if (!data.userId) {
         return Result.err(
-          new AccessRightsError('Only admin and owner can retrieve all links')
-        );
-      }
-      if (data.requesterId !== data.userId) {
-        return Result.err(
           new AccessRightsError(
-            'Only admin and owner can retrieve all links of specific user'
+            'Only admin and owner can retrieve all advertisements'
           )
         );
       }
+      // data of specific user can retrieve only that user or admin
+      if (data.requesterId !== data.userId) {
+        return Result.err(
+          new AccessRightsError(
+            'Only admin and owner can retrieve all advertisements of specific user'
+          )
+        );
+      }
+    }
+
+    if (data.userId) {
+      // check if the specified user exists
       const check = await checkUser({ id: data.userId }, client);
 
       if (check.isErr) {
@@ -263,6 +260,7 @@ export const deleteLinkById: (data: DeleteLinkData) => PResult<Link> = async (
       return Result.err(check.error);
     }
 
+    // should we delete also the stats?
     const deletedLink = await client.link.update({
       where: {
         id: data.id,
