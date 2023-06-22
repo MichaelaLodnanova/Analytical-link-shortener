@@ -14,6 +14,7 @@ import {
   RequestAdvertisementIdParams,
   RequestAdvertisementPatchReqBody,
   RequestAdvertisementPostReqBody,
+  RequestAdvertisementUserIdParams,
   RequestAllAdvertisementsGetQuery,
   ResponseAdvertisementDelete,
   ResponseAdvertisementGet,
@@ -81,7 +82,7 @@ advertisementRouter.get(
  */
 const getAllHandler = async (
   req: Request<
-    RequestAdvertisementIdParams,
+    RequestAdvertisementUserIdParams,
     never,
     never,
     RequestAllAdvertisementsGetQuery
@@ -93,8 +94,8 @@ const getAllHandler = async (
   next: NextFunction
 ) => {
   const user = req.session.user as AnonymizedUser;
-  const userId = req.params.userId as string;
-  const query = req.query as PaginationSchema;
+  const userId = req.params.userId;
+  const query = req.query;
 
   const advertisements = await getAllAdvertisments({
     userId: userId,

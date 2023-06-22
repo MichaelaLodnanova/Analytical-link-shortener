@@ -9,6 +9,10 @@ import {
   ResponseStatsAdsGet,
   RequestStatsLinkGet,
   ResponseStatsLinkGet,
+  RequestAdvertisementUserIdParams,
+  RequestAllAdvertisementsGetQuery,
+  ResponseAdvertisementGet,
+  ResponseAllAdvertisementsGet,
 } from 'common';
 import { sanitizeSearchParams } from '../utils/helpers';
 
@@ -73,6 +77,27 @@ export const adStatistics = async (data: RequestStatsAdsGet) => {
 export const linkStatistics = async (data: RequestStatsLinkGet) => {
   const resp = await apiClient.get<ResponseStatsLinkGet>(
     `/stats/link?${new URLSearchParams(sanitizeSearchParams(data)).toString()}`
+  );
+
+  return resp.data;
+};
+
+export const allAdvertisements = async ({
+  userId,
+  ...query
+}: RequestAdvertisementUserIdParams & RequestAllAdvertisementsGetQuery) => {
+  const resp = await apiClient.get<ResponseAllAdvertisementsGet>(
+    `/advertisement/all/${userId ? userId : ''}?${new URLSearchParams(
+      sanitizeSearchParams(query)
+    ).toString()}`
+  );
+
+  return resp.data;
+};
+
+export const deleteAdvertisement = async (id: string) => {
+  const resp = await apiClient.delete<ResponseAdvertisementGet>(
+    `/advertisement/${id}`
   );
 
   return resp.data;

@@ -135,9 +135,12 @@ export const getAllLinksByUserId: (
         }),
         deletedAt: null,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+        { id: 'desc' },
+      ],
       select: {
         id: true,
         url: true,

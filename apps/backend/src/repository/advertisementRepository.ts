@@ -111,9 +111,12 @@ export const getAllAdvertismentsByUserId: (
         }),
         deletedAt: null,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: [
+        {
+          createdAt: 'desc',
+        },
+        { id: 'desc' },
+      ],
       select: {
         id: true,
         title: true,
@@ -121,8 +124,8 @@ export const getAllAdvertismentsByUserId: (
         forwardUrl: true,
         createdById: true,
       },
-      take: data.limit ?? data.limit,
-      skip: data.offset ?? data.offset,
+      take: data.limit,
+      skip: data.offset,
     });
 
     return Result.ok({
