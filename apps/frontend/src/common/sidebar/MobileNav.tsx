@@ -103,9 +103,6 @@ export const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               <NavLink to="/auth/profile">
                 <MenuItem>Profile</MenuItem>
               </NavLink>
-              <NavLink to="/auth/settings">
-                <MenuItem>Settings</MenuItem>
-              </NavLink>
               <MenuDivider />
               <MenuItem onClick={() => logout()}>Sign out</MenuItem>
             </MenuList>
