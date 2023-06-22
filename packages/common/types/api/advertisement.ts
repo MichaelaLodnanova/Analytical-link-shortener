@@ -6,7 +6,13 @@ import {
 import { DateLessAdvertisement } from '../entities';
 import { SuccessResponse } from './utils';
 
-export type RequestAdvertisementIdParams = Record<string, unknown>;
+export type RequestAdvertisementIdParams = {
+  id: string;
+};
+
+export type RequestAllAdvertisementsIdParams = {
+  userId: string;
+};
 
 export type RequestAllAdvertisementsGetQuery = PaginationSchema;
 export type ResponseAllAdvertisementsGet = SuccessResponse<
