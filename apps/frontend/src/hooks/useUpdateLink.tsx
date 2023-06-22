@@ -29,7 +29,7 @@ export default function useUpdateLink() {
     onSuccess: () => {
       toast({
         title: 'Link updated!',
-        description: 'You were successfully registered',
+        description: 'Link successfully updated!',
         status: 'success',
         colorScheme: 'primary',
         duration: 5000,
