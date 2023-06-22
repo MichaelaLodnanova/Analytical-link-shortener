@@ -15,7 +15,7 @@ export type RequestAllLinksIdParams = {
   userId: string;
 };
 
-export type RequestViewLinkBody = ViewLinkSchema;
+export type RequestViewLinkQuery = ViewLinkSchema;
 
 export type RequestAllLinksGetQuery = PaginationSchema;
 export type ResponseAllLinksGet = SuccessResponse<{
