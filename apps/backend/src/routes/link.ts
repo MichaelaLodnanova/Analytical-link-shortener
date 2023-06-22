@@ -13,10 +13,11 @@ import {
   RequestLinkIdParams,
   RequestLinkPatchReqBody,
   RequestLinkPostReqBody,
-  RequestViewLinkBody,
+  RequestViewLinkQuery,
   RequestAllLinksGetQuery,
   ResponseLinkDelete,
   ResponseLinkGet,
+  ResponseViewLinkGet,
   ViewLinkSchema,
   createLinkZod,
   deleteLinkZod,
@@ -124,15 +125,15 @@ linkRouter.get(
  * Endpoint for handling redirect request by short id
  */
 const viewLinkGetHandler = async (
-  req: Request<RequestLinkIdParams, never, RequestViewLinkBody, never>,
+  req: Request<RequestLinkIdParams, never, never, RequestViewLinkQuery>,
   res: Response<
-    ResponseLinkGet | ErrorResponse,
+    ResponseViewLinkGet | ErrorResponse,
     Record<string, Result<ViewLinkData>>
   >,
   next: NextFunction
 ) => {
   const shortId = req.params.id as string;
-  const data = req.body;
+  const data = req.query;
 
   const link = await viewLink({
     shortId,
@@ -147,7 +148,7 @@ linkRouter.get(
   '/:id',
   validate<GetLinkSchema, ViewLinkSchema>({
     params: getLinkZod,
-    body: viewLinkZod,
+    query: viewLinkZod,
   }),
   viewLinkGetHandler,
   resolveResult<ViewLinkData>()
