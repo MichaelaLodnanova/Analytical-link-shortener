@@ -15,7 +15,11 @@ import {
   CreateAdvertisementStatisticsData,
   UpdateAdvertisementStatisticsData,
 } from '../types/advertisementStats';
-import { checkAdvertisement, checkLink } from './common';
+import {
+  checkAdvertisement,
+  checkAdvertisementStats,
+  checkLink,
+} from './common';
 
 /**
  * Generates a where clause for the raw timeline statistics query.
@@ -314,7 +318,12 @@ export const updateAdvertisementStatisticsById: (
   data: UpdateAdvertisementStatisticsData
 ) => PResult<OptionalAdvertisementStatistics> = async (data) => {
   try {
-    // check if exists or not deleted
+    const statCheck = await checkAdvertisementStats({ id: data.id }, client);
+
+    if (statCheck.isErr) {
+      return Result.err(statCheck.error);
+    }
+
     const statistics = await client.advertisementStatistics.update({
       where: {
         id: data.id,
