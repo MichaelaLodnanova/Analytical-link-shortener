@@ -8,11 +8,11 @@ import { DateLessLink, ViewLinkData } from '../entities';
 import { SuccessResponse } from './utils';
 
 export type RequestLinkIdParams = {
-  id: string;
+  id?: string;
 };
 
 export type RequestAllLinksIdParams = {
-  userId: string;
+  userId?: string;
 };
 
 export type RequestViewLinkBody = ViewLinkSchema;

@@ -1,15 +1,25 @@
 import axios from 'axios';
 import {
+  RequestAllAdvertisementsGetQuery,
+  RequestAllAdvertisementsIdParams,
+  RequestAllLinksGetQuery,
+  RequestAllLinksIdParams,
   RequestAuthCreate,
   RequestAuthLogin,
-  RequestStatsAdsGet,
   RequestAuthUpdateUser,
+  RequestLinkIdParams,
+  RequestLinkPatchReqBody,
+  RequestStatsAdsGet,
+  RequestStatsLinkGet,
+  ResponseAdvertisementGet,
+  ResponseAllAdvertisementsGet,
+  ResponseAllLinksGet,
   ResponseAuthGet,
   ResponseAuthLogout,
   ResponseStatsAdsGet,
-  RequestStatsLinkGet,
   ResponseStatsLinkGet,
 } from 'common';
+
 import { sanitizeSearchParams } from '../utils/helpers';
 
 const apiClient = axios.create({
@@ -74,6 +84,58 @@ export const adStatistics = async (data: RequestStatsAdsGet) => {
 export const linkStatistics = async (data: RequestStatsLinkGet) => {
   const resp = await apiClient.get<ResponseStatsLinkGet>(
     `/stats/link?${new URLSearchParams(sanitizeSearchParams(data)).toString()}`
+  );
+
+  return resp.data;
+};
+
+export const allAdvertisements = async ({
+  userId,
+  ...query
+}: RequestAllAdvertisementsIdParams & RequestAllAdvertisementsGetQuery) => {
+  const resp = await apiClient.get<ResponseAllAdvertisementsGet>(
+    `/advertisement/all/${userId ? userId : ''}?${new URLSearchParams(
+      sanitizeSearchParams(query)
+    ).toString()}`
+  );
+
+  return resp.data;
+};
+
+export const deleteAdvertisement = async (id: string) => {
+  const resp = await apiClient.delete<ResponseAdvertisementGet>(
+    `/advertisement/${id}`
+  );
+
+  return resp.data;
+};
+
+export const allLinks = async ({
+  userId,
+  ...query
+}: RequestAllLinksIdParams & RequestAllLinksGetQuery) => {
+  const resp = await apiClient.get<ResponseAllLinksGet>(
+    `/link/all/${userId ? userId : ''}?${new URLSearchParams(
+      sanitizeSearchParams(query)
+    ).toString()}`
+  );
+
+  return resp.data;
+};
+
+export const deleteLink = async (id: string) => {
+  const resp = await apiClient.delete<ResponseAdvertisementGet>(`/link/${id}`);
+
+  return resp.data;
+};
+
+export const updateLink = async ({
+  id,
+  ...data
+}: RequestLinkPatchReqBody & RequestLinkIdParams) => {
+  const resp = await apiClient.patch<RequestLinkPatchReqBody>(
+    `/link${id ? '/' + id : ''}`,
+    data
   );
 
   return resp.data;

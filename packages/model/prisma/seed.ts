@@ -87,22 +87,142 @@ async function main() {
   ]);
   console.log({ link1, link2, link3 });
 
-  const [ad1] = await Promise.all([
-    client.advertisement.upsert({
-      where: {
-        id: 'seed_advert_1',
-      },
-      update: {},
-      create: {
-        id: 'seed_advert_1',
-        title: 'Our great AD!',
-        adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-        forwardUrl: 'https://youtube.com',
-        createdById: advertiser.id,
-      },
-    }),
-  ]);
-  console.log({ ad1 });
+  const [ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9, ad10] = await Promise.all(
+    [
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_1',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_1',
+          title: 'Our great AD!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_2',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_2',
+          title: 'What and AD!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_3',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_3',
+          title: 'Buy this!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_4',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_4',
+          title: 'Buy this! 2',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_5',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_5',
+          title: 'Check it out!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_6',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_6',
+          title: 'Limited time offer!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_7',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_7',
+          title: 'Get yours now!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_8',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_8',
+          title: 'Amazing product!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_9',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_9',
+          title: 'The future is here!',
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+      client.advertisement.upsert({
+        where: {
+          id: 'seed_advert_10',
+        },
+        update: {},
+        create: {
+          id: 'seed_advert_10',
+          title: "Don't miss out!",
+          adUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+          forwardUrl: 'https://youtube.com',
+          createdById: advertiser.id,
+        },
+      }),
+    ]
+  );
+
+  console.log({ ad1, ad2, ad3, ad4, ad5, ad6, ad7, ad8, ad9, ad10 });
 
   const [click1, click2, click3, click4, click5, click6, click7, click8] =
     await Promise.all([

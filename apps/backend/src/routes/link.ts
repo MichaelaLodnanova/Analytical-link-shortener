@@ -90,8 +90,8 @@ const allLinksOfUserGetHandler = async (
   next: NextFunction
 ) => {
   const user = req.session.user as AnonymizedUser;
-  const userId = req.params.userId as string;
-  const query = req.query as PaginationSchema;
+  const userId = req.params.userId;
+  const query = req.query;
 
   const links = await getAllLinks({
     userId: userId,
