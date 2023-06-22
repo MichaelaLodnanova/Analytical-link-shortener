@@ -22,7 +22,7 @@ import {
 import { Link } from 'model';
 import { Result } from '@badrap/result';
 import { createLinkStatistic } from '../repository/linkStatsRepository';
-import { pickAdvertisement } from './advertiser';
+import { pickAdvertisement } from '../repository/advertiser';
 
 export const getLink: (data: GetLinkData) => PResult<DateLessLink> = async ({
   id,
@@ -34,7 +34,7 @@ export const getLink: (data: GetLinkData) => PResult<DateLessLink> = async ({
 
 export type ViewLinkData = {
   link: DateLessLink;
-  advertisement?: Result<DateLessAdvertisement>;
+  advertisement?: DateLessAdvertisement;
 };
 
 export const viewLink: (data: {
@@ -62,7 +62,11 @@ export const viewLink: (data: {
 
   const advertisement = await pickAdvertisement();
 
-  return Result.ok({ link: link, advertisement: advertisement });
+  if (advertisement.isErr) {
+    return Result.ok({ link: link });
+  }
+
+  return Result.ok({ link: link, advertisement: advertisement.value });
 };
 
 export const getAllLinks: (
